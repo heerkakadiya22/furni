@@ -22,7 +22,10 @@ app.set("views", [
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Setup session first
+// ✅ Serve static files FIRST
+app.use("/assets", express.static(path.join(__dirname, "assets")));
+
+// ✅ Setup session
 app.use(
   session({
     secret: CONFIG[ENV].secretKey,
@@ -32,18 +35,14 @@ app.use(
   })
 );
 
-// Then add csrf middleware (after session)
+// ✅ Then apply CSRF
 app.use(csrf());
-
-// Make assetPath available in all views
-app.locals.assetPath = "/assets/user";
-app.use("/assets/user", express.static(path.join(__dirname, "assets/user")));
 
 // Routes
 app.use(indexRoute);
 app.use(authRoute);
 
-// // ✅ Optional error handler for CSRF errors
+// // ✅ Optional error handler for CSRF
 // app.use((err, req, res, next) => {
 //   if (err.code === "EBADCSRFTOKEN") {
 //     return res.status(403).send("Invalid CSRF token.");

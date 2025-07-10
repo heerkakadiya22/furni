@@ -4,9 +4,15 @@ const registerRepo = require("../repositories/authRepository");
 exports.renderAuth = (req, res) => {
   const error = req.session.error || null;
   const success = req.session.success || null;
-  const formData = req.session.formData || {};
+  const registerFormData = req.session.registerFormData || {};
+  const loginFormData = req.session.loginFormData || {};
 
   const showLogin = req.query.show === "login";
+
+  req.session.error = null;
+  req.session.success = null;
+  req.session.registerFormData = null;
+  req.session.loginFormData = null;
 
   res.render("auth", {
     currentPage: "auth",
@@ -15,13 +21,8 @@ exports.renderAuth = (req, res) => {
     error,
     success,
     showLogin,
-    formData,
+    formData: showLogin ? loginFormData : registerFormData,
   });
-
-  // Clear session after rendering
-  req.session.error = null;
-  req.session.success = null;
-  req.session.formData = null;
 };
 
 exports.handleRegister = async (req, res) => {
@@ -32,7 +33,9 @@ exports.handleRegister = async (req, res) => {
     req.session.error = errors.array()[0].msg;
     req.session.formData = { name, email };
     req.session.showLogin = false;
-    return res.redirect("/auth");
+    return req.session.save(() => {
+      return res.redirect("/auth");
+    });
   }
 
   try {
@@ -40,22 +43,28 @@ exports.handleRegister = async (req, res) => {
 
     if (existingUser) {
       req.session.error = "Email already exists";
-      req.session.formData = { name, email };
+      req.session.registerFormData = { name, email };
       req.session.showLogin = false;
-      return res.redirect("/auth");
+      return req.session.save(() => {
+        return res.redirect("/auth");
+      });
     }
 
     await registerRepo.createUser({ name, email, password });
 
     req.session.success = "Registration successful! Please log in.";
     req.session.showLogin = true;
-    return res.redirect("/auth?show=login");
+    return req.session.save(() => {
+      return res.redirect("/auth?show=login");
+    });
   } catch (err) {
     console.error("Registration error:", err);
     req.session.error = "Something went wrong. Try again.";
-    req.session.formData = { name, email };
+    req.session.registerFormData = { name, email };
     req.session.showLogin = false;
-    return res.redirect("/auth");
+    return req.session.save(() => {
+      return res.redirect("/auth");
+    });
   }
 };
 
@@ -67,19 +76,27 @@ exports.handleLogin = async (req, res) => {
 
     if (!user || user.password !== password) {
       req.session.error = "Invalid credentials";
+      req.session.loginFormData = { email };
       req.session.showLogin = true;
-      return res.redirect("/auth?show=login");
+      return req.session.save(() => {
+        return res.redirect("/auth?show=login");
+      });
     }
 
     // You can set user session here if login is successful
     req.session.user = user;
 
     req.session.success = "Login successful!";
-    return res.redirect("/dashboard");
+    return req.session.save(() => {
+      return res.redirect("/dashboard");
+    });
   } catch (err) {
     console.error("Login error:", err);
     req.session.error = "Login failed. Try again.";
+    req.session.loginFormData = { email };
     req.session.showLogin = true;
-    return res.redirect("/auth?show=login");
+    return req.session.save(() => {
+      return res.redirect("/auth?show=login");
+    });
   }
 };
