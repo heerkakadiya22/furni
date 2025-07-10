@@ -2,7 +2,8 @@ exports.renderIndex = (req, res) => {
   try {
     res.render("index", {
       title: "Home | Furni",
-      csrfToken: req.csrfToken(), 
+      csrfToken: req.csrfToken(),
+      currentPage: "index",
       error: req.session.error || null,
       success: req.session.success || null,
       formData: req.session.formData || {},

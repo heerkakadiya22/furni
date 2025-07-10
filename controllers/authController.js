@@ -4,16 +4,12 @@ const registerRepo = require("../repositories/authRepository");
 exports.renderAuth = (req, res) => {
   const error = req.session.error || null;
   const success = req.session.success || null;
-  const showLogin = req.session.showLogin || false;
   const formData = req.session.formData || {};
 
-  // Clear session flash data
-  req.session.error = null;
-  req.session.success = null;
-  req.session.showLogin = null;
-  req.session.formData = null;
+  const showLogin = req.query.show === "login";
 
   res.render("auth", {
+    currentPage: "auth",
     title: showLogin ? "Login" : "Sign Up",
     csrfToken: req.csrfToken(),
     error,
@@ -21,6 +17,11 @@ exports.renderAuth = (req, res) => {
     showLogin,
     formData,
   });
+
+  // Clear session after rendering
+  req.session.error = null;
+  req.session.success = null;
+  req.session.formData = null;
 };
 
 exports.handleRegister = async (req, res) => {
@@ -48,7 +49,7 @@ exports.handleRegister = async (req, res) => {
 
     req.session.success = "Registration successful! Please log in.";
     req.session.showLogin = true;
-    return res.redirect("/auth");
+    return res.redirect("/auth?show=login");
   } catch (err) {
     console.error("Registration error:", err);
     req.session.error = "Something went wrong. Try again.";
@@ -67,18 +68,18 @@ exports.handleLogin = async (req, res) => {
     if (!user || user.password !== password) {
       req.session.error = "Invalid credentials";
       req.session.showLogin = true;
-      return res.redirect("/auth");
+      return res.redirect("/auth?show=login");
     }
 
     // You can set user session here if login is successful
-    // req.session.user = user;
+    req.session.user = user;
 
     req.session.success = "Login successful!";
-    return res.redirect("/dashboard"); // or home page
+    return res.redirect("/dashboard");
   } catch (err) {
     console.error("Login error:", err);
     req.session.error = "Login failed. Try again.";
     req.session.showLogin = true;
-    return res.redirect("/auth");
+    return res.redirect("/auth?show=login");
   }
 };

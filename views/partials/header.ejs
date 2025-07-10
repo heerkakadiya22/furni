@@ -3,7 +3,7 @@
 	arial-label="Furni navigation bar">
 
 	<div class="container">
-		<a class="navbar-brand" href="index.html">Furni<span>.</span></a>
+		<a class="navbar-brand" href="/">Furni<span>.</span></a>
 
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
 			data-bs-target="#navbarsFurni" aria-controls="navbarsFurni"
@@ -13,24 +13,30 @@
 
 		<div class="collapse navbar-collapse" id="navbarsFurni">
 			<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-				<li class="nav-item active">
-					<a class="nav-link" href="index.html">Home</a>
+				<li class="nav-item <%= currentPage === 'index' ? 'active' : '' %>">
+					<a class="nav-link" href="/">Home</a>
 				</li>
-				<li><a class="nav-link" href="shop.html">Shop</a></li>
-				<li><a class="nav-link" href="about.html">About us</a></li>
-				<li><a class="nav-link" href="services.html">Services</a></li>
-				<li><a class="nav-link" href="blog.html">Blog</a></li>
-				<li><a class="nav-link" href="contact.html">Contact us</a></li>
+				<li class="nav-item <%= currentPage === 'shop' ? 'active' : '' %>">
+					<a class="nav-link" href="/shop">Shop</a>
+				</li>
+				<li class="nav-item <%= currentPage === 'about' ? 'active' : '' %>">
+					<a class="nav-link" href="/about">About us</a>
+				</li>
+				<li class="nav-item <%= currentPage === 'services' ? 'active' : '' %>">
+					<a class="nav-link" href="/services">Services</a>
+				</li>
+				<li class="nav-item <%= currentPage === 'blog' ? 'active' : '' %>">
+					<a class="nav-link" href="/blog">Blog</a>
+				</li>
+				<li class="nav-item <%= currentPage === 'contact' ? 'active' : '' %>">
+					<a class="nav-link" href="/contact">Contact us</a>
+				</li>
 			</ul>
 
 			<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-				<!-- <li><a class="nav-link" href="register"><img
-							src="<%= assetPath %>/images/user.svg">Signup</a></li> -->
-
-				<a class="nav-link" href="register">
-					<img
-						src="<%= assetPath %>/images/user.svg">
-					Sign Up
+				<a class="nav-link <%= currentPage === 'auth' ? 'active' : '' %>"
+					href="/auth">
+					<img src="<%= assetPath %>/images/user.svg"> Sign Up
 				</a>
 				<li><a class="nav-link" href="cart.html"><img
 							src="<%= assetPath %>/images/cart.svg"></a></li>
