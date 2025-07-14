@@ -14,6 +14,7 @@ const indexRoute = require("./routes/indexRoute");
 const authRoute = require("./routes/authRoute");
 const pagesRoute = require("./routes/pagesRoute");
 const dashboardRoute = require("./routes/dashboardRoute");
+const passwordRoute = require("./routes/passwordRoute");
 
 app.set("view engine", "ejs");
 app.set("views", [
@@ -43,7 +44,12 @@ app.use(
 app.use(csrf());
 
 app.use((req, res, next) => {
-  res.set("Cache-Control", "no-store");
+  res.setHeader(
+    "Cache-Control",
+    "no-store, no-cache, must-revalidate, private"
+  );
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
   next();
 });
 
@@ -52,6 +58,7 @@ app.use(indexRoute);
 app.use(authRoute);
 app.use(pagesRoute);
 app.use(dashboardRoute);
+app.use(passwordRoute);
 
 // // ✅ Optional error handler for CSRF
 // app.use((err, req, res, next) => {

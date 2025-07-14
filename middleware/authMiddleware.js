@@ -1,17 +1,13 @@
-exports.protect = (req, res, next) => {
-  const { user } = req.session;
-
-  if (!user) {
-    return res.redirect("/");
+exports.preventBackForLoggedIn = (req, res, next) => {
+  if (req.session.user) {
+    return res.redirect("/dashboard");
   }
   next();
 };
 
-exports.preventBackForLoggedIn = (req, res, next) => {
-  const { user } = req.session;
-
-  if (user) {
-    return res.redirect("/dashboard");
+exports.protect = (req, res, next) => {
+  if (!req.session.user) {
+    return res.redirect("/");
   }
   next();
 };

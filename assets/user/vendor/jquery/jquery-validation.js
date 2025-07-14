@@ -55,3 +55,48 @@ $(document).ready(function () {
     },
   });
 });
+
+$("#forgotPasswordForm").validate({
+  rules: {
+    email: {
+      required: true,
+      email: true,
+    },
+  },
+  messages: {
+    email: {
+      required: "Please enter your email address",
+      email: "Please enter a valid email address",
+    },
+  },
+});
+
+$("#resetPasswordForm").validate({
+  rules: {
+    newPassword: {
+      required: true,
+      minlength: 6,
+    },
+    confirmNewPassword: {
+      required: true,
+      equalTo: "#password",
+    },
+  },
+  messages: {
+    newPassword: {
+      required: "Enter a password",
+      minlength: "Password must be at least 6 characters",
+    },
+    confirmNewPassword: {
+      required: "Confirm your password",
+      equalTo: "Passwords do not match",
+    },
+  },
+  errorPlacement: function (error, element) {
+    if (element.parent(".input-group").length) {
+      error.insertAfter(element.parent()); // after input-group
+    } else {
+      error.insertAfter(element);
+    }
+  },
+});

@@ -1,7 +1,7 @@
 exports.renderBlog = (req, res) => {
   try {
     res.render("blog", {
-      title: "Blog | Furni",
+      title: "Blog",
       csrfToken: req.csrfToken(),
       currentPage: "blog",
     });
@@ -14,7 +14,7 @@ exports.renderBlog = (req, res) => {
 exports.renderShop = (req, res) => {
   try {
     res.render("shop", {
-      title: "Shop | Furni",
+      title: "Shop",
       csrfToken: req.csrfToken(),
       currentPage: "shop",
     });
@@ -27,7 +27,7 @@ exports.renderShop = (req, res) => {
 exports.renderServices = (req, res) => {
   try {
     res.render("services", {
-      title: "Services | Furni",
+      title: "Services",
       csrfToken: req.csrfToken(),
       currentPage: "services",
     });
@@ -40,7 +40,7 @@ exports.renderServices = (req, res) => {
 exports.renderContact = (req, res) => {
   try {
     res.render("contact", {
-      title: "Contact | Furni",
+      title: "Contact us",
       csrfToken: req.csrfToken(),
       currentPage: "contact",
     });
@@ -53,7 +53,7 @@ exports.renderContact = (req, res) => {
 exports.renderAbout = (req, res) => {
   try {
     res.render("about", {
-      title: "About | Furni",
+      title: "About Us",
       csrfToken: req.csrfToken(),
       currentPage: "about",
     });
