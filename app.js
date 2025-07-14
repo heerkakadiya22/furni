@@ -13,12 +13,14 @@ require("./config/db");
 const indexRoute = require("./routes/indexRoute");
 const authRoute = require("./routes/authRoute");
 const pagesRoute = require("./routes/pagesRoute");
+const dashboardRoute = require("./routes/dashboardRoute");
 
 app.set("view engine", "ejs");
 app.set("views", [
   path.join(__dirname, "views"),
   path.join(__dirname, "views/auth"),
   path.join(__dirname, "views/pages"),
+  path.join(__dirname, "views/dashboard"),
 ]);
 
 app.use(express.json());
@@ -40,10 +42,16 @@ app.use(
 // ✅ Then apply CSRF
 app.use(csrf());
 
+app.use((req, res, next) => {
+  res.set("Cache-Control", "no-store");
+  next();
+});
+
 // Routes
 app.use(indexRoute);
 app.use(authRoute);
 app.use(pagesRoute);
+app.use(dashboardRoute);
 
 // // ✅ Optional error handler for CSRF
 // app.use((err, req, res, next) => {

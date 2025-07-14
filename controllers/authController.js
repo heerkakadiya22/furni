@@ -83,8 +83,11 @@ exports.handleLogin = async (req, res) => {
       });
     }
 
-    // You can set user session here if login is successful
-    req.session.user = user;
+    req.session.user = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
 
     req.session.success = "Login successful!";
     return req.session.save(() => {
@@ -99,4 +102,15 @@ exports.handleLogin = async (req, res) => {
       return res.redirect("/auth?show=login");
     });
   }
+};
+
+exports.logout = (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Session destroy error:", err);
+      req.session.error = "Logout failed. Try again.";
+      return res.redirect("/dashboard");
+    }
+    res.redirect("/");
+  });
 };
