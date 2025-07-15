@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html
+    lang="en"
+    class="light-style layout-menu-fixed"
+    dir="ltr"
+    data-theme="theme-default"
+    data-assets-path="../assets/"
+    data-template="vertical-menu-template-free">
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+        <title>Role List</title>
+
+        <meta name="description" content />
+        <%- include('../partials/head') %>
+          <script
+      src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+    <style>.dataTables_length,
+.dataTables_filter,
+.custom-addrole {
+  margin-left: 0.5rem;
+}
+
+/* Align dropdown vertically with search */
+.dataTables_length select {
+  height: calc(1.5em + 0.75rem + 2px);
+}</style>
+    </head>
+
+    <body>
+        <!-- Layout wrapper -->
+        <div class="layout-wrapper layout-content-navbar">
+            <div class="layout-container">
+                <!-- Menu -->
+
+                <%- include('../partials/sidebar') %>
+
+                    <!-- Content wrapper -->
+                    <div class="content-wrapper">
+                        <!-- Content -->
+
+                        <div class="container-xxl flex-grow-1 container-p-y">
+                            <h4 class="fw-bold py-3 mb-4"><span
+                                    class="text-muted fw-light">Tables /</span>
+                                <%= title %></h4>
+
+                            <!-- Basic Bootstrap Table -->
+                            <div class="card">
+                                <input type="hidden" id="csrfToken" value="<%= csrfToken %>">
+
+                                <div class="table table-bordered table-hover w-100">
+                                    <table class="table" id="rolesTable">
+                                        <thead>
+                                           <tr>
+                      <th>#</th>
+                      <th>Role Name</th>
+                      <th>Active</th>
+                      <th>Description</th>
+                      <th>Actions</th>
+                    </tr>
+                                        </thead>
+                                        <tbody id="rolesTableBody" class="table-border-bottom-0">
+                                             <tr><td colspan="5" class="text-center text-muted">Loading...</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!--/ Basic Bootstrap Table -->
+
+                        </div>
+                        <!-- / Content -->
+
+                        <%- include('../partials/footer') %>
+
+                        <div class="content-backdrop fade"></div>
+                    </div>
+                    <!-- Content wrapper -->
+                </div>
+                <!-- / Layout page -->
+            </div>
+
+            <!-- Overlay -->
+            <div class="layout-overlay layout-menu-toggle"></div>
+        </div>
+        <!-- / Layout wrapper -->
+
+        <div class="buy-now">
+            <a
+                href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/"
+                target="_blank"
+                class="btn btn-danger btn-buy-now">Upgrade to Pro</a>
+        </div>
+  <%- include('../partials/script') %>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="/assets/admin/js/custom.js"></script>
+
+    </body>
+
+        
+</html>

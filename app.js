@@ -15,13 +15,16 @@ const authRoute = require("./routes/authRoute");
 const pagesRoute = require("./routes/pagesRoute");
 const dashboardRoute = require("./routes/dashboardRoute");
 const passwordRoute = require("./routes/passwordRoute");
+const roleRoute = require("./routes/roleRoute");
 
 app.set("view engine", "ejs");
 app.set("views", [
   path.join(__dirname, "views"),
-  path.join(__dirname, "views/auth"),
-  path.join(__dirname, "views/pages"),
+  path.join(__dirname, "views/public"),
+  path.join(__dirname, "views/public/auth"),
+  path.join(__dirname, "views/public/pages"),
   path.join(__dirname, "views/dashboard"),
+  path.join(__dirname, "views/dashboard/roles"),
 ]);
 
 app.use(express.json());
@@ -59,6 +62,7 @@ app.use(authRoute);
 app.use(pagesRoute);
 app.use(dashboardRoute);
 app.use(passwordRoute);
+app.use(roleRoute);
 
 // // ✅ Optional error handler for CSRF
 // app.use((err, req, res, next) => {

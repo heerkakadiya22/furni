@@ -24,10 +24,19 @@
 
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
-        <li class="menu-item active">
-            <a href="/dashboard" class="menu-link">
+        <li
+            class="menu-item <%= currentPage === 'dashboard' ? 'active' : '' %>">
+            <a href="/dashboard"
+                class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
+            </a>
+        </li>
+        <li class="menu-item <%= currentPage === 'roles' ? 'active' : '' %>">
+            <a href="/roles"
+                class="menu-link">
+                <i class="menu-icon bi bi-person-lines-fill"></i>
+                <div data-i18n="Analytics">Roles</div>
             </a>
         </li>
     </ul>
