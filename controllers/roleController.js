@@ -33,7 +33,9 @@ exports.renderRoleForm = async (req, res) => {
       role = await roleRepository.findById(roleId);
       if (!role) {
         req.session.error = "Role not found.";
-        return res.redirect("/roles");
+        req.session.save(() => {
+          return res.redirect("/roles");
+        });
       }
     }
 
@@ -60,7 +62,14 @@ exports.createRole = async (req, res) => {
 
     if (!name) {
       req.session.error = "Role name is required.";
-      return res.redirect("/addrole");
+      return req.session.save(() => res.redirect("/addrole"));
+    }
+
+    // 🔍 Check for duplicate role
+    const existingRole = await roleRepository.findByName(name);
+    if (existingRole) {
+      req.session.error = "Role name already exists.";
+      return req.session.save(() => res.redirect("/addrole"));
     }
 
     await roleRepository.create({
@@ -69,11 +78,15 @@ exports.createRole = async (req, res) => {
       active,
     });
 
-    res.redirect("/roles");
+    req.session.save(() => {
+      return res.redirect("/roles");
+    });
   } catch (error) {
     console.error("Error creating role:", error);
     req.session.error = "Server error while creating role.";
-    res.redirect("/addrole");
+    req.session.save(() => {
+      return res.redirect("/addrole");
+    });
   }
 };
 
@@ -85,7 +98,9 @@ exports.updateRole = async (req, res) => {
 
     if (!name) {
       req.session.error = "Role name is required.";
-      return res.redirect(`/roles/${id}/edit`);
+      req.session.save(() => {
+        return res.redirect(`/roles/${id}/edit`);
+      });
     }
 
     const updated = await roleRepository.update(id, {
@@ -96,24 +111,30 @@ exports.updateRole = async (req, res) => {
 
     if (!updated) {
       req.session.error = "Failed to update role.";
-      return res.redirect("/roles");
+      req.session.save(() => {
+        return res.redirect("/roles");
+      });
     }
 
-    res.redirect("/roles");
+    req.session.save(() => {
+      return res.redirect("/roles");
+    });
   } catch (error) {
     console.error("Error updating role:", error);
     req.session.error = "Server error while updating role.";
-    res.redirect(`/roles/${req.body.id}/edit`);
+    req.session.save(() => {
+      return res.redirect(`/roles/${req.body.id}/edit`);
+    });
   }
 };
 
 exports.deleteRole = async (req, res) => {
   try {
     const roleId = req.params.id;
-    console.log("🔍 Delete Request for ID:", roleId); // ✅ log the ID
+    console.log("🔍 Delete Request for ID:", roleId);
 
     const deleted = await roleRepository.delete(roleId);
-    console.log("🗑 Deleted Count:", deleted); // ✅ log result
+    console.log("🗑 Deleted Count:", deleted);
 
     if (deleted) {
       return res

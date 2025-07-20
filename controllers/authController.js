@@ -89,7 +89,7 @@ exports.handleLogin = async (req, res) => {
       email: user.email,
     };
 
-    req.session.success = "Login successful!";
+    // req.session.success = "Login successful!";
     return req.session.save(() => {
       return res.redirect("/dashboard");
     });

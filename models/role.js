@@ -4,8 +4,10 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Role extends Model {
     static associate(models) {
-      // Define associations here
-      // Role.hasMany(models.User);
+      Role.hasMany(models.Register, {
+        foreignKey: "roleId",
+        as: "users",
+      });
     }
   }
 
@@ -30,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Role",
       tableName: "Roles",
-      timestamps: false, 
+      timestamps: false,
     }
   );
 

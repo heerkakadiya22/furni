@@ -16,6 +16,7 @@ const pagesRoute = require("./routes/pagesRoute");
 const dashboardRoute = require("./routes/dashboardRoute");
 const passwordRoute = require("./routes/passwordRoute");
 const roleRoute = require("./routes/roleRoute");
+const profileRoute = require("./routes/profileRoute");
 
 app.set("view engine", "ejs");
 app.set("views", [
@@ -25,6 +26,7 @@ app.set("views", [
   path.join(__dirname, "views/public/pages"),
   path.join(__dirname, "views/dashboard"),
   path.join(__dirname, "views/dashboard/roles"),
+  path.join(__dirname, "views/dashboard/account"),
 ]);
 
 app.use(express.json());
@@ -44,7 +46,13 @@ app.use(
 );
 
 // ✅ Then apply CSRF
-app.use(csrf());
+const csrfProtection = csrf();
+app.use((req, res, next) => {
+  if (req.method === "POST" && req.path === "/profile") {
+    return next();
+  }
+  csrfProtection(req, res, next);
+});
 
 app.use((req, res, next) => {
   res.setHeader(
@@ -63,6 +71,7 @@ app.use(pagesRoute);
 app.use(dashboardRoute);
 app.use(passwordRoute);
 app.use(roleRoute);
+app.use(profileRoute);
 
 // // ✅ Optional error handler for CSRF
 // app.use((err, req, res, next) => {

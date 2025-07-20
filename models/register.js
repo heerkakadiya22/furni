@@ -2,13 +2,11 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Register extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      Register.belongsTo(models.Role, {
+        foreignKey: "roleId",
+        as: "role",
+      });
     }
   }
   Register.init(
@@ -17,6 +15,12 @@ module.exports = (sequelize, DataTypes) => {
       email: DataTypes.STRING,
       username: DataTypes.STRING,
       password: DataTypes.STRING,
+      image: DataTypes.STRING,
+      phone: DataTypes.STRING,
+      address: DataTypes.STRING,
+      hobby: DataTypes.STRING,
+      dob: DataTypes.DATEONLY,
+      gender: DataTypes.ENUM("male", "female"),
     },
     {
       sequelize,
