@@ -46,7 +46,7 @@ $.validator.addMethod(
 );
 
 $(function () {
-  $("#userForm").validate({
+  $(".validate-form").validate({
     rules: {
       name: {
         required: true,

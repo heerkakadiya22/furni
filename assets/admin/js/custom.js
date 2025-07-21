@@ -1,6 +1,6 @@
 $(document).ready(function () {
   $.ajax({
-    url: "/getroles/api",
+    url: "/getroles",
     method: "GET",
     dataType: "json",
     success: function (roles) {

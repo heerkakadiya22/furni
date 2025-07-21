@@ -4,8 +4,8 @@ const usersController = require("../controllers/UsersController");
 
 const { upload, protect } = require("../middleware/authMiddleware");
 
-router.get("/users", usersController.getUserList);
-router.get("/getusers/api", usersController.getAllUsers);
+router.get("/users", protect, usersController.getUserList);
+router.get("/getusers", protect, usersController.getAllUsers);
 
 router.get("/adduser", protect, usersController.renderUserForm);
 

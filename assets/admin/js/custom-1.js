@@ -1,6 +1,6 @@
 $(document).ready(function () {
   $.ajax({
-    url: "/getusers/api",
+    url: "/getusers",
     method: "GET",
     dataType: "json",
     success: function (users) {
@@ -15,9 +15,8 @@ $(document).ready(function () {
             : "N/A";
           const hobby = user.hobby || "N/A";
           const role = user.role?.rolename || "N/A";
-          const emailPhone = `${user.email || "N/A"}<br><small>${
-            user.phone || ""
-          }</small>`;
+          const emailPhone = `${user.email || "N/A"}<br>
+          <small>${user.phone || ""}</small>`;
           const imageTag = user.image
             ? `<img src="${user.image}" class="user-img" alt="profile" />`
             : `<img src="./assets/admin/img/user/default.jpg" class="user-img" alt="default" />`;

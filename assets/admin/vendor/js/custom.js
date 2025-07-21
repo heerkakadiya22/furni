@@ -43,7 +43,9 @@ $(function () {
   ];
 
   requiredFields.forEach(function (fieldName) {
-    var $field = $("#userForm").find("[name='" + fieldName + "']");
+    var $field = $("#userForm, #editProfileForm").find(
+      "[name='" + fieldName + "']"
+    );
     var id = $field.attr("id");
 
     if (id) {
