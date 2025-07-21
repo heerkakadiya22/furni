@@ -13,10 +13,11 @@ exports.getAllRoles = async (req, res) => {
 exports.renderRoleListPage = (req, res) => {
   try {
     res.render("rolelist", {
-      title: "Role List",
+      breadcrumbs: [{ label: "Home", url: "/dashboard" }, { label: "Roles" }],
       currentPage: "roles",
       csrfToken: req.csrfToken(),
       user: req.session.user,
+      image: req.session?.user?.image || "/assets/admin/img/user/default.jpg",
     });
   } catch (error) {
     console.error("Error rendering role list page:", error);
@@ -39,10 +40,17 @@ exports.renderRoleForm = async (req, res) => {
       }
     }
 
+    const breadcrumbs = [
+      { label: "Home", url: "/dashboard" },
+      { label: "Roles", url: "/roles" },
+      { label: role ? "Edit Role" : "Add Role" },
+    ];
+
     res.render("roleform", {
       title: role ? "Edit Role" : "Add Role",
       currentPage: "roles",
       role,
+      breadcrumbs,
       error: req.session.error || null,
       csrfToken: req.csrfToken(),
       user: req.session.user,

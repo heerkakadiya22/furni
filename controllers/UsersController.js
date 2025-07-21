@@ -1,0 +1,143 @@
+const roleRepository = require("../repositories/roleRepository");
+const authRepository = require("../repositories/authRepository");
+const { getImagePath, formatHobbies } = require("../helper/profileHelper");
+
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await authRepository.findAll();
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching roles:", error);
+    res.status(500).json({ message: "Server error while fetching roles." });
+  }
+};
+
+exports.getUserList = async (req, res) => {
+  try {
+    const users = await authRepository.findAll();
+
+    res.render("userList", {
+      users,
+      user: req.session.user,
+      csrfToken: req.csrfToken(),
+      currentPage: "users",
+      breadcrumbs: [{ label: "Home", url: "/dashboard" }, { label: "Users" }],
+    });
+  } catch (error) {
+    console.error("Error fetching user list:", error);
+    res.status(500).send("Something went wrong while fetching users.");
+  }
+};
+
+exports.renderUserForm = async (req, res) => {
+  const userId = req.params.id;
+  const isEdit = !!userId;
+
+  try {
+    const roles = await roleRepository.findAll();
+
+    let formData = {
+      name: "",
+      email: "",
+      phone: "",
+      username: "",
+      roleId: "",
+      address: "",
+      gender: "",
+      dob: "",
+      image: "",
+      hobby: [],
+    };
+
+    if (isEdit) {
+      const user = await authRepository.findById(userId);
+      if (!user) return res.status(404).send("User not found");
+
+      formData = {
+        ...user.dataValues,
+      };
+    }
+
+    res.render("userForm", {
+      title: isEdit ? "Edit User" : "Add User",
+      user: req.session.user,
+      formData,
+      isEdit,
+      roles,
+      error: null,
+      csrfToken: req.csrfToken(),
+      currentPage: "users",
+      breadcrumbs: [
+        { label: "Dashboard", url: "/dashboard" },
+        { label: "Users", url: "/users" },
+        { label: isEdit ? "Edit User" : "Add User" },
+      ],
+    });
+  } catch (error) {
+    console.error("Error rendering user form:", error);
+    res.status(500).send("Server Error");
+  }
+};
+
+// POST: Save or Update User
+exports.handleUserSave = async (req, res) => {
+  const isEdit = !!req.params.id;
+  const userId = req.params.id;
+  const formData = req.body;
+
+  try {
+    const imagePath = getImagePath(req, formData.existingImage);
+    const hobbies = formatHobbies(formData.hobby);
+
+    const userData = {
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      username: formData.username,
+      roleId: formData.roleId,
+      address: formData.address,
+      gender: formData.gender,
+      dob: formData.dob || null,
+      image: imagePath,
+      hobby: hobbies,
+    };
+
+    if (!isEdit && formData.password) {
+      userData.password = formData.password;
+    }
+
+    if (isEdit) {
+      await authRepository.update(userId, userData);
+    } else {
+      await authRepository.createUser(userData);
+    }
+
+    res.redirect("/users");
+  } catch (error) {
+    console.error("Error saving user:", error);
+    res.status(500).send("Something went wrong while saving the user.");
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    console.log("🔍 Delete Request for ID:", userId);
+
+    const deleted = await authRepository.deleteUser(userId);
+    console.log("🗑 Deleted Count:", deleted);
+
+    if (deleted) {
+      return res
+        .status(200)
+        .json({ success: true, message: "User deleted successfully." });
+    } else {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found." });
+    }
+  } catch (error) {
+    console.error("❌ Error deleting user:", error);
+    res.status(500).json({ success: false, message: "Server error." });
+  }
+};

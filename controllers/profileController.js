@@ -18,6 +18,10 @@ const getProfile = async (req, res) => {
     console.log("✅ Gender from DB:", user.gender);
     res.render("profile", {
       title: "Edit Profile",
+      breadcrumbs: [
+        { label: "Dashboard", url: "/dashboard" },
+        { label: "Profile" }, 
+      ],
       ...user.dataValues,
       roles,
       roleId: user.roleId,

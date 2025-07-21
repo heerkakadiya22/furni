@@ -9,7 +9,7 @@
     class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
         <a href="/dashboard" class="app-brand-link">
-            <img src="/assets/user/images/favicon.png" alt
+            <img src="/assets/admin/img/favicon/favicon.png" alt
                 srcset>
             <a class="navbar-brand">Furni<span>.</span></a>
         </a>
@@ -37,6 +37,13 @@
                 class="menu-link">
                 <i class="menu-icon bi bi-person-lines-fill"></i>
                 <div data-i18n="Analytics">Roles</div>
+            </a>
+        </li>
+        <li class="menu-item <%= currentPage === 'users' ? 'active' : '' %>">
+            <a href="/users"
+                class="menu-link">
+                <i class="menu-icon bi bi-people-fill"></i>
+                <div data-i18n="Analytics">Users</div>
             </a>
         </li>
     </ul>
@@ -92,7 +99,9 @@
                         href="javascript:void(0);"
                         data-bs-toggle="dropdown">
                         <div class="avatar avatar-online">
-                            <img src="/assets/admin/img/avatars/1.png" alt
+                            <img
+                                src="<%= user && user.image ? user.image : '/assets/admin/img/user/default.jpg' %>"
+                                alt
                                 class="w-px-40 h-auto rounded-circle" />
                         </div>
                     </a>
@@ -104,7 +113,7 @@
                                         <div
                                             class="avatar avatar-online">
                                             <img
-                                                src="/assets/admin/img/avatars/1.png"
+                                                src="<%= user && user.image ? user.image : '/assets/admin/img/user/default.jpg' %>"
                                                 alt
                                                 class="w-px-40 h-auto rounded-circle" />
                                         </div>

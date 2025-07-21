@@ -21,7 +21,8 @@
 
   <!-- DataTables CSS -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
-    <style>.dataTables_length,
+    <style>
+    .dataTables_length,
 .dataTables_filter,
 .custom-addrole {
   margin-left: 0.5rem;
@@ -44,11 +45,9 @@
                     <!-- Content wrapper -->
                     <div class="content-wrapper">
                         <!-- Content -->
+                         <div class="container-xxl flex-grow-1 container-p-y">
 
-                        <div class="container-xxl flex-grow-1 container-p-y">
-                            <h4 class="fw-bold py-3 mb-4"><span
-                                    class="text-muted fw-light">Tables /</span>
-                                <%= title %></h4>
+                       <%- include('../partials/breadcrumbs', { breadcrumbs: breadcrumbs }) %>
 
                             <!-- Basic Bootstrap Table -->
                             <div class="card">

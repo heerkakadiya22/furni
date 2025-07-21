@@ -18,8 +18,18 @@ const findById = async (id) => {
   });
 };
 
+const deleteUser = async (id) => {
+  return await Register.destroy({ where: { id } });
+};
+
 const update = async (id, data) => {
   return await Register.update(data, { where: { id } });
+};
+
+const findAll = async () => {
+  return await Register.findAll({
+    include: [{ model: Role, as: "role" }],
+  });
 };
 
 module.exports = {
@@ -28,4 +38,6 @@ module.exports = {
   updatePasswordByEmail,
   findById,
   update,
+  findAll,
+  deleteUser,
 };

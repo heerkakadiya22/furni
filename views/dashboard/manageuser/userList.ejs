@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html
+    lang="en"
+    class="light-style layout-menu-fixed"
+    dir="ltr"
+    data-theme="theme-default"
+    data-assets-path="../assets/"
+    data-template="vertical-menu-template-free">
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+        <title>User List</title>
+
+        <meta name="description" content />
+        <%- include('../partials/head') %>
+        <script
+            src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+        <!-- DataTables CSS -->
+        <link rel="stylesheet"
+            href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+
+        <style>
+  .dataTables_length,
+  .dataTables_filter,
+  .custom-adduser {
+    margin-left: 0.5rem;
+  }
+
+  .dataTables_length select {
+    height: calc(1.5em + 0.75rem + 2px);
+  }
+
+  .user-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+</style>
+
+    </head>
+
+    <body>
+        <div class="layout-wrapper layout-content-navbar">
+            <div class="layout-container">
+                <%- include('../partials/sidebar') %>
+
+                <div class="content-wrapper">
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <%- include('../partials/breadcrumbs', { breadcrumbs:
+                        breadcrumbs }) %>
+
+                        <div class="card">
+                            <input type="hidden" id="csrfToken"
+                                value="<%= csrfToken %>">
+
+                            <div class="table table-bordered table-hover w-100">
+                                <table class="table" id="usersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Profile</th>
+                                            <th>Email / Phone</th>
+                                            <th>Username</th>
+                                            <th>DOB / Gender</th>
+                                            <th>Hobby</th>
+                                            <th>Role</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="usersTableBody"
+                                        class="table-border-bottom-0">
+                                        <tr>
+                                            <td colspan="8"
+                                                class="text-center text-muted">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <%- include('../partials/footer') %>
+                    <div class="content-backdrop fade"></div>
+                </div>
+            </div>
+
+            <div class="layout-overlay layout-menu-toggle"></div>
+        </div>
+
+        <div class="buy-now">
+            <a
+                href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/"
+                target="_blank"
+                class="btn btn-danger btn-buy-now">Upgrade to Pro</a>
+        </div>
+
+        <%- include('../partials/script') %>
+        <script
+            src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <script src="/assets/admin/js/custom-1.js"></script>
+    </body>
+</html>

@@ -3,7 +3,6 @@ const app = express();
 const session = require("express-session");
 const FileStore = require("session-file-store")(session);
 const path = require("path");
-const csrf = require("csurf");
 require("dotenv").config();
 const CONFIG = require("./config/config");
 const ENV = process.env.NODE_ENV || "development";
@@ -17,6 +16,9 @@ const dashboardRoute = require("./routes/dashboardRoute");
 const passwordRoute = require("./routes/passwordRoute");
 const roleRoute = require("./routes/roleRoute");
 const profileRoute = require("./routes/profileRoute");
+const userRoute = require("./routes/usersRoute");
+
+const conditionCsrf = require("./middleware/conditionalCsrf");
 
 app.set("view engine", "ejs");
 app.set("views", [
@@ -27,6 +29,7 @@ app.set("views", [
   path.join(__dirname, "views/dashboard"),
   path.join(__dirname, "views/dashboard/roles"),
   path.join(__dirname, "views/dashboard/account"),
+  path.join(__dirname, "views/dashboard/manageuser"),
 ]);
 
 app.use(express.json());
@@ -45,24 +48,8 @@ app.use(
   })
 );
 
-// ✅ Then apply CSRF
-const csrfProtection = csrf();
-app.use((req, res, next) => {
-  if (req.method === "POST" && req.path === "/profile") {
-    return next();
-  }
-  csrfProtection(req, res, next);
-});
-
-app.use((req, res, next) => {
-  res.setHeader(
-    "Cache-Control",
-    "no-store, no-cache, must-revalidate, private"
-  );
-  res.setHeader("Pragma", "no-cache");
-  res.setHeader("Expires", "0");
-  next();
-});
+// ✅ CSRF protection middleware
+app.use(conditionCsrf);
 
 // Routes
 app.use(indexRoute);
@@ -72,6 +59,7 @@ app.use(dashboardRoute);
 app.use(passwordRoute);
 app.use(roleRoute);
 app.use(profileRoute);
+app.use(userRoute);
 
 // // ✅ Optional error handler for CSRF
 // app.use((err, req, res, next) => {
