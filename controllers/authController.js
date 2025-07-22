@@ -46,7 +46,7 @@ exports.handleRegister = async (req, res) => {
       req.session.registerFormData = { name, email };
       req.session.showLogin = false;
       return req.session.save(() => {
-        return res.redirect("/auth");
+        return res.redirect("/auth?show=register");
       });
     }
 
@@ -69,7 +69,17 @@ exports.handleRegister = async (req, res) => {
 };
 
 exports.handleLogin = async (req, res) => {
+  const errors = validationResult(req);
   const { email, password } = req.body;
+
+  if (!errors.isEmpty()) {
+    req.session.error = errors.array()[0].msg;
+    req.session.loginFormData = { email };
+    req.session.showLogin = true;
+    return req.session.save(() => {
+      return res.redirect("/auth?show=login");
+    });
+  }
 
   try {
     const user = await registerRepo.findByEmail(email);

@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const usersController = require("../controllers/UsersController");
-
+const { addUserValidation } = require("../validators/userValidator");
+const { baseRules } = require("../validators/profileValidator");
 const { upload, protect } = require("../middleware/authMiddleware");
 
 router.get("/users", protect, usersController.getUserList);
@@ -15,6 +16,7 @@ router.post(
   "/adduser",
   protect,
   upload.single("image"),
+  addUserValidation,
   usersController.handleUserSave
 );
 
@@ -23,6 +25,7 @@ router.post(
   "/users/:id/edit",
   protect,
   upload.single("image"),
+  baseRules,
   usersController.handleUserSave
 );
 

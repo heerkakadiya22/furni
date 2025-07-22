@@ -1,6 +1,7 @@
 const roleRepository = require("../repositories/roleRepository");
 const authRepository = require("../repositories/authRepository");
 const { getImagePath, formatHobbies } = require("../helper/profileHelper");
+const { validationResult } = require("express-validator");
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -65,7 +66,6 @@ exports.renderUserForm = async (req, res) => {
       currentUser?.image && currentUser.image !== ""
         ? `${currentUser.image}`
         : `/assets/admin/img/user/default.jpg`;
-        
 
     res.render("userForm", {
       title: isEdit ? "Edit User" : "Add User",
@@ -91,12 +91,26 @@ exports.renderUserForm = async (req, res) => {
 
 // POST: Save or Update User
 exports.handleUserSave = async (req, res) => {
+  // ✅ Handle validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.error("🔴 Validation errors:", errors.array());
+
+    req.session.error = "Please correct the errors in your form.";
+    return req.session.save(() => {
+      const redirectUrl = isEdit ? `/users/${userId}/edit` : "/adduser";
+      res.redirect(redirectUrl);
+    });
+  }
+
   const isEdit = !!req.params.id;
   const userId = req.params.id;
   const formData = req.body;
 
   try {
-    const imagePath = getImagePath(req, formData.existingImage);
+    const user = isEdit ? await authRepository.findById(userId) : null;
+
+    const imagePath = getImagePath(req, user?.image);
     const hobbies = formatHobbies(formData.hobby);
 
     const userData = {

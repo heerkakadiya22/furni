@@ -1,5 +1,6 @@
 const roleRepository = require("../repositories/roleRepository");
 const authRepository = require("../repositories/authRepository");
+const { validationResult } = require("express-validator");
 
 exports.getAllRoles = async (req, res) => {
   try {
@@ -71,6 +72,12 @@ exports.renderRoleForm = async (req, res) => {
 };
 
 exports.createRole = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    req.session.error = errors.array()[0].msg;
+    return req.session.save(() => res.redirect("/addrole"));
+  }
+
   try {
     const { name, description } = req.body;
     const active = req.body.active ? true : false;
@@ -107,6 +114,11 @@ exports.createRole = async (req, res) => {
 
 // Handle Role Update
 exports.updateRole = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    req.session.error = errors.array()[0].msg;
+    return req.session.save(() => res.redirect(`/roles/${req.body.id}/edit`));
+  }
   try {
     const { id, name, description } = req.body;
     const active = req.body.active ? true : false;

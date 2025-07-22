@@ -1,4 +1,5 @@
 const authRepo = require("../repositories/authRepository");
+const { validationResult } = require("express-validator");
 
 // Show forgot/reset password form
 exports.renderPasswordPage = function (req, res) {
@@ -25,6 +26,14 @@ exports.renderPasswordPage = function (req, res) {
 
 // Handle forgot password form
 exports.handleForgotPassword = function (req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    req.session.error = errors.array()[0].msg;
+    return req.session.save(() => {
+      return res.redirect("/password");
+    });
+  }
+
   const email = req.body.email;
 
   authRepo
@@ -53,6 +62,14 @@ exports.handleForgotPassword = function (req, res) {
 
 // Handle password reset
 exports.handleResetPassword = function (req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    req.session.error = errors.array()[0].msg;
+    return req.session.save(() => {
+      return res.redirect("/password?action=reset");
+    });
+  }
+
   const password = req.body.newPassword;
   const confirm = req.body.confirmNewPassword;
   const email = req.session.email;
@@ -118,6 +135,12 @@ exports.changePasswordForm = (req, res) => {
 };
 
 exports.changePassword = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return renderChangePassword(res, req, {
+      error: errors.array()[0].msg,
+    });
+  }
   try {
     const { currentPassword, newPassword, confirmNewPassword } = req.body;
     const userId = req.session.user?.id;

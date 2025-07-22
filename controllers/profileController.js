@@ -1,6 +1,7 @@
 const authRepo = require("../repositories/authRepository");
 const roleRepo = require("../repositories/roleRepository");
 const { getImagePath, formatHobbies } = require("../helper/profileHelper");
+const { validationResult } = require("express-validator");
 
 const getProfile = async (req, res) => {
   try {
@@ -20,7 +21,7 @@ const getProfile = async (req, res) => {
       title: "Edit Profile",
       breadcrumbs: [
         { label: "Dashboard", url: "/dashboard" },
-        { label: "Profile" }, 
+        { label: "Profile" },
       ],
       ...user.dataValues,
       roles,
@@ -41,6 +42,15 @@ const getProfile = async (req, res) => {
 };
 
 const updateProfile = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    console.error("🔴 Validation errors:", errors.array());
+
+    req.session.error = "Please correct the errors in your form.";
+    return req.session.save(() => {
+      res.redirect("/profile"); // ✅ return here to stop further execution
+    });
+  }
   try {
     const userId = req.session.user.id;
     const { name, email, phone, username, address, dob, gender, roleId } =
