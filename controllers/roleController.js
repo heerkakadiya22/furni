@@ -1,4 +1,5 @@
 const roleRepository = require("../repositories/roleRepository");
+const authRepository = require("../repositories/authRepository");
 
 exports.getAllRoles = async (req, res) => {
   try {
@@ -10,14 +11,16 @@ exports.getAllRoles = async (req, res) => {
   }
 };
 
-exports.renderRoleListPage = (req, res) => {
+exports.renderRoleListPage = async (req, res) => {
   try {
+    const userId = req.session.user.id;
+    const user = await authRepository.findById(userId);
     res.render("rolelist", {
+      ...user.dataValues,
       breadcrumbs: [{ label: "Home", url: "/dashboard" }, { label: "Roles" }],
       currentPage: "roles",
       csrfToken: req.csrfToken(),
       user: req.session.user,
-      image: req.session?.user?.image || "/assets/admin/img/user/default.jpg",
     });
   } catch (error) {
     console.error("Error rendering role list page:", error);
@@ -29,6 +32,9 @@ exports.renderRoleForm = async (req, res) => {
   try {
     const roleId = req.params.id;
     let role = null;
+
+    const userId = req.session.user.id;
+    const user = await authRepository.findById(userId);
 
     if (roleId) {
       role = await roleRepository.findById(roleId);
@@ -47,6 +53,7 @@ exports.renderRoleForm = async (req, res) => {
     ];
 
     res.render("roleform", {
+      ...user.dataValues,
       title: role ? "Edit Role" : "Add Role",
       currentPage: "roles",
       role,

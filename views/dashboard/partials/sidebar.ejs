@@ -46,6 +46,14 @@
                 <div data-i18n="Analytics">Users</div>
             </a>
         </li>
+        <li
+            class="menu-item <%= currentPage === 'changePassword' ? 'active' : '' %>">
+            <a href="/change-password"
+                class="menu-link">
+                <i class="menu-icon bi bi-shield-lock-fill"></i>
+                <div data-i18n="Analytics">Change Password</div>
+            </a>
+        </li>
     </ul>
 </aside>
 <!-- / Menu -->
@@ -100,8 +108,7 @@
                         data-bs-toggle="dropdown">
                         <div class="avatar avatar-online">
                             <img
-                                src="<%= user && user.image ? user.image : '/assets/admin/img/user/default.jpg' %>"
-                                alt
+                                src="<%= image %>" alt
                                 class="w-px-40 h-auto rounded-circle" />
                         </div>
                     </a>
@@ -113,8 +120,7 @@
                                         <div
                                             class="avatar avatar-online">
                                             <img
-                                                src="<%= user && user.image ? user.image : '/assets/admin/img/user/default.jpg' %>"
-                                                alt
+                                                src="<%= image %>" alt
                                                 class="w-px-40 h-auto rounded-circle" />
                                         </div>
                                     </div>

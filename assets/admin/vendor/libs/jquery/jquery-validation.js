@@ -129,3 +129,53 @@ $(function () {
     },
   });
 });
+
+$(function () {
+  $("#ChangePasswordForm").validate({
+    rules: {
+      currentPassword: {
+        required: true,
+      },
+      password: {
+        required: true,
+        minlength: 6,
+        maxlength: 10,
+        pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).+$/,
+      },
+      confirmPassword: {
+        required: true,
+        equalTo: "#password",
+      },
+    },
+    messages: {
+      currentPassword: {
+        required: "Current password is required.",
+      },
+      password: {
+        required: "Password is required.",
+        minlength: "Minimum 6 characters.",
+        maxlength: "Maximum 10 characters.",
+        pattern: "Include upper, lower, digit, and special character.",
+      },
+      confirmPassword: {
+        required: "Please confirm your password.",
+        equalTo: "Passwords do not match.",
+      },
+    },
+    errorElement: "label",
+    errorClass: "error",
+    highlight: function (element) {
+      $(element).addClass("is-invalid");
+    },
+    unhighlight: function (element) {
+      $(element).removeClass("is-invalid");
+    },
+    errorPlacement: function (error, element) {
+      if (element.closest(".form-control").last().after(error)) {
+        element.parent().after(error);
+      } else {
+        error.insertAfter(element);
+      }
+    },
+  });
+});

@@ -1,5 +1,5 @@
+// Function to handle required fields in role forms
 $(function () {
-  // Define the fields you want to target
   var requiredFields = ["name"];
 
   requiredFields.forEach(function (fieldName) {
@@ -32,8 +32,8 @@ $(function () {
   });
 });
 
+// Function to handle required fields in user forms
 $(function () {
-  // Define the fields you want to target
   var requiredFields = [
     "name",
     "email",
@@ -74,6 +74,7 @@ $(function () {
   });
 });
 
+// Function to handle image upload and preview
 document.getElementById("imageUpload").addEventListener("change", function (e) {
   const reader = new FileReader();
   reader.onload = function (e) {
@@ -82,6 +83,7 @@ document.getElementById("imageUpload").addEventListener("change", function (e) {
   reader.readAsDataURL(this.files[0]);
 });
 
+// Function to remove alert after 5 seconds
 setTimeout(() => {
   const alert = document.querySelector(".alert");
   if (alert) {
@@ -93,3 +95,19 @@ setTimeout(() => {
     }, 300);
   }
 }, 5000);
+
+// Function to toggle password visibility
+function togglePassword(inputId, iconId) {
+  const input = document.getElementById(inputId);
+  const icon = document.getElementById(iconId);
+
+  if (input.type === "password") {
+    input.type = "text";
+    icon.classList.remove("fa-eye");
+    icon.classList.add("fa-eye-slash");
+  } else {
+    input.type = "password";
+    icon.classList.remove("fa-eye-slash");
+    icon.classList.add("fa-eye");
+  }
+}

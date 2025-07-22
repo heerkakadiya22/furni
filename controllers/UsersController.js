@@ -15,8 +15,10 @@ exports.getAllUsers = async (req, res) => {
 exports.getUserList = async (req, res) => {
   try {
     const users = await authRepository.findAll();
-
+    const userId = req.session.user.id;
+    const user = await authRepository.findById(userId);
     res.render("userList", {
+      ...user.dataValues,
       users,
       user: req.session.user,
       csrfToken: req.csrfToken(),
@@ -58,10 +60,18 @@ exports.renderUserForm = async (req, res) => {
       };
     }
 
+    const currentUser = await authRepository.findById(req.session.user.id);
+    const profileImage =
+      currentUser?.image && currentUser.image !== ""
+        ? `${currentUser.image}`
+        : `/assets/admin/img/user/default.jpg`;
+        
+
     res.render("userForm", {
       title: isEdit ? "Edit User" : "Add User",
       user: req.session.user,
       formData,
+      image: profileImage,
       isEdit,
       roles,
       error: null,
