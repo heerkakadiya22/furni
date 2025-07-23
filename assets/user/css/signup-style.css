@@ -269,6 +269,40 @@ input[type="radio"] {
   -ms-appearance: radio !important;
 }
 
+label.error {
+  color: #ff0019;
+  font-size: 13px;
+  display: block;
+  margin-left: 15px;
+  margin-bottom: -20px;
+}
+
+.alert-danger {
+  color: #ff0015;
+  padding: 20px;
+  font-size: 14px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input[type="password"],
+.password-wrapper input[type="text"] {
+  padding-right: 35px; /* space for the eye icon */
+}
+
+.toggle-password {
+  position: absolute;
+  top: 40%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #666;
+}
+
 img {
   max-width: 100%;
   height: auto;

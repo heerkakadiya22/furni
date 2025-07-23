@@ -1,0 +1,25 @@
+.dataTables_length,
+.dataTables_filter,
+.custom-addrole,
+.custom-adduser {
+  margin-left: 0.5rem;
+}
+
+/* Align dropdown vertically with search */
+.dataTables_length select {
+  height: calc(1.5em + 0.75rem + 2px);
+}
+
+.user-img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* roleform */
+.error {
+  color: red;
+  font-size: 0.875em;
+  margin-top: 0.25rem;
+}

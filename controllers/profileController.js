@@ -1,6 +1,10 @@
 const authRepo = require("../repositories/authRepository");
 const roleRepo = require("../repositories/roleRepository");
-const { getImagePath, formatHobbies } = require("../helper/profileHelper");
+const {
+  getImagePath,
+  formatHobbies,
+  deleteOldImageIfNeeded,
+} = require("../helper/profileHelper");
 const { validationResult } = require("express-validator");
 
 const getProfile = async (req, res) => {
@@ -60,6 +64,10 @@ const updateProfile = async (req, res) => {
     const user = await authRepo.findById(userId);
 
     if (!user) throw new Error("User not found");
+
+    if (req.file && user.image) {
+      deleteOldImageIfNeeded(user.image);
+    }
 
     const imagePath = getImagePath(req, user.image);
 

@@ -110,13 +110,21 @@ exports.handleUserSave = async (req, res) => {
   const formData = req.body;
 
   try {
-    const user = isEdit ? await authRepository.findById(userId) : null;
+    let existingUser = null;
+    if (isEdit) {
+      existingUser = await authRepository.findById(userId);
+      if (!existingUser) {
+        return res.status(404).send("User not found.");
+      }
 
-    if (isEdit && req.file && user?.image) {
-      deleteOldImageIfNeeded(user.image);
+      // ✅ Delete old image if a new one is uploaded
+      if (req.file && existingUser.image) {
+        deleteOldImageIfNeeded(existingUser.image);
+      }
     }
 
-    const imagePath = getImagePath(req, user?.image);
+    // ✅ Always get updated image path: new or fallback to old
+    const imagePath = getImagePath(req, existingUser?.image);
     const hobbies = formatHobbies(formData.hobby);
 
     const userData = {

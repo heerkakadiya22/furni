@@ -13,24 +13,10 @@
         <link
             href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
             rel="stylesheet">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="/assets/user/css/signup-style.css">
-        <style>
-      label.error {
-        color: #ff0019;
-        font-size: 13px;
-        display: block;
-        margin-left: 15px;
-        margin-bottom: -20px;
-      }
 
-      .alert-danger {
-        color: #ff0015;
-        padding: 20px;
-        font-size: 14px;
-        margin-left: 10px;
-        margin-bottom: 10px;
-      }
-    </style>
     </head>
 
     <body>
@@ -84,19 +70,27 @@
                                     placeholder="Your Email"
                                     value="<%= formData?.email || '' %>" />
                             </div>
-                            <div class="form-group">
+                            <!-- Password -->
+                            <div class="form-group password-wrapper">
                                 <label for="password"><i
                                         class="bi bi-lock"></i></label>
                                 <input type="password" name="password"
                                     id="password" placeholder="Password" />
+                                <i class="fa-solid fa-eye toggle-password"
+                                    onclick="togglePassword('password', this)"></i>
                             </div>
-                            <div class="form-group">
+
+                            <!-- Confirm Password -->
+                            <div class="form-group password-wrapper">
                                 <label for="confirmPassword"><i
                                         class="bi bi-lock-fill"></i></label>
                                 <input type="password" name="confirmPassword"
                                     id="confirmPassword"
                                     placeholder="Repeat your password" />
+                                <i class="fa-solid fa-eye toggle-password"
+                                    onclick="togglePassword('confirmPassword', this)"></i>
                             </div>
+
                             <div class="form-group">
                                 <input type="checkbox" name="agree-term"
                                     id="agree-term" class="agree-term" />
@@ -137,13 +131,17 @@
                                     id="login_email" placeholder="Your Email"
                                     value="<%= formData?.email || '' %>" />
                             </div>
-                            <div class="form-group">
+
+                            <div class="form-group password-wrapper">
                                 <label for="login_password"><i
                                         class="bi bi-lock"></i></label>
                                 <input type="password" name="password"
                                     id="login_password"
                                     placeholder="Password" />
+                                <i class="fa-solid fa-eye toggle-password"
+                                    onclick="togglePassword('login_password', this)"></i>
                             </div>
+
                             <div class="form-group form-button">
                                 <input type="submit" name="signin" id="signin"
                                     class="form-submit" value="Log in" />
@@ -181,5 +179,6 @@
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
         <script src="/assets/user/vendor/jquery/jquery-validation.js"></script>
+        <script src="/assets/admin/vendor/js/custom.js"></script>
     </body>
 </html>

@@ -15743,8 +15743,8 @@ html:not(.layout-footer-fixed) .content-wrapper {
   cursor: pointer;
 }
 .avatar img {
-  width: 100%;
-  height: 100%;
+ width: 40px;
+ height: 40px;
 }
 .avatar .avatar-initial {
   position: absolute;

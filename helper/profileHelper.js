@@ -23,22 +23,27 @@ const formatHobbies = (hobbyInput) => {
 /**
  * Delete the old image from server if it's not the default
  */
-const deleteOldImageIfNeeded = (oldImageFilename) => {
+const deleteOldImageIfNeeded = (imagePathFromDB) => {
   const defaultFilename = path.basename(DEFAULT_IMAGE);
-  if (!oldImageFilename || oldImageFilename === defaultFilename) return;
+  const imageFilename = path.basename(imagePathFromDB || "");
 
-  const oldImagePath = path.join(
+  if (!imageFilename || imageFilename === defaultFilename) return;
+
+  const fullPath = path.join(
     __dirname,
-    "../public/assets/admin/img/user/",
-    oldImageFilename
+    "../assets/admin/img/user",
+    imageFilename
   );
 
-  if (fs.existsSync(oldImagePath)) {
-    fs.unlink(oldImagePath, (err) => {
-      if (err) console.error("❌ Failed to delete old image:", err);
-      else console.log("🗑️ Deleted old image:", oldImageFilename);
-    });
-  }
+  fs.unlink(fullPath, (err) => {
+    if (err && err.code !== "ENOENT") {
+      console.error("❌ Failed to delete image:", err);
+    } else if (!err) {
+      console.log("🗑️ Deleted image:", imageFilename);
+    } else {
+      console.warn("⚠️ Image not found:", fullPath);
+    }
+  });
 };
 
 module.exports = {
