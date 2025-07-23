@@ -1,6 +1,10 @@
 const roleRepository = require("../repositories/roleRepository");
 const authRepository = require("../repositories/authRepository");
-const { getImagePath, formatHobbies } = require("../helper/profileHelper");
+const {
+  getImagePath,
+  formatHobbies,
+  deleteOldImageIfNeeded,
+} = require("../helper/profileHelper");
 const { validationResult } = require("express-validator");
 
 exports.getAllUsers = async (req, res) => {
@@ -94,8 +98,6 @@ exports.handleUserSave = async (req, res) => {
   // ✅ Handle validation errors
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.error("🔴 Validation errors:", errors.array());
-
     req.session.error = "Please correct the errors in your form.";
     return req.session.save(() => {
       const redirectUrl = isEdit ? `/users/${userId}/edit` : "/adduser";
@@ -109,6 +111,10 @@ exports.handleUserSave = async (req, res) => {
 
   try {
     const user = isEdit ? await authRepository.findById(userId) : null;
+
+    if (isEdit && req.file && user?.image) {
+      deleteOldImageIfNeeded(user.image);
+    }
 
     const imagePath = getImagePath(req, user?.image);
     const hobbies = formatHobbies(formData.hobby);
@@ -138,6 +144,8 @@ exports.handleUserSave = async (req, res) => {
 
     res.redirect("/users");
   } catch (error) {
+    console.error("❌ Error saving user:", error.message);
+    console.error("📦 Full Error Stack:", error.stack);
     console.error("Error saving user:", error);
     res.status(500).send("Something went wrong while saving the user.");
   }

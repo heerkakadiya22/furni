@@ -108,7 +108,8 @@
                         data-bs-toggle="dropdown">
                         <div class="avatar avatar-online">
                             <img
-                                src="<%= image %>" alt
+                                src="<%= image || '/assets/admin/img/user/default.jpg' %>"
+                                alt
                                 class="w-px-40 h-auto rounded-circle" />
                         </div>
                     </a>
@@ -120,7 +121,8 @@
                                         <div
                                             class="avatar avatar-online">
                                             <img
-                                                src="<%= image %>" alt
+                                                src="<%= image || '/assets/admin/img/user/default.jpg' %>"
+                                                alt
                                                 class="w-px-40 h-auto rounded-circle" />
                                         </div>
                                     </div>
