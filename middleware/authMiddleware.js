@@ -1,20 +1,27 @@
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const registerRepo = require("../repositories/authRepository");
 
-const preventBackForLoggedIn = (req, res, next) => {
-  if (req.session.user) {
-    return res.redirect("/dashboard");
-  }
-  next();
-};
-
-const protect = (req, res, next) => {
+async function protect(req, res, next) {
   if (!req.session.user) {
     return res.redirect("/");
   }
-  next();
-};
+
+  try {
+    const freshUser = await registerRepo.findById(req.session.user.id);
+    if (freshUser?.roleId === 1) {
+      // Update session with the new role
+      req.session.user.roleId = 1;
+      return next(); // ✅ allow
+    }
+  } catch (error) {
+    console.error("Protect middleware error:", error);
+  }
+
+  // ❌ Not admin
+  return res.redirect("/");
+}
 
 // Ensure upload directory exists
 const uploadDir = path.join(__dirname, "../assets/admin/img/user");
@@ -53,6 +60,5 @@ const upload = multer({
 
 module.exports = {
   upload,
-  preventBackForLoggedIn,
   protect,
 };

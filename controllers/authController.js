@@ -53,7 +53,7 @@ exports.handleRegister = async (req, res) => {
     }
 
     const token = uuidv4();
-    const email_expired = new Date(Date.now() + 24 * 60 * 60 * 1000); 
+    const email_expired = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
     await registerRepo.createUser({
       name,
@@ -117,7 +117,7 @@ exports.handleLogin = async (req, res) => {
       } else {
         req.session.error = "Please verify your email to continue.";
       }
-      
+
       req.session.loginFormData = { email };
       req.session.showLogin = true;
       return req.session.save(() => res.redirect("/auth?show=login"));
@@ -128,9 +128,30 @@ exports.handleLogin = async (req, res) => {
       id: user.id,
       name: user.name,
       email: user.email,
+      roleId: user.roleId,
     };
 
-    return req.session.save(() => res.redirect("/dashboard"));
+    if (user.roleId === 1) {
+      // Admin: open dashboard in new tab, redirect index in current
+      return req.session.save(() => {
+        return res.send(`
+          <html>
+            <head>
+              <script>
+                window.open('/dashboard', '_blank');
+                window.location.href = '/';  
+              </script>
+            </head>
+            <body>
+              Redirecting...
+            </body>
+          </html>
+        `);
+      });
+    } else {
+      // Non-admin user: redirect to index only
+      return req.session.save(() => res.redirect("/"));
+    }
   } catch (err) {
     console.error("Login error:", err);
     req.session.error = "Login failed. Try again.";

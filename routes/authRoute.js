@@ -5,9 +5,8 @@ const {
   registerValidation,
   loginValidation,
 } = require("../validators/authValidator");
-const { preventBackForLoggedIn } = require("../middleware/authMiddleware");
 
-router.get("/auth", preventBackForLoggedIn, authController.renderAuth);
+router.get("/auth", authController.renderAuth);
 router.post("/register", registerValidation, authController.handleRegister);
 router.post("/login", loginValidation, authController.handleLogin);
 router.post("/logout", authController.logout);
