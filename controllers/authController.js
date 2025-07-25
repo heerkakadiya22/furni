@@ -23,6 +23,7 @@ exports.renderAuth = (req, res) => {
     error,
     success,
     showLogin,
+    session: req.session,
     formData: showLogin ? loginFormData : registerFormData,
   });
 };

@@ -3,13 +3,13 @@ exports.renderIndex = (req, res) => {
     res.render("index", {
       title: "Home | Furni",
       csrfToken: req.csrfToken(),
+      session: req.session,
       currentPage: "index",
       error: req.session.error || null,
       success: req.session.success || null,
       formData: req.session.formData || {},
     });
 
-    // Reset session values
     req.session.error = null;
     req.session.success = null;
     req.session.formData = null;

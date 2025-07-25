@@ -34,13 +34,42 @@
 			</ul>
 
 			<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-				<a class="nav-link <%= currentPage === 'auth' ? 'active' : '' %>"
-					href="/auth">
-					<img src="/assets/user/images/user.svg"> Sign Up
-				</a>
-				<li><a class="nav-link" href="cart.html"><img
-							src="/assets/user/images/cart.svg"></a></li>
+				<% if (!session?.user) { %>
+				<li>
+					<a class="nav-link <%= currentPage === 'auth' ? 'active' : '' %>"
+						href="/auth">
+						<img src="/assets/user/images/user.svg"> Sign Up
+					</a>
+				</li>
+				<% } else { %>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle text-white" href="#" role="button"
+						data-bs-toggle="dropdown">
+						<%= session.user.name %>
+					</a>
+					<ul class="dropdown-menu">
+						<% if (session.user.roleId === 1) { %>
+						<li><a class="dropdown-item" href="/dashboard">Admin Panel</a></li>
+						<% } %>
+						<li class="dropdown-item p-0">
+							<form action="/logout" method="POST" class="m-0 p-0">
+								<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+								<button type="submit" class="dropdown-item w-100 text-start">
+									<i class="bx bx-power-off me-2"></i> Logout
+								</button>
+							</form>
+						</li>
+					</ul>
+				</li>
+				<% } %>
+
+				<li>
+					<a class="nav-link" href="/cart">
+						<img src="/assets/user/images/cart.svg">
+					</a>
+				</li>
 			</ul>
+
 		</div>
 	</div>
 

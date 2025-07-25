@@ -4,6 +4,7 @@ exports.renderBlog = (req, res) => {
       title: "Blog",
       csrfToken: req.csrfToken(),
       currentPage: "blog",
+      session: req.session,
     });
   } catch (error) {
     console.error("Error rendering blog page:", error);
@@ -17,6 +18,7 @@ exports.renderShop = (req, res) => {
       title: "Shop",
       csrfToken: req.csrfToken(),
       currentPage: "shop",
+      session: req.session,
     });
   } catch (error) {
     console.error("Error rendering shop page:", error);
@@ -30,6 +32,7 @@ exports.renderServices = (req, res) => {
       title: "Services",
       csrfToken: req.csrfToken(),
       currentPage: "services",
+      session: req.session,
     });
   } catch (error) {
     console.error("Error rendering services page:", error);
@@ -43,6 +46,7 @@ exports.renderContact = (req, res) => {
       title: "Contact us",
       csrfToken: req.csrfToken(),
       currentPage: "contact",
+      session: req.session,
     });
   } catch (error) {
     console.error("Error rendering contact page:", error);
@@ -56,6 +60,7 @@ exports.renderAbout = (req, res) => {
       title: "About Us",
       csrfToken: req.csrfToken(),
       currentPage: "about",
+      session: req.session,
     });
   } catch (error) {
     console.error("Error rendering about page:", error);
