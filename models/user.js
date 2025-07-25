@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
@@ -9,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
+
   User.init(
     {
       name: DataTypes.STRING,
@@ -21,6 +23,17 @@ module.exports = (sequelize, DataTypes) => {
       hobby: DataTypes.STRING,
       dob: DataTypes.DATEONLY,
       gender: DataTypes.ENUM("male", "female"),
+
+      verifiedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: "verifiedAt",
+      },
+      email_expired: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        field: "email_expired",
+      },
     },
     {
       sequelize,
@@ -29,5 +42,6 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: false,
     }
   );
+
   return User;
 };

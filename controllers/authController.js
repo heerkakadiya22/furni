@@ -1,5 +1,7 @@
 const { validationResult } = require("express-validator");
 const registerRepo = require("../repositories/authRepository");
+const { v4: uuidv4 } = require("uuid");
+const sendVerificationEmail = require("../utils/sendVerificationEmail");
 
 exports.renderAuth = (req, res) => {
   const error = req.session.error || null;
@@ -50,20 +52,38 @@ exports.handleRegister = async (req, res) => {
       });
     }
 
-    await registerRepo.createUser({ name, email, password });
+    const token = uuidv4();
+    const email_expired = new Date(Date.now() + 24 * 60 * 60 * 1000); 
 
-    req.session.success = "Registration successful! Please log in.";
+    await registerRepo.createUser({
+      name,
+      email,
+      password,
+      verifiedAt: null,
+      email_expired,
+    });
+
+    // Store token in session
+    req.session.emailVerification = {
+      token,
+      email,
+      expiresAt: email_expired,
+    };
+
+    await sendVerificationEmail(email, token);
+
+    req.session.success = "Registered! Please check your email to verify.";
     req.session.showLogin = true;
     return req.session.save(() => {
       return res.redirect("/auth?show=login");
     });
   } catch (err) {
     console.error("Registration error:", err);
-    req.session.error = "Something went wrong. Try again.";
+    req.session.error = "Registration failed.";
     req.session.registerFormData = { name, email };
     req.session.showLogin = false;
     return req.session.save(() => {
-      return res.redirect("/auth");
+      return res.redirect("/auth?show=register");
     });
   }
 };
@@ -76,9 +96,7 @@ exports.handleLogin = async (req, res) => {
     req.session.error = errors.array()[0].msg;
     req.session.loginFormData = { email };
     req.session.showLogin = true;
-    return req.session.save(() => {
-      return res.redirect("/auth?show=login");
-    });
+    return req.session.save(() => res.redirect("/auth?show=login"));
   }
 
   try {
@@ -88,29 +106,37 @@ exports.handleLogin = async (req, res) => {
       req.session.error = "Invalid credentials";
       req.session.loginFormData = { email };
       req.session.showLogin = true;
-      return req.session.save(() => {
-        return res.redirect("/auth?show=login");
-      });
+      return req.session.save(() => res.redirect("/auth?show=login"));
     }
 
+    // Check if the user has verified their email
+    if (!user.verifiedAt) {
+      const now = new Date();
+      if (user.email_expired && new Date(user.email_expired) < now) {
+        req.session.error = "Verification link expired. Please register again.";
+      } else {
+        req.session.error = "Please verify your email to continue.";
+      }
+      
+      req.session.loginFormData = { email };
+      req.session.showLogin = true;
+      return req.session.save(() => res.redirect("/auth?show=login"));
+    }
+
+    // Login success
     req.session.user = {
       id: user.id,
       name: user.name,
       email: user.email,
     };
 
-    // req.session.success = "Login successful!";
-    return req.session.save(() => {
-      return res.redirect("/dashboard");
-    });
+    return req.session.save(() => res.redirect("/dashboard"));
   } catch (err) {
     console.error("Login error:", err);
     req.session.error = "Login failed. Try again.";
     req.session.loginFormData = { email };
     req.session.showLogin = true;
-    return req.session.save(() => {
-      return res.redirect("/auth?show=login");
-    });
+    return req.session.save(() => res.redirect("/auth?show=login"));
   }
 };
 

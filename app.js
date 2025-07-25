@@ -17,6 +17,7 @@ const passwordRoute = require("./routes/passwordRoute");
 const roleRoute = require("./routes/roleRoute");
 const profileRoute = require("./routes/profileRoute");
 const userRoute = require("./routes/usersRoute");
+const verifyEmail = require("./routes/verifyEmailRoute");
 
 const conditionCsrf = require("./middleware/conditionalCsrf");
 
@@ -60,6 +61,7 @@ app.use(passwordRoute);
 app.use(roleRoute);
 app.use(profileRoute);
 app.use(userRoute);
+app.use(verifyEmail);
 
 // // ✅ Optional error handler for CSRF
 // app.use((err, req, res, next) => {
