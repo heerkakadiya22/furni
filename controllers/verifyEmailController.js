@@ -31,7 +31,7 @@ exports.verifyEmail = async (req, res) => {
     const updateResult = await authRepo.update(user.id, {
       verifiedAt: new Date(),
     });
-    console.log("🛠️ Update result:", updateResult); // usually [1] if success
+    console.log("🛠️ Update result:", updateResult);
 
     // Step 3: Confirm update
     const updatedUser = await authRepo.findByEmail(email);

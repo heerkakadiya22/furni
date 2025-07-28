@@ -21,6 +21,7 @@ exports.renderPasswordPage = function (req, res) {
     action,
     email,
     currentPage: "auth",
+    title: "forget-password",
   });
 };
 
