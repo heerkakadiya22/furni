@@ -129,6 +129,7 @@ exports.handleLogin = async (req, res) => {
       id: user.id,
       name: user.name,
       email: user.email,
+      image: user.image || "default.jpg",
       roleId: user.roleId,
     };
 
