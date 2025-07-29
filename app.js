@@ -18,6 +18,7 @@ const roleRoute = require("./routes/roleRoute");
 const profileRoute = require("./routes/profileRoute");
 const userRoute = require("./routes/usersRoute");
 const verifyEmail = require("./routes/verifyEmailRoute");
+const categoryRoute = require("./routes/categoryRoute");
 
 const conditionCsrf = require("./middleware/conditionalCsrf");
 
@@ -31,6 +32,7 @@ app.set("views", [
   path.join(__dirname, "views/dashboard/roles"),
   path.join(__dirname, "views/dashboard/account"),
   path.join(__dirname, "views/dashboard/manageuser"),
+  path.join(__dirname, "views/dashboard/categories"),
 ]);
 
 app.use(express.json());
@@ -62,6 +64,7 @@ app.use(roleRoute);
 app.use(profileRoute);
 app.use(userRoute);
 app.use(verifyEmail);
+app.use(categoryRoute);
 
 // // ✅ Optional error handler for CSRF
 // app.use((err, req, res, next) => {

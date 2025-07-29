@@ -11,6 +11,7 @@ exports.renderDashboard = async (req, res) => {
       csrfToken: req.csrfToken(),
       user: req.session.user,
       currentPage: "dashboard",
+      title: "Admin dashboard",
     });
   } catch (error) {
     console.error("Error rendering dashboard:", error);

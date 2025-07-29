@@ -81,6 +81,99 @@ $(document).ready(function () {
   });
 });
 
+$(document).ready(function () {
+  $.ajax({
+    url: "/getCategory",
+    method: "GET",
+    dataType: "json",
+    success: function (categories) {
+      categories.sort((a, b) => b.id - a.id);
+      let rows = "";
+      if (categories.length > 0) {
+        categories.forEach((category, index) => {
+          const isActiveIcon =
+            category.isActive === true
+              ? '<i class="fas fa-check text-success"></i>'
+              : '<i class="fas fa-times text-danger"></i>';
+          rows += `
+            <tr>
+              <td>${index + 1}</td>
+              <td>${category.name || "N/A"}</td>
+              <td>${isActiveIcon}</td>
+              <td>${category.description || "N/A"}</td>
+              <td>
+                <a class="btn btn-sm btn-info" href="/categories/${
+                  category.id
+                }/edit">
+                  <i class="fas fa-pencil-alt"></i> Edit
+                </a>
+                <button class="btn btn-sm btn-danger btn-delete-category" data-id="${
+                  category.id
+                }">
+                  <i class="fas fa-trash"></i> Delete
+                </button>
+              </td>
+            </tr>
+          `;
+        });
+      } else {
+        rows = `<tr><td colspan="5" class="text-center text-muted">No categories found.</td></tr>`;
+      }
+
+      // Inject table rows
+      $("#categoryTableBody").html(rows);
+      $("#categoryTableBody tr").each(function () {
+        console.log("TD count:", $(this).find("td").length);
+      });
+
+      if ($.fn.DataTable.isDataTable("#categoryTable")) {
+        $("#categoryTable").DataTable().clear().destroy();
+      }
+
+      // Initialize DataTable
+      const table = $("#categoryTable").DataTable({
+        destroy: true,
+        paging: true,
+        lengthChange: true,
+        searching: true,
+        ordering: true,
+        order: [[0, "asc"]],
+        info: true,
+        autoWidth: false,
+        responsive: true,
+        pageLength: 5,
+        lengthMenu: [
+          [5, 10, 25, 50],
+          [5, 10, 25, 50],
+        ],
+        language: {
+          lengthMenu: "_MENU_",
+          searchPlaceholder: "Search category...",
+        },
+        dom:
+          "<'d-flex align-items-center justify-content-between flex-wrap mb-2 mt-2 m-3'<'custom-title'><'d-flex align-items-center ml-auto' f l <'custom-addcategory'>>>" +
+          "rt" +
+          "<'row'<'col-md-6'i><'col-md-6'p>>",
+      });
+
+      // Custom title and Add category button
+      $("#categoryTable_wrapper .custom-title").html(
+        '<h5 class="card-title m-3">All Category</h5>'
+      );
+      $("#categoryTable_wrapper .custom-addcategory").html(`
+        <a href="/addcategory" class="btn btn-primary mr-4 mt-2 mb-2">
+          <i class="nav-icon fas fa-plus"></i> Add Category
+        </a>
+      `);
+    },
+    error: function () {
+      $("#categoryTableBody").html(
+        `<tr><td colspan="5" class="text-center text-danger">Error loading category.</td></tr>`
+      );
+    },
+  });
+});
+
 const csrfToken = document.getElementById("csrfToken").value;
 document.addEventListener("click", function (e) {
   if (e.target.closest(".btn-delete-role")) {

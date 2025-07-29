@@ -22,6 +22,7 @@ exports.renderRoleListPage = async (req, res) => {
       currentPage: "roles",
       csrfToken: req.csrfToken(),
       user: req.session.user,
+      title: "Roles List",
     });
   } catch (error) {
     console.error("Error rendering role list page:", error);

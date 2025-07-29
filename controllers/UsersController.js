@@ -28,6 +28,7 @@ exports.getUserList = async (req, res) => {
       user: req.session.user,
       csrfToken: req.csrfToken(),
       currentPage: "users",
+      title: "Users List",
       breadcrumbs: [{ label: "Home", url: "/dashboard" }, { label: "Users" }],
     });
   } catch (error) {

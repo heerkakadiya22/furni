@@ -47,6 +47,13 @@
                 <div data-i18n="Analytics">Users</div>
             </a>
         </li>
+        <li class="menu-item <%= currentPage === 'Category' ? 'active' : '' %>">
+            <a href="/categories"
+                class="menu-link">
+                <i class="menu-icon bi bi-card-list"></i>
+                <div data-i18n="Analytics">Categories</div>
+            </a>
+        </li>
         <li
             class="menu-item <%= currentPage === 'changePassword' ? 'active' : '' %>">
             <a href="/change-password"

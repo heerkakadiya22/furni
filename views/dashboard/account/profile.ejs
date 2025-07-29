@@ -1,206 +1,199 @@
 <!DOCTYPE html>
-<html
-  lang="en"
-  class="light-style layout-menu-fixed"
-  dir="ltr"
-  data-theme="theme-default"
-  data-assets-path="../assets/"
-  data-template="vertical-menu-template-free"
->
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
-    />
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+  data-template="vertical-menu-template-free">
 
-    <title><%= title %></title>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <meta name="description" content="" />
+  <title>
+    <%= title %>
+  </title>
 
-    <%- include('../partials/head') %>
-  </head>
+  <meta name="description" content="" />
 
-  <body>
-    <!-- Layout wrapper -->
-    <div class="layout-wrapper layout-content-navbar">
-      <div class="layout-container">
-        <!-- Menu -->
+  <%- include('../partials/head') %>
+</head>
 
-        <%- include('../partials/sidebar') %>
+<body>
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <!-- Menu -->
 
-          <!-- Content wrapper -->
-          <div class="content-wrapper">
-            <!-- Content -->
+      <%- include('../partials/sidebar') %>
 
-            <div class="container-xxl flex-grow-1 container-p-y">
-              
-     <%- include('../partials/breadcrumbs', { breadcrumbs: breadcrumbs }) %>
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+
+          <div class="container-xxl flex-grow-1 container-p-y">
+
+            <%- include('../partials/breadcrumbs', { breadcrumbs: breadcrumbs }) %>
 
 
-                    <% if (success) { %>
-  <div class="alert alert-success alert-dismissible fade show" role="alert">
-    <%= success %>
-  </div>
-<% } %>
-
-<% if (error) { %>
-  <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    <%= error %>
-  </div>
-<% } %>
-                    <div class="card-body">
-
-                     <form action="/profile" method="POST" enctype="multipart/form-data" id="editProfileForm" class="validate-form" novalidate>
-                      
-                      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-
-                        <!-- Profile Image -->
-                         
-                        <div class="text-center mb-4 position-relative" style="width: 150px; margin: auto;">
-                          
-                          <img
-                          src="<%= image ? image : '/assets/admin/img/user/default.jpg' %>"
-                          alt="User Avatar"
-                          id="previewImg"
-                          class="rounded-circle shadow"
-                          style="width: 150px; height: 150px; object-fit: cover;"
-                          />
-                          
-                          <label for="imageUpload"
-                          class="position-absolute bottom-0 end-0 bg-dark rounded-circle p-2"
-                          style="cursor: pointer;"
-                          >
-                          
-                          <i class="fas fa-camera text-white"></i>
-                        </label>
-                        <input type="file" id="imageUpload" name="image" accept="image/*" class="d-none" />
-                      </div>
-
-  <!-- name -->
-  <div class="form-group mb-3">
-    <label for="name">Full Name</label>
-    <input type="text" class="form-control" name="name" id="name" placeholder="Full Name" value="<%= name %>" required />
-  </div>
-
-  <!-- Email & Phone -->
-  <div class="form-row row">
-    <div class="form-group col-md-6 mb-3">
-      <label for="email">Email</label>
-      <input type="email" class="form-control" name="email" id="email" placeholder="Email" value="<%= email %>" required />
-    </div>
-    <div class="form-group col-md-6 mb-3">
-      <label for="phone">Phone Number</label>
-      <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone Number" value="<%= phone %>" />
-    </div>
-  </div>
-
-  <!-- Username & Role -->
-  <div class="form-row row">
-    <div class="form-group col-md-6 mb-3">
-      <label for="username">Username</label>
-      <input type="text" class="form-control" name="username" id="username" placeholder="Username" value="<%= username %>" required />
-    </div>
-    <div class="form-group col-md-6 mb-3">
-      <label for="roleId">Select Role</label>
-      <select id="role" name="roleId" class="form-control" required>
-        <option value disabled <%=!roleId ? "selected" : "" %>>Select Role</option>
-        <% roles.forEach(function(role) { %>
-          <option value="<%= role.id %>" <%= role.id === roleId ? "selected" : "" %>><%= role.rolename %></option>
-        <% }); %>
-      </select>
-    </div>
-  </div>
-
-  <!-- Address -->
-  <div class="form-group mb-3">
-    <label for="address">Address</label>
-    <textarea name="address" id="address" class="form-control" placeholder="Address"><%= address %></textarea>
-  </div>
-
-  <!-- DOB & Gender -->
-  <div class="form-row row">
-    <div class="form-group col-md-6 mb-3">
-      <label for="dob">Date of Birth</label>
-      <input type="date" class="form-control" name="dob" id="dob" value="<%= dob %>" />
-    </div>
-    
- <!-- Gender -->
-<div class="form-group col-md-6 mb-3">
-  <label>Gender</label><br />
-  <div class="form-check form-check-inline">
-    <input
-      class="form-check-input"
-      type="radio"
-      name="gender"
-      value="Male"
-      <%= gender === 'male' ? 'checked' : '' %>
-    />
-    <label class="form-check-label">Male</label>
-  </div>
-  <div class="form-check form-check-inline">
-    <input
-      class="form-check-input"
-      type="radio"
-      name="gender"
-      value="Female"
-      <%= gender === 'female' ? 'checked' : '' %>
-    />
-    <label class="form-check-label">Female</label>
-  </div>
-</div>
-
-  </div>
-
-  <!-- Hobby -->
-  <div class="form-group mb-3">
-    <label>Hobby</label><br />
-    <% const hobbiesList = ["Singing", "Dancing", "Travelling", "Drawing", "Gym", "Hike", "Gaming", "Sports", "Coding", "Other"]; %>
-    <% hobbiesList.forEach(h => { %>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" name="hobby" value="<%= h %>" <%= Array.isArray(hobby) && hobby.includes(h) ? "checked" : "" %> />
-        <label class="form-check-label"><%= h %></label>
-      </div>
-    <% }); %>
-  </div>
-
-  <!-- Submit -->
-  <div class="form-group text-center mt-4">
-    <button type="submit" class="btn btn-success btn-lg w-100">Save Changes</button>
-  </div>
-</form>
-                    </div>
-                  </div>
+              <% if (success) { %>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <%= success %>
                 </div>
-              </div>
-            </div>
-            <!-- / Content -->
+                <% } %>
 
-     
-            <!-- Footer -->
-             <%- include('../partials/footer') %>
+                  <% if (error) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                      <%= error %>
+                    </div>
+                    <% } %>
+                      <div class="card-body">
 
-            <div class="content-backdrop fade"></div>
+                        <form action="/profile" method="POST" enctype="multipart/form-data" id="editProfileForm"
+                          class="validate-form" novalidate>
+
+                          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+
+                          <!-- Profile Image -->
+
+                          <div class="text-center mb-4 position-relative" style="width: 150px; margin: auto;">
+
+                            <img src="<%= image ? image : '/assets/admin/img/user/default.jpg' %>" alt="User Avatar"
+                              id="previewImg" class="rounded-circle shadow"
+                              style="width: 150px; height: 150px; object-fit: cover;" />
+
+                            <label for="imageUpload" class="position-absolute bottom-0 end-0 bg-dark rounded-circle p-2"
+                              style="cursor: pointer;">
+
+                              <i class="fas fa-camera text-white"></i>
+                            </label>
+                            <input type="file" id="imageUpload" name="image" accept="image/*" class="d-none" />
+                          </div>
+
+                          <!-- name -->
+                          <div class="form-group mb-3">
+                            <label for="name">Full Name</label>
+                            <input type="text" class="form-control" name="name" id="name" placeholder="Full Name"
+                              value="<%= name %>" required />
+                          </div>
+
+                          <!-- Email & Phone -->
+                          <div class="form-row row">
+                            <div class="form-group col-md-6 mb-3">
+                              <label for="email">Email</label>
+                              <input type="email" class="form-control" name="email" id="email" placeholder="Email"
+                                value="<%= email %>" required />
+                            </div>
+                            <div class="form-group col-md-6 mb-3">
+                              <label for="phone">Phone Number</label>
+                              <input type="text" class="form-control" name="phone" id="phone" placeholder="Phone Number"
+                                value="<%= phone %>" />
+                            </div>
+                          </div>
+
+                          <!-- Username & Role -->
+                          <div class="form-row row">
+                            <div class="form-group col-md-6 mb-3">
+                              <label for="username">Username</label>
+                              <input type="text" class="form-control" name="username" id="username"
+                                placeholder="Username" value="<%= username %>" required />
+                            </div>
+                            <div class="form-group col-md-6 mb-3">
+                              <label for="roleId">Select Role</label>
+                              <select id="role" name="roleId" class="form-control" required>
+                                <option value disabled <%=!roleId ? "selected" : "" %>>Select Role</option>
+                                <% roles.forEach(function(role) { %>
+                                  <option value="<%= role.id %>" <%=role.id===roleId ? "selected" : "" %>><%=
+                                      role.rolename %>
+                                  </option>
+                                  <% }); %>
+                              </select>
+                            </div>
+                          </div>
+
+                          <!-- Address -->
+                          <div class="form-group mb-3">
+                            <label for="address">Address</label>
+                            <textarea name="address" id="address" class="form-control" placeholder="Address">
+                              <%= address %>
+                            </textarea>
+                          </div>
+
+                          <!-- DOB & Gender -->
+                          <div class="form-row row">
+                            <div class="form-group col-md-6 mb-3">
+                              <label for="dob">Date of Birth</label>
+                              <input type="date" class="form-control" name="dob" id="dob" value="<%= dob %>" />
+                            </div>
+
+                            <!-- Gender -->
+                            <div class="form-group col-md-6 mb-3">
+                              <label>Gender</label><br />
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" value="Male"
+                                  <%=gender==='male' ? 'checked' : '' %>
+                                />
+                                <label class="form-check-label">Male</label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" value="Female"
+                                  <%=gender==='female' ? 'checked' : '' %>
+                                />
+                                <label class="form-check-label">Female</label>
+                              </div>
+                            </div>
+
+                          </div>
+
+                          <!-- Hobby -->
+                          <div class="form-group mb-3">
+                            <label>Hobby</label><br />
+                            <% const hobbiesList=["Singing", "Dancing" , "Travelling" , "Drawing" , "Gym" , "Hike"
+                              , "Gaming" , "Sports" , "Coding" , "Other" ]; %>
+                              <% hobbiesList.forEach(h=> { %>
+                                <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="checkbox" name="hobby" value="<%= h %>"
+                                    <%=Array.isArray(hobby) && hobby.includes(h) ? "checked" : "" %> />
+                                  <label class="form-check-label">
+                                    <%= h %>
+                                  </label>
+                                </div>
+                                <% }); %>
+                          </div>
+
+                          <!-- Submit -->
+                          <div class="form-group text-center mt-4">
+                            <button type="submit" class="btn btn-success btn-lg w-100">Save Changes</button>
+                          </div>
+                        </form>
+                      </div>
           </div>
-          <!-- Content wrapper -->
         </div>
-        <!-- / Layout page -->
-      </div>
+    </div>
+  </div>
+  <!-- / Content -->
 
-      <!-- Overlay -->
-      <div class="layout-overlay layout-menu-toggle"></div>
+
+  <!-- Footer -->
+  <%- include('../partials/footer') %>
+
+    <div class="content-backdrop fade"></div>
+    </div>
+    <!-- Content wrapper -->
+    </div>
+    <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
     </div>
     <!-- / Layout wrapper -->
 
 
     <!-- Core JS -->
-     <%- include('../partials/script') %>
-            <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
-       
-    <script src="../assets/admin/vendor/libs/jquery/jquery-validation.js"></script>
-        <script src="../assets/admin/vendor/js/custom.js"></script>
+    <%- include('../partials/script') %>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
 
-  </body>
+      <script src="../assets/admin/vendor/libs/jquery/jquery-validation.js"></script>
+      <script src="../assets/admin/vendor/js/custom.js"></script>
+
+</body>
+
 </html>
-
