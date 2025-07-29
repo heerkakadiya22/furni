@@ -67,3 +67,45 @@ exports.renderAbout = (req, res) => {
     res.status(500).send("Something went wrong.");
   }
 };
+
+exports.renderCart = (req, res) => {
+  try {
+    res.render("cart", {
+      title: "Cart",
+      csrfToken: req.csrfToken(),
+      currentPage: "Cart",
+      session: req.session,
+    });
+  } catch (error) {
+    console.error("Error rendering about page:", error);
+    res.status(500).send("Something went wrong.");
+  }
+};
+
+exports.renderCheckout = (req, res) => {
+  try {
+    res.render("checkout", {
+      title: "checkout",
+      csrfToken: req.csrfToken(),
+      currentPage: "checkout",
+      session: req.session,
+    });
+  } catch (error) {
+    console.error("Error rendering about page:", error);
+    res.status(500).send("Something went wrong.");
+  }
+};
+
+exports.renderThanks = (req, res) => {
+  try {
+    res.render("thanks", {
+      title: "Thank You",
+      csrfToken: req.csrfToken(),
+      currentPage: "Thank You",
+      session: req.session,
+    });
+  } catch (error) {
+    console.error("Error rendering about page:", error);
+    res.status(500).send("Something went wrong.");
+  }
+};
