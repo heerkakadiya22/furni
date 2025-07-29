@@ -11,19 +11,17 @@ async function protect(req, res, next) {
   try {
     const freshUser = await registerRepo.findById(req.session.user.id);
     if (freshUser?.roleId === 1) {
-      // Update session with the new role
       req.session.user.roleId = 1;
-      return next(); // ✅ allow
+      return next();
     }
   } catch (error) {
     console.error("Protect middleware error:", error);
   }
-
-  // ❌ Not admin
   return res.redirect("/");
 }
 
-// Ensure upload directory exists
+
+//for image
 const uploadDir = path.join(__dirname, "../assets/admin/img/user");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
