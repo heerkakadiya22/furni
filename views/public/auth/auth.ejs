@@ -102,7 +102,8 @@
                             </div>
                             <div class="form-group form-button">
                                 <input type="submit" name="signup" id="signup"
-                                    class="form-submit" value="Register" />
+                                    class="btn btn-primary"
+                                    value="Register" />
                             </div>
                             <p>Already have an account? <a
                                     href="/auth?show=login">Login</a></p>
@@ -145,7 +146,7 @@
                             <div class="form-group form-button">
                                 <input type="submit" name="signin"
                                     id="signin"
-                                    class="form-submit" value="Log in" />
+                                    class="btn btn-primary" value="Log in" />
                             </div>
 
                             <p>Don't have an account? <a
@@ -153,6 +154,20 @@
                             <p><a href="/password">Forgot
                                     Password?</a></p>
                         </form>
+
+                        <% if (session?.resendEligibleEmail) { %>
+                        <form method="POST" action="/resend-verification"
+                            class="mt-2">
+                            <input type="hidden" name="_csrf"
+                                value="<%= csrfToken %>">
+                            <input type="hidden" name="email"
+                                value="<%= session.resendEligibleEmail %>">
+                            <button type="submit"
+                                class="btn btn-primary m-3">
+                                Resend Verification Email
+                            </button>
+                        </form>
+                        <% } %>
                     </div>
 
                     <div class="signup-image">

@@ -113,14 +113,16 @@ exports.handleLogin = async (req, res) => {
     // Check if the user has verified their email
     if (!user.verifiedAt) {
       const now = new Date();
+      req.session.loginFormData = { email };
+      req.session.showLogin = true;
+
       if (user.email_expired && new Date(user.email_expired) < now) {
-        req.session.error = "Verification link expired. Please register again.";
+        req.session.error = "Verification link expired.";
+        req.session.resendEligibleEmail = user.email; // show resend
       } else {
         req.session.error = "Please verify your email to continue.";
       }
 
-      req.session.loginFormData = { email };
-      req.session.showLogin = true;
       return req.session.save(() => res.redirect("/auth?show=login"));
     }
 
