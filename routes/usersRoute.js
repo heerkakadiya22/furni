@@ -3,7 +3,8 @@ const router = express.Router();
 const usersController = require("../controllers/UsersController");
 const { addUserValidation } = require("../validators/userValidator");
 const { baseRules } = require("../validators/profileValidator");
-const { upload, protect } = require("../middleware/authMiddleware");
+const { protect } = require("../middleware/authMiddleware");
+const { upload } = require("../helper/imageHelper");
 
 router.get("/users", protect, usersController.getUserList);
 router.get("/getusers", protect, usersController.getAllUsers);

@@ -10,15 +10,7 @@ require("./config/db");
 
 // Routes
 const indexRoute = require("./routes/indexRoute");
-const authRoute = require("./routes/authRoute");
-const pagesRoute = require("./routes/pagesRoute");
-const dashboardRoute = require("./routes/dashboardRoute");
-const passwordRoute = require("./routes/passwordRoute");
-const roleRoute = require("./routes/roleRoute");
-const profileRoute = require("./routes/profileRoute");
-const userRoute = require("./routes/usersRoute");
-const verifyEmail = require("./routes/verifyEmailRoute");
-const categoryRoute = require("./routes/categoryRoute");
+
 
 const conditionCsrf = require("./middleware/conditionalCsrf");
 
@@ -56,23 +48,7 @@ app.use(conditionCsrf);
 
 // Routes
 app.use(indexRoute);
-app.use(authRoute);
-app.use(pagesRoute);
-app.use(dashboardRoute);
-app.use(passwordRoute);
-app.use(roleRoute);
-app.use(profileRoute);
-app.use(userRoute);
-app.use(verifyEmail);
-app.use(categoryRoute);
 
-// // ✅ Optional error handler for CSRF
-// app.use((err, req, res, next) => {
-//   if (err.code === "EBADCSRFTOKEN") {
-//     return res.status(403).send("Invalid CSRF token.");
-//   }
-//   next(err);
-// });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
