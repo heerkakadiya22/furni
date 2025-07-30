@@ -143,6 +143,9 @@
                                     onclick="togglePassword('login_password', this)"></i>
                             </div>
 
+                            <p><a href="/password">Forgot
+                                    Password?</a></p>
+
                             <div class="form-group form-button">
                                 <input type="submit" name="signin"
                                     id="signin"
@@ -151,8 +154,7 @@
 
                             <p>Don't have an account? <a
                                     href="/auth?show=register">Register</a></p>
-                            <p><a href="/password">Forgot
-                                    Password?</a></p>
+
                         </form>
 
                         <% if (session?.resendEligibleEmail) { %>

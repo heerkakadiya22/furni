@@ -3,7 +3,9 @@ $(function () {
   var requiredFields = ["name"];
 
   requiredFields.forEach(function (fieldName) {
-    var $field = $("#roleForm").find("[name='" + fieldName + "']");
+    var $field = $("#roleForm, #categoryForm").find(
+      "[name='" + fieldName + "']"
+    );
     var id = $field.attr("id");
 
     if (id) {

@@ -21,11 +21,11 @@ $(document).ready(function () {
                 <a class="btn btn-sm btn-info" href="/roles/${role.id}/edit">
                   <i class="fas fa-pencil-alt"></i> Edit
                 </a>
-                <button class="btn btn-sm btn-danger btn-delete-role" data-id="${
-                  role.id
-                }">
-                  <i class="fas fa-trash"></i> Delete
-                </button>
+             <button class="btn btn-sm btn-danger btn-delete" data-type="roles" data-id="${
+               role.id
+             }">
+             <i class="fas fa-trash"></i> Delete
+             </button>
               </td>
             </tr>
           `;
@@ -91,15 +91,14 @@ $(document).ready(function () {
       let rows = "";
       if (categories.length > 0) {
         categories.forEach((category, index) => {
-          const isActiveIcon =
-            category.isActive === true
-              ? '<i class="fas fa-check text-success"></i>'
-              : '<i class="fas fa-times text-danger"></i>';
+          const active = !!category.isActive
+            ? '<i class="fas fa-check text-success"></i>'
+            : '<i class="fas fa-times text-danger"></i>';
           rows += `
             <tr>
               <td>${index + 1}</td>
               <td>${category.name || "N/A"}</td>
-              <td>${isActiveIcon}</td>
+              <td>${active}</td>
               <td>${category.description || "N/A"}</td>
               <td>
                 <a class="btn btn-sm btn-info" href="/categories/${
@@ -107,11 +106,11 @@ $(document).ready(function () {
                 }/edit">
                   <i class="fas fa-pencil-alt"></i> Edit
                 </a>
-                <button class="btn btn-sm btn-danger btn-delete-category" data-id="${
-                  category.id
-                }">
-                  <i class="fas fa-trash"></i> Delete
-                </button>
+              <button class="btn btn-sm btn-danger btn-delete" data-type="categories" data-id="${
+                category.id
+              }">
+              <i class="fas fa-trash"></i> Delete
+              </button>
               </td>
             </tr>
           `;
@@ -175,10 +174,12 @@ $(document).ready(function () {
 });
 
 const csrfToken = document.getElementById("csrfToken").value;
+
 document.addEventListener("click", function (e) {
-  if (e.target.closest(".btn-delete-role")) {
-    const button = e.target.closest(".btn-delete-role");
-    const roleId = button.getAttribute("data-id");
+  const button = e.target.closest(".btn-delete");
+  if (button) {
+    const type = button.getAttribute("data-type"); // "roles" or "categories"
+    const id = button.getAttribute("data-id");
 
     swal({
       title: "Are you sure?",
@@ -188,7 +189,7 @@ document.addEventListener("click", function (e) {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        fetch(`/roles/${roleId}`, {
+        fetch(`/${type}/${id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -207,7 +208,7 @@ document.addEventListener("click", function (e) {
           })
           .catch((err) => {
             console.error("Delete failed:", err);
-            swal("Error!", "Failed to delete role.", "error");
+            swal("Error!", "Failed to delete item.", "error");
           });
       }
     });

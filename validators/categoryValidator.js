@@ -1,6 +1,6 @@
 const { body } = require("express-validator");
 
-exports.roleValidation = [
+exports.categoryValidation = [
   // Name
   body("name").notEmpty().withMessage("Name is required"),
   // Description

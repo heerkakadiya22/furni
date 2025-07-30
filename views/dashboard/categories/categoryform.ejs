@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+    data-template="vertical-menu-template-free">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        <%= title %>
+    </title>
+
+    <%- include('../partials/head') %>
+        <!-- Optional custom CSS -->
+        <link rel="stylesheet" href="/assets/admin/css/custom.css">
+</head>
+
+<body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            <%- include('../partials/sidebar') %>
+
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+                    <div class="container-xxl flex-grow-1 container-p-y">
+
+                        <%- include('../partials/breadcrumbs', { breadcrumbs: breadcrumbs }) %>
+
+                            <div class="card-body">
+                                <% if (error) { %>
+                                    <div class="alert alert-danger">
+                                        <%= error %>
+                                    </div>
+                                    <% } %>
+
+                                        <form
+                                            action="<%= category ? '/categories/' + category.id + '/edit' : '/addcategory' %>"
+                                            method="POST" id="categoryForm" novalidate>
+
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                                            <% if (category) { %>
+                                                <input type="hidden" name="id" value="<%= category.id %>">
+                                                <% } %>
+
+                                                    <!-- category Name -->
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="name">category Name</label>
+                                                        <input type="text" class="form-control" name="name" id="name"
+                                                            placeholder="Enter category name"
+                                                            value="<%= category ? category.name : '' %>" required />
+                                                    </div>
+
+                                                    <!-- Description -->
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="description">Description</label>
+                                                        <textarea class="form-control" name="description"
+                                                            id="description" rows="3" placeholder="Enter description">
+                                                            <%= category ? category.description : '' %>
+                                                        </textarea>
+                                                    </div>
+
+                                                    <!-- Active Checkbox -->
+                                                    <div class="form-check mb-3">
+                                                        <input class="form-check-input" type="checkbox" name="isActive"
+                                                            id="isActive" <%=category && category.isActive ? "checked"
+                                                            : "" %>
+                                                        />
+                                                        <label class="form-check-label" for="isActive">isActive</label>
+                                                    </div>
+
+                                                    <!-- Submit -->
+                                                    <div class="d-grid">
+                                                        <button type="submit" class="btn btn-primary">
+                                                            <i class="bx bx-save"></i>
+                                                            <%= category ? "Save Changes" : "Create category" %>
+                                                        </button>
+                                                    </div>
+                                        </form>
+
+                                        <div class="text-center mt-3">
+                                            <a href="/categories" class="btn btn-outline-secondary"><i
+                                                    class="bx bx-left-arrow-alt"></i>
+                                                Back to category List</a>
+                                        </div>
+                            </div>
+                    </div>
+                </div>
+
+                <%- include('../partials/footer') %>
+                    <div class="content-backdrop fade"></div>
+        </div>
+    </div>
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+
+    <%- include('../partials/script') %>
+
+        <!-- jQuery Validate -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+        <script src="/assets/admin/vendor/libs/jquery/jquery-validation.js"></script>
+
+        <script src="/assets/admin/vendor/js/custom.js"></script>
+
+</body>
+
+</html>
