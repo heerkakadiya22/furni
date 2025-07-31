@@ -9,7 +9,7 @@ exports.renderAuth = (req, res) => {
   const registerFormData = req.session.registerFormData || {};
   const loginFormData = req.session.loginFormData || {};
 
-  const showLogin = req.query.show === "login";
+  const showLogin = req.query.show !== "register";
 
   req.session.error = null;
   req.session.success = null;
@@ -131,7 +131,7 @@ exports.handleLogin = async (req, res) => {
       id: user.id,
       name: user.name,
       email: user.email,
-      image: user.image || "default.jpg",
+      image: user.image,
       roleId: user.roleId,
     };
 

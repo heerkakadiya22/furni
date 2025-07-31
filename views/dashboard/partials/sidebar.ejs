@@ -1,22 +1,22 @@
- <style>
-  .navbar-brand {
-    font-size: 32px;
-    font-weight: 600; }
- .navbar-brand > span {
-      opacity: .4; }</style>
+<style>
+    .navbar-brand {
+        font-size: 32px;
+        font-weight: 600;
+    }
 
-<aside id="layout-menu"
-    class="layout-menu menu-vertical menu bg-menu-theme">
+    .navbar-brand>span {
+        opacity: .4;
+    }
+</style>
+
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
         <a href="/dashboard" class="app-brand-link">
-            <img src="/assets/admin/img/favicon/favicon.png" alt
-                srcset>
-            <a class="navbar-brand menu-link"
-                href="/dashboard">Furni<span>.</span></a>
+            <img src="/assets/admin/img/favicon/favicon.png" alt srcset>
+            <a class="navbar-brand menu-link" href="/dashboard">Furni<span>.</span></a>
         </a>
 
-        <a href="javascript:void(0);"
-            class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
         </a>
     </div>
@@ -25,43 +25,31 @@
 
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
-        <li
-            class="menu-item <%= currentPage === 'dashboard' ? 'active' : '' %>">
-            <a href="/dashboard"
-                class="menu-link">
+        <li class="menu-item <%= currentPage === 'dashboard' ? 'active' : '' %>">
+            <a href="/dashboard" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Dashboard</div>
             </a>
         </li>
         <li class="menu-item <%= currentPage === 'roles' ? 'active' : '' %>">
-            <a href="/roles"
-                class="menu-link">
+            <a href="/roles" class="menu-link">
                 <i class="menu-icon bi bi-person-lines-fill"></i>
                 <div data-i18n="Analytics">Roles</div>
             </a>
         </li>
         <li class="menu-item <%= currentPage === 'users' ? 'active' : '' %>">
-            <a href="/users"
-                class="menu-link">
+            <a href="/users" class="menu-link">
                 <i class="menu-icon bi bi-people-fill"></i>
                 <div data-i18n="Analytics">Users</div>
             </a>
         </li>
         <li class="menu-item <%= currentPage === 'Category' ? 'active' : '' %>">
-            <a href="/categories"
-                class="menu-link">
+            <a href="/categories" class="menu-link">
                 <i class="menu-icon bi bi-card-list"></i>
                 <div data-i18n="Analytics">Categories</div>
             </a>
         </li>
-        <li
-            class="menu-item <%= currentPage === 'changePassword' ? 'active' : '' %>">
-            <a href="/change-password"
-                class="menu-link">
-                <i class="menu-icon bi bi-shield-lock-fill"></i>
-                <div data-i18n="Analytics">Change Password</div>
-            </a>
-        </li>
+
     </ul>
 </aside>
 <!-- / Menu -->
@@ -70,27 +58,20 @@
 <div class="layout-page">
     <!-- Navbar -->
 
-    <nav
-        class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+    <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
         id="layout-navbar">
-        <div
-            class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-            <a class="nav-item nav-link px-0 me-xl-4"
-                href="javascript:void(0)">
+        <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
                 <i class="bx bx-menu bx-sm"></i>
             </a>
         </div>
 
-        <div class="navbar-nav-right d-flex align-items-center"
-            id="navbar-collapse">
+        <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
             <!-- Search -->
             <div class="navbar-nav align-items-center">
                 <div class="nav-item d-flex align-items-center">
                     <i class="bx bx-search fs-4 lh-0"></i>
-                    <input
-                        type="text"
-                        class="form-control border-0 shadow-none"
-                        placeholder="Search..."
+                    <input type="text" class="form-control border-0 shadow-none" placeholder="Search..."
                         aria-label="Search..." />
                 </div>
             </div>
@@ -99,26 +80,14 @@
             <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <!-- Place this tag where you want the button to render. -->
                 <li class="nav-item lh-1 me-3">
-                    <a
-                        class="github-button"
-                        href="https://github.com/themeselection/sneat-html-admin-template-free"
-                        data-icon="octicon-star"
-                        data-size="large"
-                        data-show-count="true"
-                        aria-label="Star themeselection/sneat-html-admin-template-free on GitHub">Star</a>
+                    <a href="/" class="btn btn-primary">User Panel</a>
                 </li>
 
                 <!-- User -->
-                <li
-                    class="nav-item navbar-dropdown dropdown-user dropdown">
-                    <a class="nav-link dropdown-toggle hide-arrow"
-                        href="javascript:void(0);"
-                        data-bs-toggle="dropdown">
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                    <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                         <div class="avatar avatar-online">
-                            <img
-                                src="<%= image || '/assets/admin/img/user/default.jpg' %>"
-                                alt
-                                class="rounded-circle" />
+                            <img src="<%= image %>" alt class="rounded-circle" />
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
@@ -126,20 +95,15 @@
                             <a class="dropdown-item" href="#">
                                 <div class="d-flex">
                                     <div class="flex-shrink-0 me-3">
-                                        <div
-                                            class="avatar avatar-online">
-                                            <img
-                                                src="<%= image || '/assets/admin/img/user/default.jpg' %>"
-                                                alt
-                                                class="rounded-circle" />
+                                        <div class="avatar avatar-online">
+                                            <img src="<%= image %>" alt class="rounded-circle" />
                                         </div>
                                     </div>
                                     <div class="flex-grow-1">
-                                        <span
-                                            class="fw-semibold d-block"><%=
-                                            user.name %></span>
-                                        <small
-                                            class="text-muted">Admin</small>
+                                        <span class="fw-semibold d-block">
+                                            <%= user.name %>
+                                        </span>
+                                        <small class="text-muted">Admin</small>
                                     </div>
                                 </div>
                             </a>
@@ -155,35 +119,24 @@
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="#">
-                                <i class="bx bx-cog me-2"></i>
-                                <span
-                                    class="align-middle">Settings</span>
+                            <a class="dropdown-item" href="/change-password">
+                                <i class="bx bi bi-shield-lock"></i>
+                                <span class="align-middle">Change Password</span>
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item" href="#">
-                                <span
-                                    class="d-flex align-items-center align-middle">
-                                    <i
-                                        class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                                    <span
-                                        class="flex-grow-1 align-middle">Billing</span>
-                                    <span
-                                        class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
-                                </span>
+                                <i class="bx bx-cog me-2"></i>
+                                <span class="align-middle">Settings</span>
                             </a>
                         </li>
                         <li>
                             <div class="dropdown-divider"></div>
                         </li>
                         <li class="dropdown-item p-0">
-                            <form action="/logout" method="POST"
-                                class="m-0 p-0">
-                                <input type="hidden" name="_csrf"
-                                    value="<%= csrfToken %>">
-                                <button type="submit"
-                                    class="dropdown-item w-100 text-start">
+                            <form action="/logout" method="POST" class="m-0 p-0">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <button type="submit" class="dropdown-item w-100 text-start">
                                     <i class="bx bx-power-off me-2"></i>
                                     Logout
                                 </button>

@@ -17,9 +17,7 @@ $(document).ready(function () {
           const role = user.role?.rolename || "N/A";
           const emailPhone = `${user.email || "N/A"}<br>
           <small>${user.phone || ""}</small>`;
-          const imageTag = user.image
-            ? `<img src="${user.image}" class="user-img" alt="profile" />`
-            : `<img src="./assets/admin/img/user/default.jpg" class="user-img" alt="default" />`;
+          const imageTag = `<img src="${user.image}" class="user-img" alt="profile" />`;
 
           rows += `
             <tr>

@@ -11,8 +11,8 @@ require("./config/db");
 // Routes
 const indexRoute = require("./routes/indexRoute");
 
-
 const conditionCsrf = require("./middleware/conditionalCsrf");
+const { refreshUserSession } = require("./middleware/authMiddleware");
 
 app.set("view engine", "ejs");
 app.set("views", [
@@ -45,10 +45,10 @@ app.use(
 
 // ✅ CSRF protection middleware
 app.use(conditionCsrf);
+app.use(refreshUserSession);
 
 // Routes
 app.use(indexRoute);
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
