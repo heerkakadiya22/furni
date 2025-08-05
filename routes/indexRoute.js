@@ -11,6 +11,7 @@ const profileRoute = require("./profileRoute");
 const userRoute = require("./usersRoute");
 const verifyEmail = require("./verifyEmailRoute");
 const categoryRoute = require("./categoryRoute");
+const settingsRoute = require("./settingsRoute");
 
 router.get("/", indexController.renderIndex);
 
@@ -23,5 +24,6 @@ router.use(profileRoute);
 router.use(userRoute);
 router.use(verifyEmail);
 router.use(categoryRoute);
+router.use(settingsRoute); 
 
 module.exports = router;

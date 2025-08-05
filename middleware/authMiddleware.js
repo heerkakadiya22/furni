@@ -37,7 +37,15 @@ const refreshUserSession = async (req, res, next) => {
   next();
 };
 
+function alreadyLoggedIn(req, res, next) {
+  if (req.session.user) {
+    return res.redirect("/");
+  }
+  next();
+}
+
 module.exports = {
   protect,
   refreshUserSession,
+  alreadyLoggedIn,
 };

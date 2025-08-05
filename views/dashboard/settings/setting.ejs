@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default"
+    data-assets-path="/assets/admin/" data-template="vertical-menu-template-free">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <title>
+        <%= title %>
+    </title>
+    <meta name="description" content="" />
+    <%- include('../partials/head') %>
+</head>
+
+<body>
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            <%- include('../partials/sidebar') %>
+                <div class="content-wrapper">
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <%- include('../partials/breadcrumbs') %>
+
+                            <!-- Tabs Navigation -->
+                            <ul class="nav nav-pills flex-column flex-md-row mb-3" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link <%= activeTab === 'connections' ? 'active' : '' %>"
+                                        href="/settings?tab=connections">
+                                        <i class="bx bx-link-alt me-1"></i> Connections
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link <%= activeTab === 'theme' ? 'active' : '' %>"
+                                        href="/settings?tab=theme">
+                                        <i class="bx bx-user me-1"></i> Theme
+                                    </a>
+                                </li>
+                                <!-- <li class="nav-item">
+                                    <a class="nav-link <%= activeTab === 'notifications' ? 'active' : '' %>"
+                                        href="/settings?tab=notifications">
+                                        <i class="bx bx-bell me-1"></i> Notifications
+                                    </a>
+                                </li> -->
+                            </ul>
+
+
+                            <div class="tab-content">
+                                <!-- Account Tab -->
+
+                                <!-- Notifications Tab -->
+                                <!-- <div class="tab-pane fade <%= activeTab === 'notifications' ? 'show active' : '' %>"
+                                    id="notifications" role="tabpanel">
+                                    <div class="card">
+                                        <h5 class="card-header">Notification Settings</h5>
+                                        <div class="card-body">
+                                            <p>Notification content goes here...</p>
+                                        </div>
+                                    </div>
+                                </div> -->
+
+                                <!-- Connections Tab -->
+                                <div class="tab-pane fade <%= activeTab === 'connections' ? 'show active' : '' %>"
+                                    id="connections" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-md-6 col-12 mb-md-0 mb-4">
+                                            <div class="card">
+                                                <h5 class="card-header">Connected Accounts</h5>
+                                                <div class="card-body">
+                                                    <p>Display content from your connected accounts on your site</p>
+                                                    <% const connections=[ { name: "Google" ,
+                                                        desc: "Calendar and contacts" , img: "google" , checked: false
+                                                        }, { name: "Slack" , desc: "Communication" , img: "slack" ,
+                                                        checked: true }, { name: "Github" ,
+                                                        desc: "Manage your Git repositories" , img: "github" , checked:
+                                                        false }, { name: "Mailchimp" , desc: "Email marketing service" ,
+                                                        img: "mailchimp" , checked: true }, { name: "Asana" ,
+                                                        desc: "Communication" , img: "asana" , checked: true } ]; %>
+
+                                                        <% connections.forEach(item=> { %>
+                                                            <div class="d-flex mb-3">
+                                                                <div class="flex-shrink-0">
+                                                                    <img src="/assets/admin/img/icons/brands/<%= item.img %>.png"
+                                                                        alt="<%= item.name %>" class="me-3"
+                                                                        height="30" />
+                                                                </div>
+                                                                <div class="flex-grow-1 row">
+                                                                    <div class="col-9 mb-sm-0 mb-2">
+                                                                        <h6 class="mb-0">
+                                                                            <%= item.name %>
+                                                                        </h6>
+                                                                        <small class="text-muted">
+                                                                            <%= item.desc %>
+                                                                        </small>
+                                                                    </div>
+                                                                    <div class="col-3 text-end">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input float-end"
+                                                                                type="checkbox" role="switch"
+                                                                                <%=item.checked ? "checked" : "" %> />
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <% }); %>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 col-12">
+                                            <div class="card">
+                                                <h5 class="card-header">Social Accounts</h5>
+                                                <div class="card-body">
+                                                    <p>Display content from social accounts on your site</p>
+                                                    <% const socials=[ { name: "Facebook" , status: "Not Connected" ,
+                                                        icon: "link-alt" , btn: "secondary" , isLink: true }, {
+                                                        name: "Twitter" , status: "@ThemeSelection" ,
+                                                        link: "https://twitter.com/Theme_Selection" , icon: "trash-alt"
+                                                        , btn: "danger" }, { name: "Instagram" ,
+                                                        status: "@ThemeSelection" ,
+                                                        link: "https://www.instagram.com/themeselection/" ,
+                                                        icon: "trash-alt" , btn: "danger" }, { name: "Dribbble" ,
+                                                        status: "Not Connected" , icon: "link-alt" , btn: "secondary" ,
+                                                        isLink: true }, { name: "Behance" , status: "Not Connected" ,
+                                                        icon: "link-alt" , btn: "secondary" , isLink: true } ]; %>
+
+                                                        <% socials.forEach(social=> { %>
+                                                            <div class="d-flex mb-3">
+                                                                <div class="flex-shrink-0">
+                                                                    <img src="/assets/admin/img/icons/brands/<%= social.name.toLowerCase() %>.png"
+                                                                        alt="<%= social.name %>" class="me-3"
+                                                                        height="30" />
+                                                                </div>
+                                                                <div class="flex-grow-1 row">
+                                                                    <div class="col-8 col-sm-7 mb-sm-0 mb-2">
+                                                                        <h6 class="mb-0">
+                                                                            <%= social.name %>
+                                                                        </h6>
+                                                                        <% if (social.link) { %>
+                                                                            <a href="<%= social.link %>"
+                                                                                target="_blank">
+                                                                                <%= social.status %>
+                                                                            </a>
+                                                                            <% } else { %>
+                                                                                <small class="text-muted">
+                                                                                    <%= social.status %>
+                                                                                </small>
+                                                                                <% } %>
+                                                                    </div>
+                                                                    <div class="col-4 col-sm-5 text-end">
+                                                                        <button type="button"
+                                                                            class="btn btn-icon btn-outline-<%= social.btn %>">
+                                                                            <i class="bx bx-<%= social.icon %>"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <% }); %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- End Connections Tab -->
+
+                                <div class="tab-pane fade <%= activeTab === 'theme' ? 'show active' : '' %>" id="theme"
+                                    role="tabpanel">
+                                    <div class="card">
+                                        <h5 class="card-header">Theme Settings</h5>
+                                        <div class="card-body">
+                                            <p>Theme content goes here...</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- End Tab Content -->
+                    </div>
+
+                    <%- include('../partials/footer') %>
+                        <div class="content-backdrop fade"></div>
+                </div>
+        </div>
+        <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <%- include('../partials/script') %>
+</body>
+
+</html>

@@ -5,9 +5,9 @@ exports.renderDashboard = async (req, res) => {
     const userId = req.session.user.id;
     const user = await authRepo.findById(userId);
 
-    res.render("dashboard/dashboard", {
+    res.render("dashboard", {
       title: "Dashboard | Furni",
-      ...user.dataValues, // ✅ Now safe
+      ...user.dataValues,
       csrfToken: req.csrfToken(),
       user: req.session.user,
       currentPage: "dashboard",

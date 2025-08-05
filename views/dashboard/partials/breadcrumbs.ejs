@@ -1,25 +1,24 @@
-
-
 <!-- Breadcrumb Navigation -->
 <nav aria-label="breadcrumb" class="mb-3">
-    <ol class="breadcrumb">
-        <% if (breadcrumbs && breadcrumbs.length > 0) { %>
-        <% breadcrumbs.forEach((crumb, index) => { %>
-        <% if (index === breadcrumbs.length - 1) { %>
-        <li class="breadcrumb-item active text-primary" aria-current="page">
-            <%= crumb.label %>
-        </li>
-        <% } else { %>
-        <li class="breadcrumb-item">
-            <a href="<%= crumb.url %>"><%= crumb.label %></a>
-        </li>
-        <% } %>
-        <% }) %>
-        <% } %>
+    <ol class="breadcrumb text-muted fw-medium fs-5">
+        <% if (breadcrumbs && breadcrumbs.length> 0) { %>
+            <% breadcrumbs.forEach((crumb, index)=> { %>
+                <% if (index===breadcrumbs.length - 1) { %>
+                    <li class="breadcrumb-item active text-primary" aria-current="page">
+                        <%= crumb.label %>
+                    </li>
+                    <% } else { %>
+                        <li class="breadcrumb-item">
+                            <a href="<%= crumb.url %>">
+                                <%= crumb.label %>
+                            </a>
+                        </li>
+                        <% } %>
+                            <% }) %>
+                                <% } %>
     </ol>
 </nav>
 
 <!-- Basic Layout -->
 <div class="row">
     <div class="col-xl">
-        <div class="card mb-4">
