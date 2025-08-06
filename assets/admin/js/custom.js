@@ -178,7 +178,7 @@ const csrfToken = document.getElementById("csrfToken").value;
 document.addEventListener("click", function (e) {
   const button = e.target.closest(".btn-delete");
   if (button) {
-    const type = button.getAttribute("data-type"); // "roles" or "categories"
+    const type = button.getAttribute("data-type"); 
     const id = button.getAttribute("data-id");
 
     swal({

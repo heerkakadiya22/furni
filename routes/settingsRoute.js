@@ -5,4 +5,12 @@ const { protect } = require("../middleware/authMiddleware");
 
 router.get("/settings", protect, settingsController.renderSettings);
 
+router.post("/settings/social", protect, settingsController.saveSocialIcon);
+
+router.delete(
+  "/settings/social/:platform",
+  protect,
+  settingsController.deleteSocialIcon
+);
+
 module.exports = router;

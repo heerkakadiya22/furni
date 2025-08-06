@@ -11,6 +11,9 @@
     </title>
     <meta name="description" content="" />
     <%- include('../partials/head') %>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
 </head>
 
 <body>
@@ -108,78 +111,158 @@
 
                                         <div class="col-md-6 col-12">
                                             <div class="card">
-                                                <h5 class="card-header">Social Accounts</h5>
+                                                <div class="d-flex">
+                                                    <h5 class="card-header" style="margin-right: auto;">Social Accounts
+                                                    </h5>
+                                                    <input type="hidden" id="csrfToken" value="<%= csrfToken %>" />
+                                                    <!-- Add Button -->
+                                                    <button type="button" class="btn btn-primary m-3" id="addSocialBtn"
+                                                        data-bs-toggle="modal" data-bs-target="#socialAccountModal">
+                                                        Add New
+                                                    </button>
+                                                </div>
+
                                                 <div class="card-body">
                                                     <p>Display content from social accounts on your site</p>
-                                                    <% const socials=[ { name: "Facebook" , status: "Not Connected" ,
-                                                        icon: "link-alt" , btn: "secondary" , isLink: true }, {
-                                                        name: "Twitter" , status: "@ThemeSelection" ,
-                                                        link: "https://twitter.com/Theme_Selection" , icon: "trash-alt"
-                                                        , btn: "danger" }, { name: "Instagram" ,
-                                                        status: "@ThemeSelection" ,
-                                                        link: "https://www.instagram.com/themeselection/" ,
-                                                        icon: "trash-alt" , btn: "danger" }, { name: "Dribbble" ,
-                                                        status: "Not Connected" , icon: "link-alt" , btn: "secondary" ,
-                                                        isLink: true }, { name: "Behance" , status: "Not Connected" ,
-                                                        icon: "link-alt" , btn: "secondary" , isLink: true } ]; %>
 
-                                                        <% socials.forEach(social=> { %>
-                                                            <div class="d-flex mb-3">
-                                                                <div class="flex-shrink-0">
-                                                                    <img src="/assets/admin/img/icons/brands/<%= social.name.toLowerCase() %>.png"
-                                                                        alt="<%= social.name %>" class="me-3"
-                                                                        height="30" />
+                                                    <% socials.forEach(social=> {
+                                                        let platform = '';
+                                                        let iconClass = '';
+                                                        let iconFile = '';
+                                                        let link = social.description;
+
+                                                        if (social.facebook_icon) {
+                                                        platform = 'facebook';
+                                                        iconClass = social.facebook_icon;
+                                                        iconFile = 'facebook';
+                                                        } else if (social.twitter_icon) {
+                                                        platform = 'twitter';
+                                                        iconClass = social.twitter_icon;
+                                                        iconFile = 'twitter';
+                                                        } else if (social.insta_icon) {
+                                                        platform = 'insta';
+                                                        iconClass = social.insta_icon;
+                                                        iconFile = 'instagram';
+                                                        } else if (social.linkedin_icon) {
+                                                        platform = 'linkedin';
+                                                        iconClass = social.linkedin_icon;
+                                                        iconFile = 'linkedin';
+                                                        }
+                                                        %>
+                                                        <div class="d-flex mb-3 mt-4">
+                                                            <div class="flex-shrink-0">
+
+                                                                <a href="#">
+                                                                    <i class="<%= iconClass %> me-3 text-secondary"
+                                                                        style="font-size: 30px;"></i>
+
+                                                                </a>
+                                                            </div>
+                                                            <div class="flex-grow-1 row">
+                                                                <div class="col-7">
+                                                                    <h6 class="mb-0 text-capitalize">
+                                                                        <%= platform %>
+                                                                    </h6>
+                                                                    <% if (link) { %>
+                                                                        <a href="<%= link %>" target="_blank">
+                                                                            <%= link %>
+                                                                        </a>
+                                                                        <% } else { %>
+                                                                            <small class="text-muted">Not
+                                                                                Connected</small>
+                                                                            <% } %>
                                                                 </div>
-                                                                <div class="flex-grow-1 row">
-                                                                    <div class="col-8 col-sm-7 mb-sm-0 mb-2">
-                                                                        <h6 class="mb-0">
-                                                                            <%= social.name %>
-                                                                        </h6>
-                                                                        <% if (social.link) { %>
-                                                                            <a href="<%= social.link %>"
-                                                                                target="_blank">
-                                                                                <%= social.status %>
-                                                                            </a>
-                                                                            <% } else { %>
-                                                                                <small class="text-muted">
-                                                                                    <%= social.status %>
-                                                                                </small>
-                                                                                <% } %>
-                                                                    </div>
-                                                                    <div class="col-4 col-sm-5 text-end">
-                                                                        <button type="button"
-                                                                            class="btn btn-icon btn-outline-<%= social.btn %>">
-                                                                            <i class="bx bx-<%= social.icon %>"></i>
-                                                                        </button>
-                                                                    </div>
+                                                                <div class="col-5 text-end">
+
+                                                                    <button type="button"
+                                                                        class="btn btn-icon btn-outline-danger delete-social"
+                                                                        data-platform="<%= platform %>">
+                                                                        <i class="bx bx-trash-alt"></i>
+                                                                    </button>
                                                                 </div>
                                                             </div>
-                                                            <% }); %>
+                                                        </div>
+                                                        <% }) %>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div> <!-- End Connections Tab -->
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="socialAccountModal" tabindex="-1"
+                                            aria-labelledby="socialAccountModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form id="socialForm" method="POST" action="/settings/social">
 
-                                <div class="tab-pane fade <%= activeTab === 'theme' ? 'show active' : '' %>" id="theme"
-                                    role="tabpanel">
-                                    <div class="card">
-                                        <h5 class="card-header">Theme Settings</h5>
-                                        <div class="card-body">
-                                            <p>Theme content goes here...</p>
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="socialAccountModalLabel">
+                                                                Add/Update Social Account</h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <input type="hidden" name="_csrf"
+                                                                value="<%= csrfToken %>" />
+
+                                                            <div class="mb-3">
+                                                                <label for="platform"
+                                                                    class="form-label">Platform</label>
+                                                                <input type="hidden" name="platform"
+                                                                    id="platformHidden">
+                                                                <select class="form-select" id="platform" required>
+                                                                    <option value="facebook">Facebook</option>
+                                                                    <option value="twitter">Twitter</option>
+                                                                    <option value="insta">Instagram</option>
+                                                                    <option value="linkedin">LinkedIn</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="mb-3">
+                                                                <label for="iconClass" class="form-label">Icon
+                                                                    Class</label>
+                                                                <input type="text" class="form-control" id="iconClass"
+                                                                    name="iconClass" placeholder="e.g. bx bxl-facebook"
+                                                                    required>
+                                                            </div>
+
+                                                            <div class="mb-3">
+                                                                <label for="link" class="form-label">Social Link</label>
+                                                                <input type="url" class="form-control" id="link"
+                                                                    name="link"
+                                                                    placeholder="https://example.com/yourpage" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-primary"
+                                                                id="submitSocialBtn">Add</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div> <!-- End Tab Content -->
-                    </div>
 
-                    <%- include('../partials/footer') %>
-                        <div class="content-backdrop fade"></div>
+                                        <!-- End Connections Tab -->
+
+                                        <div class="tab-pane fade <%= activeTab === 'theme' ? 'show active' : '' %>"
+                                            id="theme" role="tabpanel">
+                                            <div class="card">
+                                                <h5 class="card-header">Theme Settings</h5>
+                                                <div class="card-body">
+                                                    <p>Theme content goes here...</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> <!-- End Tab Content -->
+                                </div>
+
+                                <%- include('../partials/footer') %>
+                                    <div class="content-backdrop fade"></div>
+                            </div>
+                    </div>
+                    <div class="layout-overlay layout-menu-toggle"></div>
                 </div>
-        </div>
-        <div class="layout-overlay layout-menu-toggle"></div>
-    </div>
-    <%- include('../partials/script') %>
+                <%- include('../partials/script') %>
+                    <script src="/assets/admin/js/settings.js"></script>
+
 </body>
 
 </html>
