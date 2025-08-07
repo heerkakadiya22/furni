@@ -1,7 +1,7 @@
 const csrf = require("csurf");
 const csrfProtection = csrf();
 
-const exemptPaths = ["/profile", "/adduser"];
+const exemptPaths = ["/profile", "/adduser", "/setting/general/update"];
 
 const exemptEditPathRegex = /^\/users\/\d+\/edit$/;
 

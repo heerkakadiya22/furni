@@ -11,126 +11,136 @@
     </title>
     <meta name="description" content="" />
     <meta name="csrf-token" content="<%= csrfToken %>">
+
     <%- include('../partials/head') %>
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-
 </head>
 
 <body>
     <div class="layout-wrapper layout-content-navbar">
         <div class="layout-container">
             <%- include('../partials/sidebar') %>
-                <div class="content-wrapper">
-                    <div class="container-xxl flex-grow-1 container-p-y">
-                        <%- include('../partials/breadcrumbs') %>
+                <div class="layout-container">
+                    <div class="content-wrapper">
+                        <div class="container-xxl flex-grow-1 container-p-y">
+                            <%- include('../partials/breadcrumbs') %>
 
-                            <!-- Tabs Navigation -->
-                            <ul class="nav nav-pills flex-column flex-md-row mb-3" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link <%= activeTab === 'connections' ? 'active' : '' %>"
-                                        href="/settings?tab=connections">
-                                        <i class="bx bx-link-alt me-1"></i> Connections
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link <%= activeTab === 'theme' ? 'active' : '' %>"
-                                        href="/settings?tab=theme">
-                                        <i class="bx bx-user me-1"></i> Theme
-                                    </a>
-                                </li>
-                                <!-- <li class="nav-item">
-                                    <a class="nav-link <%= activeTab === 'notifications' ? 'active' : '' %>"
-                                        href="/settings?tab=notifications">
-                                        <i class="bx bx-bell me-1"></i> Notifications
-                                    </a>
-                                </li> -->
-                            </ul>
+                                <!-- Tabs Navigation -->
+                                <ul class="nav nav-pills flex-column flex-md-row mb-3" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link <%= activeTab === 'connections' ? 'active' : '' %>"
+                                            href="/setting?tab=connections">
+                                            <i class="bx bx-link-alt me-1"></i> Connections
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link <%= activeTab === 'theme' ? 'active' : '' %>"
+                                            href="/setting?tab=theme">
+                                            <i class="bx bx-palette me-1"></i> Theme
+                                        </a>
+                                    </li>
+                                </ul>
 
-
-                            <div class="tab-content">
-                                <!-- Account Tab -->
-
-                                <!-- Notifications Tab -->
-                                <!-- <div class="tab-pane fade <%= activeTab === 'notifications' ? 'show active' : '' %>"
-                                    id="notifications" role="tabpanel">
-                                    <div class="card">
-                                        <h5 class="card-header">Notification Settings</h5>
-                                        <div class="card-body">
-                                            <p>Notification content goes here...</p>
-                                        </div>
-                                    </div>
-                                </div> -->
-
-                                <!-- Connections Tab -->
-                                <div class="tab-pane fade <%= activeTab === 'connections' ? 'show active' : '' %>"
-                                    id="connections" role="tabpanel">
-                                    <div class="row">
-                                        <div class="col-md-6 col-12 mb-md-0 mb-4">
-                                            <div class="card">
-                                                <h5 class="card-header">Connected Accounts</h5>
-                                                <div class="card-body">
-                                                    <p>Display content from your connected accounts on your site</p>
-                                                    <% const connections=[ { name: "Google" ,
-                                                        desc: "Calendar and contacts" , img: "google" , checked: false
-                                                        }, { name: "Slack" , desc: "Communication" , img: "slack" ,
-                                                        checked: true }, { name: "Github" ,
-                                                        desc: "Manage your Git repositories" , img: "github" , checked:
-                                                        false }, { name: "Mailchimp" , desc: "Email marketing service" ,
-                                                        img: "mailchimp" , checked: true }, { name: "Asana" ,
-                                                        desc: "Communication" , img: "asana" , checked: true } ]; %>
-
-                                                        <% connections.forEach(item=> { %>
-                                                            <div class="d-flex mb-3">
-                                                                <div class="flex-shrink-0">
-                                                                    <img src="/assets/admin/img/icons/brands/<%= item.img %>.png"
-                                                                        alt="<%= item.name %>" class="me-3"
-                                                                        height="30" />
-                                                                </div>
-                                                                <div class="flex-grow-1 row">
-                                                                    <div class="col-9 mb-sm-0 mb-2">
-                                                                        <h6 class="mb-0">
-                                                                            <%= item.name %>
-                                                                        </h6>
-                                                                        <small class="text-muted">
-                                                                            <%= item.desc %>
-                                                                        </small>
-                                                                    </div>
-                                                                    <div class="col-3 text-end">
-                                                                        <div class="form-check form-switch">
-                                                                            <input class="form-check-input float-end"
-                                                                                type="checkbox" role="switch"
-                                                                                <%=item.checked ? "checked" : "" %> />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <% }); %>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6 col-12">
-                                            <% if (activeTab==="connections" ) { %>
-                                                <!-- Social Accounts Display Card -->
+                                <div class="tab-content">
+                                    <!-- Connections Tab -->
+                                    <div class="tab-pane fade <%= activeTab === 'connections' ? 'show active' : '' %>"
+                                        id="connections" role="tabpanel">
+                                        <div class="row">
+                                            <!-- General Info Column -->
+                                            <!-- GENERAL INFO CARD -->
+                                            <div class="col-md-6 col-12">
                                                 <div class="card mb-4">
-                                                    <div class="d-flex">
-                                                        <h5 class="card-header">Social Accounts</h5>
-                                                        <button type="button" class="btn btn-primary ms-auto m-2"
-                                                            data-bs-toggle="modal" data-bs-target="#editIconsModal">
-                                                            Update Icons
+                                                    <div class="d-flex align-items-center">
+                                                        <h5 class="card-header">General Info & Logos</h5>
+                                                        <button type="button" class="btn btn-primary ms-auto m-3"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#editGeneralIconsModal">
+                                                            Update
                                                         </button>
                                                     </div>
                                                     <div class="card-body">
-                                                        <p>Display content from social accounts on your site</p>
+                                                        <p>Customize your general contact information and site branding.
+                                                        </p>
 
+                                                        <% const generalIcons=[ { key: "email" , label: "Email" , icon:
+                                                            settings.email }, { key: "phone" , label: "Phone" , icon:
+                                                            settings.phone }, { key: "location" , label: "Location" ,
+                                                            icon: settings.location }, ]; %>
+
+                                                            <% generalIcons.forEach(item=> { if (item.icon) { %>
+                                                                <div class="d-flex mb-3">
+                                                                    <div class="flex-shrink-0">
+                                                                        <i class="<%= item.icon %> me-3"
+                                                                            style="font-size: 20px;"></i>
+                                                                    </div>
+                                                                    <div class="flex-grow-1 row">
+                                                                        <div class="col-8 col-sm-7 mb-sm-0 mb-2">
+                                                                            <h6 class="mb-0">
+                                                                                <%= item.label %>
+                                                                            </h6>
+                                                                            <small class="text-muted">
+                                                                                <%= item.icon %>
+                                                                            </small>
+                                                                        </div>
+                                                                        <div class="col-4 col-sm-5 text-end">
+                                                                            <button type="button"
+                                                                                class="btn btn-icon btn-outline-danger"
+                                                                                onclick="confirmDeleteIcon('<%= item.key %>')">
+                                                                                <i class="bx bx-trash-alt"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <% } }); %>
+
+                                                                    <% if (settings.sitename_logo || settings.logo) { %>
+                                                                        <div
+                                                                            class="d-flex align-items-center gap-4 mt-3">
+                                                                            <% if (settings.sitename_logo) { %>
+                                                                                <div class="text-center">
+                                                                                    <img src="/assets/admin/img/favicon/<%= settings.sitename_logo %>"
+                                                                                        alt="Site Name Logo"
+                                                                                        height="40" />
+                                                                                    <p class="mb-0 small">Site Logo</p>
+                                                                                </div>
+                                                                                <% } %>
+                                                                                    <% if (settings.logo) { %>
+                                                                                        <div class="text-center">
+                                                                                            <img src="/assets/admin/img/favicon/<%= settings.logo %>"
+                                                                                                alt="Main Logo"
+                                                                                                height="40" />
+                                                                                            <p class="mb-0 small">Main
+                                                                                                Logo</p>
+                                                                                        </div>
+                                                                                        <% } %>
+                                                                        </div>
+                                                                        <% } %>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <!-- Social Accounts Column -->
+                                            <div class="col-md-6 col-12">
+                                                <div class="card mb-4">
+                                                    <div class="d-flex align-items-center">
+                                                        <h5 class="card-header">Social Accounts</h5>
+                                                        <button type="button" class="btn btn-primary ms-auto m-3"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#editSocialIconsModal">
+                                                            Update
+                                                        </button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p>Display content from social accounts on your site.</p>
                                                         <% const socials=[ { name: "Facebook" , icon:
                                                             settings.facebook_icon }, { name: "Twitter" , icon:
                                                             settings.twitter_icon }, { name: "Instagram" , icon:
                                                             settings.insta_icon }, { name: "LinkedIn" , icon:
                                                             settings.linkedin_icon } ]; %>
-
-                                                            <% socials.forEach(social=> { %>
+                                                            <% socials.forEach(social=> {
+                                                                if (social.icon) { %>
                                                                 <div class="d-flex mb-3">
                                                                     <div class="flex-shrink-0">
                                                                         <i class="<%= social.icon %> me-3"
@@ -153,92 +163,146 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <% }) %>
+                                                                <% } }); %>
+
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
 
-                                                <!-- Edit Social Icons Modal -->
-                                                <div class="modal fade" id="editIconsModal" tabindex="-1"
-                                                    aria-labelledby="editIconsModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered">
-                                                        <div class="modal-content">
-                                                            <form action="/setting/social/update" method="POST">
-                                                                <input type="hidden" name="_csrf"
-                                                                    value="<%= csrfToken %>">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="editIconsModalLabel">
-                                                                        Edit Social Icons</h5>
-                                                                    <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal"
-                                                                        aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div class="row">
-                                                                        <% const fields=[ { name: "facebook_icon" ,
-                                                                            label: "Facebook Icon" }, {
-                                                                            name: "twitter_icon" , label: "Twitter Icon"
-                                                                            }, { name: "insta_icon" ,
-                                                                            label: "Instagram Icon" }, {
-                                                                            name: "linkedin_icon" ,
-                                                                            label: "LinkedIn Icon" } ]; %>
+                                        <!-- MODALS FOR 'CONNECTIONS' TAB -->
 
-                                                                            <% fields.forEach(f=> { %>
-                                                                                <div class="col-md-6 mb-3">
-                                                                                    <label for="<%= f.name %>"
-                                                                                        class="form-label">
-                                                                                        <%= f.label %>
-                                                                                    </label>
-                                                                                    <input type="text"
-                                                                                        class="form-control"
-                                                                                        id="<%= f.name %>"
-                                                                                        name="<%= f.name %>"
-                                                                                        value="<%= settings[f.name] || '' %>"
-                                                                                        placeholder="e.g. bx bxl-facebook" />
-                                                                                </div>
-                                                                                <% }) %>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button"
-                                                                        class="btn btn-outline-secondary"
-                                                                        data-bs-dismiss="modal">Close</button>
-                                                                    <button type="submit" class="btn btn-primary">Save
-                                                                        Changes</button>
-                                                                </div>
-                                                            </form>
+                                        <!-- Edit Social Icons Modal -->
+                                        <div class="modal fade" id="editSocialIconsModal" tabindex="-1"
+                                            aria-labelledby="editSocialIconsModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <form action="/setting/social/update" method="POST">
+                                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="editSocialIconsModalLabel">Edit
+                                                                Social Icons</h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
-                                                    </div>
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <% const fields=[ { name: "facebook_icon" ,
+                                                                    label: "Facebook Icon" }, { name: "twitter_icon" ,
+                                                                    label: "Twitter Icon" }, { name: "insta_icon" ,
+                                                                    label: "Instagram Icon" }, { name: "linkedin_icon" ,
+                                                                    label: "LinkedIn Icon" } ]; %>
+                                                                    <% fields.forEach(f=> { %>
+                                                                        <div class="col-12 mb-3">
+                                                                            <label for="<%= f.name %>"
+                                                                                class="form-label">
+                                                                                <%= f.label %>
+                                                                            </label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="<%= f.name %>" name="<%= f.name %>"
+                                                                                value="<%= settings[f.name] || '' %>"
+                                                                                placeholder="e.g. bx bxl-facebook" />
+                                                                        </div>
+                                                                        <% }) %>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-secondary"
+                                                                data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary">Save
+                                                                Changes</button>
+                                                        </div>
+                                                    </form>
                                                 </div>
-                                                <% } %>
+                                            </div>
+                                        </div>
+
+                                        <!-- Edit General Info Modal -->
+                                        <div class="modal fade" id="editGeneralIconsModal" tabindex="-1"
+                                            aria-labelledby="editGeneralIconsModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                    <form action="/setting/general/update" method="POST"
+                                                        enctype="multipart/form-data">
+                                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="editGeneralIconsModalLabel">
+                                                                Edit General Info & Logos</h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <% const generalFields=[ { name: "email" ,
+                                                                    label: "Email" }, { name: "phone" , label: "Phone"
+                                                                    }, { name: "location" , label: "Location" }, ]; %>
+
+                                                                    <% generalFields.forEach(f=> { %>
+                                                                        <div class="col-md-6 mb-3">
+                                                                            <label for="<%= f.name %>"
+                                                                                class="form-label">
+                                                                                <%= f.label %>
+                                                                            </label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="<%= f.name %>" name="<%= f.name %>"
+                                                                                value="<%= settings[f.name] || '' %>" />
+                                                                        </div>
+                                                                        <% }); %>
+
+                                                                            <div class="col-md-6 mb-3">
+                                                                                <label for="sitename_logo"
+                                                                                    class="form-label">Site Name
+                                                                                    Logo</label>
+                                                                                <input type="file" class="form-control"
+                                                                                    name="sitename_logo"
+                                                                                    accept="image/*" />
+                                                                            </div>
+
+                                                                            <div class="col-md-6 mb-3">
+                                                                                <label for="logo"
+                                                                                    class="form-label">Main
+                                                                                    Logo</label>
+                                                                                <input type="file" class="form-control"
+                                                                                    name="logo" accept="image/*" />
+                                                                            </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-secondary"
+                                                                data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary">Save
+                                                                Changes</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </div>
-                                </div>
-                            </div>
-                            <!-- End Connections Tab -->
+                                    <!-- End Connections Tab -->
 
-                            <div class="tab-pane fade <%= activeTab === 'theme' ? 'show active' : '' %>" id="theme"
-                                role="tabpanel">
-                                <div class="card">
-                                    <h5 class="card-header">Theme Settings</h5>
-                                    <div class="card-body">
-                                        <p>Theme content goes here...</p>
+                                    <!-- Theme Tab -->
+                                    <div class="tab-pane fade <%= activeTab === 'theme' ? 'show active' : '' %>"
+                                        id="theme" role="tabpanel">
+                                        <div class="card">
+                                            <h5 class="card-header">Theme Settings</h5>
+                                            <div class="card-body">
+                                                <p>Theme content goes here...</p>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <!-- End Theme Tab -->
                                 </div>
-                            </div>
-                    </div> <!-- End theme Tab Content -->
+                        </div>
+                        <%- include('../partials/footer') %>
+                            <div class="content-backdrop fade"></div>
+                    </div>
                 </div>
-
-                <%- include('../partials/footer') %>
-                    <div class="content-backdrop fade"></div>
         </div>
-    </div>
-    <div class="layout-overlay layout-menu-toggle"></div>
+        <div class="layout-overlay layout-menu-toggle"></div>
     </div>
     <%- include('../partials/script') %>
-
         <script src="/assets/admin/js/settings.js"></script>
-
 </body>
 
 </html>

@@ -1,7 +1,7 @@
 function confirmDeleteIcon(platform) {
   swal({
-    title: `Delete ${platform} icon?`,
-    text: "This will remove the icon from settings.",
+    title: `Delete ${platform}?`,
+    text: "This will remove the data from settings.",
     icon: "warning",
     buttons: true,
     dangerMode: true,
@@ -11,7 +11,19 @@ function confirmDeleteIcon(platform) {
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
 
-      fetch(`/setting/icon/${platform}`, {
+      const generalFields = [
+        "email",
+        "phone",
+        "location",
+        "sitename_logo",
+        "logo",
+      ];
+      const isGeneral = generalFields.includes(platform);
+      const endpoint = isGeneral
+        ? `/setting/general/${platform}`
+        : `/setting/icon/${platform}`;
+
+      fetch(endpoint, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

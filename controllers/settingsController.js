@@ -67,3 +67,36 @@ exports.deleteSocialIcon = async (req, res) => {
     res.status(500).json({ error: err.message || "Failed to delete icon." });
   }
 };
+
+exports.updateGeneralInfo = async (req, res) => {
+  try {
+    const { email, phone, location } = req.body;
+    const updateData = { email, phone, location };
+
+    if (req.files?.sitename_logo?.[0]) {
+      updateData.sitename_logo = req.files.sitename_logo[0].filename;
+    }
+
+    if (req.files?.logo?.[0]) {
+      updateData.logo = req.files.logo[0].filename;
+    }
+
+    await settingRepo.updateSettings(updateData);
+    res.redirect("/setting?tab=connections");
+  } catch (err) {
+    console.error("Error updating general info:", err);
+    res.status(500).send("Failed to update general info.");
+  }
+};
+
+exports.deleteGeneralField = async (req, res) => {
+  try {
+    const { platform } = req.params;
+    await settingRepo.clearGeneralField(platform);
+
+    res.json({ success: true, message: `${platform} deleted.` });
+  } catch (err) {
+    console.error("Delete Error:", err);
+    res.status(500).json({ error: err.message || "Failed to delete field." });
+  }
+};

@@ -50,3 +50,17 @@ exports.clearIconByPlatform = async (platform) => {
   setting[field] = null;
   await setting.save();
 };
+
+exports.clearGeneralField = async (platform) => {
+  const allowedFields = ["email", "phone", "location", "sitename_logo", "logo"];
+
+  if (!allowedFields.includes(platform)) {
+    throw new Error("Invalid general field");
+  }
+
+  const setting = await Setting.findOne();
+  if (!setting) throw new Error("Settings not found");
+
+  setting[platform] = null;
+  await setting.save();
+};
