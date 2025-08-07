@@ -1,7 +1,5 @@
 const authRepo = require("../repositories/authRepository");
 const settingRepo = require("../repositories/settingsRepository");
-const { Op } = require("sequelize");
-const { Setting } = require("../models");
 
 exports.renderSettings = async (req, res) => {
   try {
@@ -16,18 +14,8 @@ exports.renderSettings = async (req, res) => {
       notifications: "Notifications",
     };
 
-    // Tab-specific data
-    let tabData = {};
+    const settings = await settingRepo.getSettings();
 
-    if (tab === "connections") {
-      tabData.socials = await settingRepo.findSocialIcons();
-    }
-
-    if (tab === "theme") {
-      tabData.themeSettings = await settingRepo.findTheme();
-    }
-
-    // Render page
     res.render("setting", {
       title: tabTitles[tab],
       csrfToken: req.csrfToken(),
@@ -35,7 +23,7 @@ exports.renderSettings = async (req, res) => {
       currentPage: "Settings",
       activeTab: tab,
       ...user.dataValues,
-      ...tabData,
+      settings,
       breadcrumbs: [
         { label: "Home", url: "/dashboard" },
         { label: "Settings" },
@@ -48,56 +36,34 @@ exports.renderSettings = async (req, res) => {
   }
 };
 
-exports.saveSocialIcon = async (req, res) => {
-  const { platform, iconClass, link } = req.body;
-
-  if (!["facebook", "twitter", "insta", "linkedin"].includes(platform)) {
-    return res.status(400).send("Invalid platform");
-  }
-
+exports.updateSocialIcons = async (req, res) => {
   try {
-    await settingRepo.insertSocialIcon(platform, iconClass, link);
-    res.redirect("/settings?tab=connections");
+    const { facebook_icon, twitter_icon, insta_icon, linkedin_icon } = req.body;
+
+    await settingRepo.updateSettings({
+      facebook_icon,
+      twitter_icon,
+      insta_icon,
+      linkedin_icon,
+    });
+
+    res.redirect("/setting?tab=connections");
   } catch (err) {
-    console.error("Error saving social icon:", err);
-    res.status(500).send("Something went wrong.");
+    console.error("Error updating social icons:", err);
+    res.status(500).send("Failed to update social icons.");
   }
 };
 
 exports.deleteSocialIcon = async (req, res) => {
   try {
-    const platform = req.params.platform.toLowerCase();
+    const { platform } = req.params;
+    console.log("➡️ Platform to delete:", platform);
 
-    const iconColumn = `${platform}_icon`;
-    const validColumns = [
-      "facebook_icon",
-      "twitter_icon",
-      "insta_icon",
-      "linkedin_icon",
-    ];
+    await settingRepo.clearIconByPlatform(platform);
 
-    if (!validColumns.includes(iconColumn)) {
-      return res.status(400).json({ error: "Invalid platform" });
-    }
-
-    const whereCondition = {};
-    whereCondition[iconColumn] = { [Op.ne]: null };
-
-    const deletedCount = await Setting.destroy({ where: whereCondition });
-
-    if (deletedCount > 0) {
-      res.status(200).json({
-        success: true,
-        message: `${platform} icon deleted successfully.`,
-      });
-    } else {
-      res.status(404).json({
-        success: false,
-        message: `No ${platform} icon found to delete.`,
-      });
-    }
+    res.json({ success: true, message: `${platform} icon deleted.` });
   } catch (err) {
-    console.error("Error deleting social icon:", err);
-    res.status(500).json({ success: false, message: "Server error" });
+    console.error("❌ Delete Error:", err.stack || err.message);
+    res.status(500).json({ error: err.message || "Failed to delete icon." });
   }
 };

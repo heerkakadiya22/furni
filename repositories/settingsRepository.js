@@ -1,70 +1,52 @@
 const { Setting } = require("../models");
-const { Op } = require("sequelize");
 
-const settingRepository = {
-  async find() {
-    return await Setting.findOne();
-  },
+exports.getSettings = async () => {
+  let setting = await Setting.findOne();
 
-  async update(fields) {
-    let setting = await Setting.findOne();
-    if (!setting) {
-      setting = await Setting.create(fields);
-      return setting;
-    }
-
-    return await setting.update(fields);
-  },
-
-  async updateThemeColor(themeColor) {
-    return await this.update({ theme_color: themeColor });
-  },
-
-  async insertSocialIcon(platform, iconClass, link) {
-    const insertData = {
-      facebook_icon: null,
-      twitter_icon: null,
-      insta_icon: null,
-      linkedin_icon: null,
-      description: link,
-    };
-
-    insertData[`${platform}_icon`] = iconClass;
-
-    return await Setting.create(insertData);
-  },
-
-  async clearSocialIcons() {
-    return await this.update({
-      facebook_icon: null,
-      twitter_icon: null,
-      insta_icon: null,
-      linkedin_icon: null,
-      description: null,
+  if (!setting) {
+    setting = await Setting.create({
+      facebook_icon: "",
+      twitter_icon: "",
+      insta_icon: "",
+      linkedin_icon: "",
     });
-  },
+  }
 
-  async updateLogo(logoPath) {
-    return await this.update({ logo: logoPath });
-  },
-
-  async findSocialIcons() {
-    return await Setting.findAll({
-      where: {
-        [Op.or]: [
-          { facebook_icon: { [Op.ne]: null } },
-          { twitter_icon: { [Op.ne]: null } },
-          { insta_icon: { [Op.ne]: null } },
-          { linkedin_icon: { [Op.ne]: null } },
-        ],
-      },
-    });
-  },
-
-  async findThemeColor() {
-    const setting = await Setting.findOne();
-    return setting?.theme_color || null;
-  },
+  return setting;
 };
 
-module.exports = settingRepository;
+exports.updateSettings = async (data) => {
+  let setting = await Setting.findOne();
+
+  if (!setting) {
+    setting = await Setting.create(data);
+  } else {
+    await setting.update(data);
+  }
+
+  return setting;
+};
+
+exports.clearIconByPlatform = async (platform) => {
+  const platformToField = {
+    facebook: "facebook_icon",
+    twitter: "twitter_icon",
+    instagram: "insta_icon",
+    linkedin: "linkedin_icon",
+  };
+
+  const field = platformToField[platform];
+  console.log("➡️ Mapped field:", field);
+
+  if (!field) {
+    throw new Error("Invalid platform name");
+  }
+
+  const setting = await Setting.findOne();
+  if (!setting) {
+    throw new Error("Setting not found");
+  }
+
+  setting[field] = null;
+  await setting.save();
+};

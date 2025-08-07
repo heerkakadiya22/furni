@@ -10,6 +10,7 @@
         <%= title %>
     </title>
     <meta name="description" content="" />
+    <meta name="csrf-token" content="<%= csrfToken %>">
     <%- include('../partials/head') %>
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
@@ -110,158 +111,133 @@
                                         </div>
 
                                         <div class="col-md-6 col-12">
-                                            <div class="card">
-                                                <div class="d-flex">
-                                                    <h5 class="card-header" style="margin-right: auto;">Social Accounts
-                                                    </h5>
-                                                    <input type="hidden" id="csrfToken" value="<%= csrfToken %>" />
-                                                    <!-- Add Button -->
-                                                    <button type="button" class="btn btn-primary m-3" id="addSocialBtn"
-                                                        data-bs-toggle="modal" data-bs-target="#socialAccountModal">
-                                                        Add New
-                                                    </button>
-                                                </div>
+                                            <% if (activeTab==="connections" ) { %>
+                                                <!-- Social Accounts Display Card -->
+                                                <div class="card mb-4">
+                                                    <div class="d-flex">
+                                                        <h5 class="card-header">Social Accounts</h5>
+                                                        <button type="button" class="btn btn-primary ms-auto m-2"
+                                                            data-bs-toggle="modal" data-bs-target="#editIconsModal">
+                                                            Update Icons
+                                                        </button>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <p>Display content from social accounts on your site</p>
 
-                                                <div class="card-body">
-                                                    <p>Display content from social accounts on your site</p>
+                                                        <% const socials=[ { name: "Facebook" , icon:
+                                                            settings.facebook_icon }, { name: "Twitter" , icon:
+                                                            settings.twitter_icon }, { name: "Instagram" , icon:
+                                                            settings.insta_icon }, { name: "LinkedIn" , icon:
+                                                            settings.linkedin_icon } ]; %>
 
-                                                    <% socials.forEach(social=> {
-                                                        let platform = '';
-                                                        let iconClass = '';
-                                                        let iconFile = '';
-                                                        let link = social.description;
-
-                                                        if (social.facebook_icon) {
-                                                        platform = 'facebook';
-                                                        iconClass = social.facebook_icon;
-                                                        iconFile = 'facebook';
-                                                        } else if (social.twitter_icon) {
-                                                        platform = 'twitter';
-                                                        iconClass = social.twitter_icon;
-                                                        iconFile = 'twitter';
-                                                        } else if (social.insta_icon) {
-                                                        platform = 'insta';
-                                                        iconClass = social.insta_icon;
-                                                        iconFile = 'instagram';
-                                                        } else if (social.linkedin_icon) {
-                                                        platform = 'linkedin';
-                                                        iconClass = social.linkedin_icon;
-                                                        iconFile = 'linkedin';
-                                                        }
-                                                        %>
-                                                        <div class="d-flex mb-3 mt-4">
-                                                            <div class="flex-shrink-0">
-
-                                                                <a href="#">
-                                                                    <i class="<%= iconClass %> me-3 text-secondary"
-                                                                        style="font-size: 30px;"></i>
-
-                                                                </a>
-                                                            </div>
-                                                            <div class="flex-grow-1 row">
-                                                                <div class="col-7">
-                                                                    <h6 class="mb-0 text-capitalize">
-                                                                        <%= platform %>
-                                                                    </h6>
-                                                                    <% if (link) { %>
-                                                                        <a href="<%= link %>" target="_blank">
-                                                                            <%= link %>
-                                                                        </a>
-                                                                        <% } else { %>
+                                                            <% socials.forEach(social=> { %>
+                                                                <div class="d-flex mb-3">
+                                                                    <div class="flex-shrink-0">
+                                                                        <i class="<%= social.icon %> me-3"
+                                                                            style="font-size: 30px;"></i>
+                                                                    </div>
+                                                                    <div class="flex-grow-1 row">
+                                                                        <div class="col-8 col-sm-7 mb-sm-0 mb-2">
+                                                                            <h6 class="mb-0">
+                                                                                <%= social.name %>
+                                                                            </h6>
                                                                             <small class="text-muted">Not
                                                                                 Connected</small>
-                                                                            <% } %>
+                                                                        </div>
+                                                                        <div class="col-4 col-sm-5 text-end">
+                                                                            <button type="button"
+                                                                                class="btn btn-icon btn-outline-danger"
+                                                                                onclick="confirmDeleteIcon('<%= social.name.toLowerCase() %>')">
+                                                                                <i class="bx bx-trash-alt"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="col-5 text-end">
+                                                                <% }) %>
+                                                    </div>
+                                                </div>
 
+                                                <!-- Edit Social Icons Modal -->
+                                                <div class="modal fade" id="editIconsModal" tabindex="-1"
+                                                    aria-labelledby="editIconsModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <form action="/setting/social/update" method="POST">
+                                                                <input type="hidden" name="_csrf"
+                                                                    value="<%= csrfToken %>">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="editIconsModalLabel">
+                                                                        Edit Social Icons</h5>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="row">
+                                                                        <% const fields=[ { name: "facebook_icon" ,
+                                                                            label: "Facebook Icon" }, {
+                                                                            name: "twitter_icon" , label: "Twitter Icon"
+                                                                            }, { name: "insta_icon" ,
+                                                                            label: "Instagram Icon" }, {
+                                                                            name: "linkedin_icon" ,
+                                                                            label: "LinkedIn Icon" } ]; %>
+
+                                                                            <% fields.forEach(f=> { %>
+                                                                                <div class="col-md-6 mb-3">
+                                                                                    <label for="<%= f.name %>"
+                                                                                        class="form-label">
+                                                                                        <%= f.label %>
+                                                                                    </label>
+                                                                                    <input type="text"
+                                                                                        class="form-control"
+                                                                                        id="<%= f.name %>"
+                                                                                        name="<%= f.name %>"
+                                                                                        value="<%= settings[f.name] || '' %>"
+                                                                                        placeholder="e.g. bx bxl-facebook" />
+                                                                                </div>
+                                                                                <% }) %>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
                                                                     <button type="button"
-                                                                        class="btn btn-icon btn-outline-danger delete-social"
-                                                                        data-platform="<%= platform %>">
-                                                                        <i class="bx bx-trash-alt"></i>
-                                                                    </button>
+                                                                        class="btn btn-outline-secondary"
+                                                                        data-bs-dismiss="modal">Close</button>
+                                                                    <button type="submit" class="btn btn-primary">Save
+                                                                        Changes</button>
                                                                 </div>
-                                                            </div>
+                                                            </form>
                                                         </div>
-                                                        <% }) %>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <!-- Modal -->
-                                        <div class="modal fade" id="socialAccountModal" tabindex="-1"
-                                            aria-labelledby="socialAccountModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <form id="socialForm" method="POST" action="/settings/social">
-
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="socialAccountModalLabel">
-                                                                Add/Update Social Account</h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <input type="hidden" name="_csrf"
-                                                                value="<%= csrfToken %>" />
-
-                                                            <div class="mb-3">
-                                                                <label for="platform"
-                                                                    class="form-label">Platform</label>
-                                                                <input type="hidden" name="platform"
-                                                                    id="platformHidden">
-                                                                <select class="form-select" id="platform" required>
-                                                                    <option value="facebook">Facebook</option>
-                                                                    <option value="twitter">Twitter</option>
-                                                                    <option value="insta">Instagram</option>
-                                                                    <option value="linkedin">LinkedIn</option>
-                                                                </select>
-                                                            </div>
-
-                                                            <div class="mb-3">
-                                                                <label for="iconClass" class="form-label">Icon
-                                                                    Class</label>
-                                                                <input type="text" class="form-control" id="iconClass"
-                                                                    name="iconClass" placeholder="e.g. bx bxl-facebook"
-                                                                    required>
-                                                            </div>
-
-                                                            <div class="mb-3">
-                                                                <label for="link" class="form-label">Social Link</label>
-                                                                <input type="url" class="form-control" id="link"
-                                                                    name="link"
-                                                                    placeholder="https://example.com/yourpage" required>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="submit" class="btn btn-primary"
-                                                                id="submitSocialBtn">Add</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
+                                                <% } %>
                                         </div>
 
-                                        <!-- End Connections Tab -->
-
-                                        <div class="tab-pane fade <%= activeTab === 'theme' ? 'show active' : '' %>"
-                                            id="theme" role="tabpanel">
-                                            <div class="card">
-                                                <h5 class="card-header">Theme Settings</h5>
-                                                <div class="card-body">
-                                                    <p>Theme content goes here...</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> <!-- End Tab Content -->
+                                    </div>
                                 </div>
-
-                                <%- include('../partials/footer') %>
-                                    <div class="content-backdrop fade"></div>
                             </div>
-                    </div>
-                    <div class="layout-overlay layout-menu-toggle"></div>
+                            <!-- End Connections Tab -->
+
+                            <div class="tab-pane fade <%= activeTab === 'theme' ? 'show active' : '' %>" id="theme"
+                                role="tabpanel">
+                                <div class="card">
+                                    <h5 class="card-header">Theme Settings</h5>
+                                    <div class="card-body">
+                                        <p>Theme content goes here...</p>
+                                    </div>
+                                </div>
+                            </div>
+                    </div> <!-- End theme Tab Content -->
                 </div>
-                <%- include('../partials/script') %>
-                    <script src="/assets/admin/js/settings.js"></script>
+
+                <%- include('../partials/footer') %>
+                    <div class="content-backdrop fade"></div>
+        </div>
+    </div>
+    <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <%- include('../partials/script') %>
+
+        <script src="/assets/admin/js/settings.js"></script>
 
 </body>
 

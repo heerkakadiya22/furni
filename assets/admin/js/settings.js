@@ -1,55 +1,37 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const csrfToken = document.getElementById("csrfToken")?.value;
+function confirmDeleteIcon(platform) {
+  swal({
+    title: `Delete ${platform} icon?`,
+    text: "This will remove the icon from settings.",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  }).then((willDelete) => {
+    if (willDelete) {
+      const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
 
-  document.querySelectorAll(".delete-social").forEach((button) => {
-    button.addEventListener("click", function () {
-      const platform = button.getAttribute("data-platform");
-
-      swal({
-        title: "Are you sure?",
-        text: `This will remove the ${platform} social icon.`,
-        icon: "warning",
-        buttons: ["Cancel", "Yes, delete it!"],
-        dangerMode: true,
-      }).then((willDelete) => {
-        if (willDelete) {
-          fetch(`/settings/social/${platform}`, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-              "CSRF-Token": csrfToken,
-            },
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.message) {
-                swal("Deleted!", data.message, "success").then(() => {
-                  // Option 1: Reload to update view
-                  location.reload();
-
-                  // Option 2 (optional): remove icon block without reload
-                  // button.closest(".d-flex.mb-3.mt-4").remove();
-                });
-              } else {
-                swal("Error!", data.error || "Something went wrong", "error");
-              }
-            })
-            .catch((err) => {
-              console.error("Delete error:", err);
-              swal("Error!", "Failed to delete the social icon.", "error");
-            });
-        }
-      });
-    });
+      fetch(`/setting/icon/${platform}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "CSRF-Token": csrfToken,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            swal("Deleted!", {
+              icon: "success",
+            }).then(() => location.reload());
+          } else {
+            swal("Error", data.error || "Failed to delete.", "error");
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          swal("Error", "Server error occurred.", "error");
+        });
+    }
   });
-});
-
-document.getElementById("addSocialBtn").addEventListener("click", () => {
-  document.getElementById("socialForm").action = "/settings/social";
-  document.getElementById("platform").disabled = false;
-  document.getElementById("platform").value = "facebook";
-  document.getElementById("platformHidden").value = "facebook";
-  document.getElementById("iconClass").value = "";
-  document.getElementById("link").value = "";
-  document.getElementById("submitSocialBtn").textContent = "Add";
-});
+}
