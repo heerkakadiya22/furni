@@ -31,4 +31,6 @@ router.delete(
   settingsController.deleteTermsPrivacyField
 );
 
+router.post("/setting/theme/update", settingsController.updateThemeColor);
+
 module.exports = router;

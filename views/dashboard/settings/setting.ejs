@@ -9,7 +9,7 @@
     <title>
         <%= title %>
     </title>
-    <meta name="description" content="" />
+    <meta name="description" content />
     <meta name="csrf-token" content="<%= csrfToken %>">
 
     <%- include('../partials/head') %>
@@ -34,7 +34,8 @@
                                     <li class="nav-item">
                                         <a class="nav-link <%= activeTab === 'connections' ? 'active' : '' %>"
                                             href="/setting?tab=connections">
-                                            <i class="bx bx-link-alt me-1"></i> Connections
+                                            <i class="bx bx-link-alt me-1"></i>
+                                            Connections
                                         </a>
                                     </li>
                                     <li class="nav-item">
@@ -46,7 +47,8 @@
                                     <li class="nav-item">
                                         <a class="nav-link <%= activeTab === 'terms_privacy' ? 'active' : '' %>"
                                             href="/setting?tab=terms_privacy">
-                                            <i class="bx bx-file me-1"></i> Terms & Privacy
+                                            <i class="bx bx-file me-1"></i> Terms &
+                                            Privacy
                                         </a>
                                     </li>
                                 </ul>
@@ -61,7 +63,8 @@
                                             <div class="col-md-6 col-12">
                                                 <div class="card mb-4">
                                                     <div class="d-flex align-items-center">
-                                                        <h5 class="card-header">General Info & Logos</h5>
+                                                        <h5 class="card-header">General
+                                                            Info & Logos</h5>
                                                         <button type="button" class="btn btn-primary ms-auto m-3"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#editGeneralIconsModal">
@@ -69,7 +72,9 @@
                                                         </button>
                                                     </div>
                                                     <div class="card-body">
-                                                        <p>Customize your general contact information and site branding.
+                                                        <p>Customize your general
+                                                            contact information and
+                                                            site branding.
                                                         </p>
 
                                                         <% const generalIcons=[ { key: "email" , label: "Email" , icon:
@@ -77,7 +82,8 @@
                                                             settings.phone }, { key: "location" , label: "Location" ,
                                                             icon: settings.location }, ]; %>
 
-                                                            <% generalIcons.forEach(item=> { if (item.icon) { %>
+                                                            <% generalIcons.forEach(item=>
+                                                                { if (item.icon) { %>
                                                                 <div class="d-flex mb-3">
                                                                     <div class="flex-shrink-0">
                                                                         <i class="<%= item.icon %> me-3"
@@ -111,7 +117,8 @@
                                                                                     <img src="/assets/admin/img/favicon/<%= settings.sitename_logo %>"
                                                                                         alt="Site Name Logo"
                                                                                         height="40" />
-                                                                                    <p class="mb-0 small">Site Logo</p>
+                                                                                    <p class="mb-0 small">Site
+                                                                                        Logo</p>
                                                                                 </div>
                                                                                 <% } %>
                                                                                     <% if (settings.logo) { %>
@@ -129,12 +136,12 @@
                                                 </div>
                                             </div>
 
-
                                             <!-- Social Accounts Column -->
                                             <div class="col-md-6 col-12">
                                                 <div class="card mb-4">
                                                     <div class="d-flex align-items-center">
-                                                        <h5 class="card-header">Social Accounts</h5>
+                                                        <h5 class="card-header">Social
+                                                            Accounts</h5>
                                                         <button type="button" class="btn btn-primary ms-auto m-3"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#editSocialIconsModal">
@@ -142,13 +149,16 @@
                                                         </button>
                                                     </div>
                                                     <div class="card-body">
-                                                        <p>Display content from social accounts on your site.</p>
+                                                        <p>Display content from
+                                                            social accounts on your
+                                                            site.</p>
                                                         <% const socials=[ { name: "Facebook" , icon:
                                                             settings.facebook_icon }, { name: "Twitter" , icon:
                                                             settings.twitter_icon }, { name: "Instagram" , icon:
                                                             settings.insta_icon }, { name: "LinkedIn" , icon:
                                                             settings.linkedin_icon } ]; %>
-                                                            <% socials.forEach(social=> {
+                                                            <% socials.forEach(social=>
+                                                                {
                                                                 if (social.icon) { %>
                                                                 <div class="d-flex mb-3">
                                                                     <div class="flex-shrink-0">
@@ -201,7 +211,8 @@
                                                                     label: "Twitter Icon" }, { name: "insta_icon" ,
                                                                     label: "Instagram Icon" }, { name: "linkedin_icon" ,
                                                                     label: "LinkedIn Icon" } ]; %>
-                                                                    <% fields.forEach(f=> { %>
+                                                                    <% fields.forEach(f=> {
+                                                                        %>
                                                                         <div class="col-12 mb-3">
                                                                             <label for="<%= f.name %>"
                                                                                 class="form-label">
@@ -236,7 +247,8 @@
                                                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="editGeneralIconsModalLabel">
-                                                                Edit General Info & Logos</h5>
+                                                                Edit General Info &
+                                                                Logos</h5>
                                                             <button type="button" class="btn-close"
                                                                 data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
@@ -246,7 +258,8 @@
                                                                     label: "Email" }, { name: "phone" , label: "Phone"
                                                                     }, { name: "location" , label: "Location" }, ]; %>
 
-                                                                    <% generalFields.forEach(f=> { %>
+                                                                    <% generalFields.forEach(f=>
+                                                                        { %>
                                                                         <div class="col-md-6 mb-3">
                                                                             <label for="<%= f.name %>"
                                                                                 class="form-label">
@@ -260,7 +273,8 @@
 
                                                                             <div class="col-md-6 mb-3">
                                                                                 <label for="sitename_logo"
-                                                                                    class="form-label">Site Name
+                                                                                    class="form-label">Site
+                                                                                    Name
                                                                                     Logo</label>
                                                                                 <input type="file" class="form-control"
                                                                                     name="sitename_logo"
@@ -293,22 +307,85 @@
                                     <!-- Theme Tab -->
                                     <div class="tab-pane fade <%= activeTab === 'theme' ? 'show active' : '' %>"
                                         id="theme" role="tabpanel">
-                                        <div class="card">
-                                            <h5 class="card-header">Theme Settings</h5>
+                                        <div class="card shadow-sm border-0">
+                                            <div class="d-flex align-items-center">
+                                                <h5 class="card-header mb-0">Theme
+                                                    Settings</h5>
+                                                <button type="button" class="btn btn-primary ms-auto m-3"
+                                                    data-bs-toggle="modal" data-bs-target="#editThemeColorModal">
+                                                    <i class="bx bx-edit"></i>
+                                                    Update
+                                                </button>
+                                            </div>
                                             <div class="card-body">
-                                                <p>Theme content goes here...</p>
+                                                <h6 class="fw-bold">Theme Color</h6>
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <div id="themeColorPreview"
+                                                        style="width: 50px; height: 50px; border-radius: 6px; border: 1px solid #ccc; background-color: <%= settings.theme_color || '#ffffff' %>;">
+                                                    </div>
+                                                    <p class="mb-0"><strong>
+                                                            <%= settings.theme_color || 'No color set' %>
+                                                        </strong></p>
+                                                </div>
                                             </div>
                                         </div>
+
+                                        <!-- Edit Theme Color Modal -->
+                                        <div class="modal fade" id="editThemeColorModal" tabindex="-1"
+                                            aria-labelledby="editThemeColorModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content border-0 shadow-sm">
+                                                    <form action="/setting/theme/update" method="POST">
+                                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title fw-bold"
+                                                                id="editThemeColorModalLabel">
+                                                                Edit Theme Color
+                                                            </h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body text-center">
+
+                                                            <!-- Preview Box -->
+                                                            <label for="themeColorPicker" id="themeColorPreview"
+                                                                style="display: inline-block;width: 80px;height: 80px;border-radius: 8px;border: 2px solid #ccc; cursor: pointer; background-color: <%= settings.theme_color || '#ffffff' %>;">
+                                                            </label>
+
+                                                            <!-- Hidden Color Picker -->
+                                                            <input type="color" id="themeColorPicker" name="theme_color"
+                                                                value="<%= settings.theme_color || '#ffffff' %>"
+                                                                style="opacity:0; position:absolute; z-index:-1;">
+
+                                                            <!-- Hex Code Display -->
+                                                            <p class="mt-3 fw-bold" id="themeColorValue">
+                                                                <%= settings.theme_color || '#ffffff' %>
+                                                            </p>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-secondary"
+                                                                data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary">
+                                                                <i class="bx bx-save"></i>
+                                                                Save Changes
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                     <!-- End Theme Tab -->
-
 
                                     <!-- Terms & Privacy Tab -->
                                     <div class="tab-pane fade <%= activeTab === 'terms_privacy' ? 'show active' : '' %>"
                                         id="terms_privacy" role="tabpanel">
                                         <div class="card">
                                             <div class="d-flex align-items-center">
-                                                <h5 class="card-header">Terms & Privacy Settings</h5>
+                                                <h5 class="card-header">Terms &
+                                                    Privacy Settings</h5>
                                                 <button type="button" class="btn btn-primary ms-auto m-3"
                                                     data-bs-toggle="modal" data-bs-target="#editTermsPrivacyModal">
                                                     Update
@@ -321,7 +398,8 @@
 
                                                 <div class="card-body">
 
-                                                    <% termsPrivacyFields.forEach(field=> { %>
+                                                    <% termsPrivacyFields.forEach(field=> {
+                                                        %>
                                                         <h6>
                                                             <%= field.label %>
                                                         </h6>
@@ -336,7 +414,6 @@
                                                         <% }); %>
                                                 </div>
                                         </div>
-
 
                                         <!-- Edit Terms & Privacy Modal -->
 

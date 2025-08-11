@@ -130,3 +130,17 @@ exports.deleteTermsPrivacyField = async (req, res) => {
     res.status(500).json({ error: err.message || "Failed to delete content." });
   }
 };
+
+
+exports.updateThemeColor = async (req, res) => {
+  try {
+    const { theme_color } = req.body;
+
+    await settingRepo.updateSettings({ theme_color });
+
+    res.redirect("/setting?tab=theme");
+  } catch (err) {
+    console.error("Error updating theme color:", err);
+    res.status(500).send("Failed to update theme color.");
+  }
+};

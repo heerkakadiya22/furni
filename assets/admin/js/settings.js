@@ -104,3 +104,16 @@ function confirmDeleteTermsField(field) {
     }
   });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const picker = document.getElementById("themeColorPicker");
+  const preview = document.querySelector(".modal-body #themeColorPreview");
+  const valueText = document.getElementById("themeColorValue");
+
+  if (picker) {
+    picker.addEventListener("input", function () {
+      preview.style.backgroundColor = picker.value;
+      valueText.textContent = picker.value;
+    });
+  }
+});
