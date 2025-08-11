@@ -64,3 +64,31 @@ exports.clearGeneralField = async (platform) => {
   setting[platform] = null;
   await setting.save();
 };
+
+exports.updateSettings = async (data) => {
+  let setting = await Setting.findOne();
+
+  if (!setting) {
+    setting = await Setting.create(data);
+  } else {
+    await setting.update(data);
+  }
+
+  return setting;
+};
+
+exports.clearTermsPrivacyField = async (field) => {
+  const allowedFields = ["terms", "privacy", "description"];
+
+  if (!allowedFields.includes(field)) {
+    throw new Error("Invalid Terms & Privacy field");
+  }
+
+  const setting = await Setting.findOne();
+  if (!setting) {
+    throw new Error("Settings not found");
+  }
+
+  setting[field] = null;
+  await setting.save();
+};

@@ -47,3 +47,60 @@ function confirmDeleteIcon(platform) {
     }
   });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  new FroalaEditor(".rich-editor", {
+    height: 300,
+    toolbarSticky: true,
+    toolbarButtons: [
+      "bold",
+      "italic",
+      "underline",
+      "strikeThrough",
+      "|",
+      "formatUL",
+      "formatOL",
+      "|",
+      "insertLink",
+      "insertImage",
+      "|",
+      "undo",
+      "redo",
+      "html",
+    ],
+  });
+});
+
+function confirmDeleteTermsField(field) {
+  swal({
+    title: `Delete ${field}?`,
+    text: "This will permanently remove the content for this field.",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  }).then((willDelete) => {
+    if (willDelete) {
+      fetch(`/setting/terms-privacy/${field}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "CSRF-Token": document.querySelector('meta[name="csrf-token"]')
+            .content,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            swal("Deleted!", data.message, "success").then(() =>
+              location.reload()
+            );
+          } else {
+            swal("Error", data.error || "Something went wrong.", "error");
+          }
+        })
+        .catch((err) => {
+          swal("Error", err.message, "error");
+        });
+    }
+  });
+}

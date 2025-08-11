@@ -14,7 +14,10 @@
 
     <%- include('../partials/head') %>
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+        <!-- Froala CSS -->
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/4.0.15/css/froala_editor.pkgd.min.css">
+
 </head>
 
 <body>
@@ -38,6 +41,12 @@
                                         <a class="nav-link <%= activeTab === 'theme' ? 'active' : '' %>"
                                             href="/setting?tab=theme">
                                             <i class="bx bx-palette me-1"></i> Theme
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link <%= activeTab === 'terms_privacy' ? 'active' : '' %>"
+                                            href="/setting?tab=terms_privacy">
+                                            <i class="bx bx-file me-1"></i> Terms & Privacy
                                         </a>
                                     </li>
                                 </ul>
@@ -292,6 +301,94 @@
                                         </div>
                                     </div>
                                     <!-- End Theme Tab -->
+
+
+                                    <!-- Terms & Privacy Tab -->
+                                    <div class="tab-pane fade <%= activeTab === 'terms_privacy' ? 'show active' : '' %>"
+                                        id="terms_privacy" role="tabpanel">
+                                        <div class="card">
+                                            <div class="d-flex align-items-center">
+                                                <h5 class="card-header">Terms & Privacy Settings</h5>
+                                                <button type="button" class="btn btn-primary ms-auto m-3"
+                                                    data-bs-toggle="modal" data-bs-target="#editTermsPrivacyModal">
+                                                    Update
+                                                </button>
+                                            </div>
+                                            <% const termsPrivacyFields=[ { key: "terms" , label: "Terms" , content:
+                                                settings.terms }, { key: "privacy" , label: "Privacy" , content:
+                                                settings.privacy }, { key: "description" , label: "Description" ,
+                                                content: settings.description } ]; %>
+
+                                                <div class="card-body">
+
+                                                    <% termsPrivacyFields.forEach(field=> { %>
+                                                        <h6>
+                                                            <%= field.label %>
+                                                        </h6>
+                                                        <div><%- field.content || `No ${field.label} content` %></div>
+                                                        <div class="text-end mb-3">
+                                                            <button type="button"
+                                                                class="btn btn-icon btn-outline-danger"
+                                                                onclick="confirmDeleteTermsField('<%= field.key %>')">
+                                                                <i class="bx bx-trash-alt"></i>
+                                                            </button>
+                                                        </div>
+                                                        <% }); %>
+                                                </div>
+                                        </div>
+
+
+                                        <!-- Edit Terms & Privacy Modal -->
+
+                                        <div class="modal fade" id="editTermsPrivacyModal" tabindex="-1"
+                                            aria-labelledby="editTermsPrivacyModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                <div class="modal-content">
+                                                    <form action="/setting/terms-privacy/update" method="POST">
+                                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="editTermsPrivacyModalLabel">Edit
+                                                                Terms & Privacy</h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="mb-3">
+                                                                <label for="terms" class="form-label">Terms</label>
+                                                                <textarea id="terms" name="terms"
+                                                                    class="form-control rich-editor">
+                                                                    <%= settings.terms || '' %>
+                                                                </textarea>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="privacy" class="form-label">Privacy</label>
+                                                                <textarea id="privacy" name="privacy"
+                                                                    class="form-control rich-editor">
+                                                                    <%= settings.privacy || '' %>
+                                                                </textarea>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="description"
+                                                                    class="form-label">Description</label>
+                                                                <textarea id="description" name="description"
+                                                                    class="form-control rich-editor">
+                                                                    <%= settings.description || '' %>
+                                                                </textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-secondary"
+                                                                data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary">Save
+                                                                Changes</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Terms & Privacy Tab -->
+
                                 </div>
                         </div>
                         <%- include('../partials/footer') %>
@@ -302,6 +399,8 @@
         <div class="layout-overlay layout-menu-toggle"></div>
     </div>
     <%- include('../partials/script') %>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/froala-editor/4.0.15/js/froala_editor.pkgd.min.js"></script>
+        ;
         <script src="/assets/admin/js/settings.js"></script>
 </body>
 

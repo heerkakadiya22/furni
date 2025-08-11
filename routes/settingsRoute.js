@@ -17,7 +17,18 @@ router.post(
   ]),
   settingsController.updateGeneralInfo
 );
-router.delete("/setting/general/:platform", settingsController.deleteGeneralField);
+router.delete(
+  "/setting/general/:platform",
+  settingsController.deleteGeneralField
+);
 
+router.post(
+  "/setting/terms-privacy/update",
+  settingsController.updateTermsPrivacy
+);
+router.delete(
+  "/setting/terms-privacy/:field",
+  settingsController.deleteTermsPrivacyField
+);
 
 module.exports = router;

@@ -11,7 +11,7 @@ exports.renderSettings = async (req, res) => {
     const tabTitles = {
       connections: "Connections",
       theme: "Theme",
-      notifications: "Notifications",
+      terms_privacy: "Terms & Privacy",
     };
 
     const settings = await settingRepo.getSettings();
@@ -98,5 +98,35 @@ exports.deleteGeneralField = async (req, res) => {
   } catch (err) {
     console.error("Delete Error:", err);
     res.status(500).json({ error: err.message || "Failed to delete field." });
+  }
+};
+
+// ===== TERMS & PRIVACY =====
+exports.updateTermsPrivacy = async (req, res) => {
+  try {
+    const { terms, privacy, description } = req.body;
+
+    await settingRepo.updateSettings({
+      terms,
+      privacy,
+      description,
+    });
+
+    res.redirect("/setting?tab=terms_privacy");
+  } catch (err) {
+    console.error("Error updating terms & privacy:", err);
+    res.status(500).send("Failed to update terms & privacy.");
+  }
+};
+
+exports.deleteTermsPrivacyField = async (req, res) => {
+  try {
+    const { field } = req.params;
+    await settingRepo.clearTermsPrivacyField(field);
+
+    res.json({ success: true, message: `${field} content deleted.` });
+  } catch (err) {
+    console.error("Delete Error:", err);
+    res.status(500).json({ error: err.message || "Failed to delete content." });
   }
 };
