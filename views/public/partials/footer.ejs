@@ -35,27 +35,33 @@
         <div class="row g-5 mb-5">
             <div class="col-lg-4">
                 <div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">Furni<span>.</span></a></div>
-                <p class="mb-4">
-                </p>
+                <% if (settings.description) { %>
+                    <p class="mb-4">
+                        <%= settings.description.replace(/<[^>]*>?/gm, '') %>
+                    </p>
+                    <% } %>
 
-                <ul class="list-unstyled custom-social">
-                    <% if (settings.facebook_icon) { %>
-                        <li><a href="#"><span class="<%= settings.facebook_icon %>"></span></a></li>
-                        <% } %>
 
-                            <% if (settings.twitter_icon) { %>
-                                <li><a href="#"><span class="<%= settings.twitter_icon %>"></span></a></li>
+                        <ul class="list-unstyled custom-social">
+                            <% if (settings.facebook_icon) { %>
+                                <li><a href="#"><span class="<%= settings.facebook_icon %>"></span></a></li>
                                 <% } %>
 
-                                    <% if (settings.insta_icon) { %>
-                                        <li><a href="#"><span class="<%= settings.insta_icon %>"></span></a></li>
+                                    <% if (settings.twitter_icon) { %>
+                                        <li><a href="#"><span class="<%= settings.twitter_icon %>"></span></a></li>
                                         <% } %>
 
-                                            <% if (settings.linkedin_icon) { %>
-                                                <li><a href="#"><span class="<%= settings.linkedin_icon %>"></span></a>
+                                            <% if (settings.insta_icon) { %>
+                                                <li><a href="#"><span class="<%= settings.insta_icon %>"></span></a>
                                                 </li>
                                                 <% } %>
-                </ul>
+
+                                                    <% if (settings.linkedin_icon) { %>
+                                                        <li><a href="#"><span
+                                                                    class="<%= settings.linkedin_icon %>"></span></a>
+                                                        </li>
+                                                        <% } %>
+                        </ul>
 
             </div>
 
@@ -83,7 +89,7 @@
                             <li><a href="#">Jobs</a></li>
                             <li><a href="#">Our team</a></li>
                             <li><a href="#">Leadership</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="/terms-and-privacy?type=privacy">Privacy Policy</a></li>
                         </ul>
                     </div>
 
@@ -115,9 +121,9 @@
 
                 <div class="col-lg-6 text-center text-lg-end">
                     <ul class="list-unstyled d-inline-flex ms-auto">
-                        <li class="me-4"><a href="#">Terms &amp;
+                        <li class="me-4"><a href="/terms-and-privacy?type=terms">Terms &amp;
                                 Conditions</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="/terms-and-privacy?type=privacy">Privacy Policy</a></li>
                     </ul>
                 </div>
 

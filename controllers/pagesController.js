@@ -109,3 +109,22 @@ exports.renderThanks = (req, res) => {
     res.status(500).send("Something went wrong.");
   }
 };
+
+exports.renderTermsAndPrivacy = async (req, res) => {
+  try {
+    const type = req.query.type || "terms";
+    const pageTitle =
+      type === "terms" ? "Terms & Conditions" : "Privacy Policy";
+
+    res.render("termsAndPrivacy", {
+      type,
+      title: pageTitle,
+      csrfToken: req.csrfToken(),
+      currentPage: type === "terms" ? "Terms & Conditions" : "Privacy Policy",
+      session: req.session,
+    });
+  } catch (error) {
+    console.error("Error rendering Terms & Privacy page:", error);
+    res.status(500).send("Something went wrong.");
+  }
+};

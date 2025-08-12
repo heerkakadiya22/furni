@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+    <link rel="shortcut icon" href="favicon.png">
+
+    <meta name="description" content />
+    <meta name="keywords" content="bootstrap, bootstrap4" />
+    <%- include('../partials/Head') %>
+        <title>
+            <%= title %>
+        </title>
+</head>
+
+<body>
+    <%- include('../partials/Header') %>
+        <div class="hero">
+            <div class="container">
+                <div class="row justify-content-between">
+                    <div class="btn-policy-switch">
+                        <div class="col-lg-5">
+                            <div class="intro-excerpt">
+                                <h1>
+                                    <%= title %>
+                                </h1>
+                            </div>
+                        </div>
+                        <a href="/terms-and-privacy?type=terms"
+                            class="btn <%= type === 'terms' ? 'btn-secondary' : 'btn-outline-secondary' %> me-2">
+                            Terms &amp; Conditions
+                        </a>
+                        <a href="/terms-and-privacy?type=privacy"
+                            class="btn <%= type === 'privacy' ? 'btn-secondary' : 'btn-outline-secondary' %>">
+                            Privacy Policy
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="untree_co-section product-section before-footer-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-md-4 col-lg-3 mb-2">
+                        <h2 class="mb-2 justify-content-between ">
+                            <%= title %>
+                        </h2>
+                        <div class="policy-content">
+                            <% if (type==='terms' ) { %>
+                                <%= settings.terms.replace(/<[^>]*>?/gm, '') %>
+                                    <% } else if (type==='privacy' ) { %>
+                                        <%= settings.privacy.replace(/<[^>]*>?/gm, '') %>
+                                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <%- include('../partials/footer') %>
+            <%- include('../partials/script') %>
+</body>
+
+</html>
