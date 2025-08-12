@@ -24,6 +24,6 @@ router.use(profileRoute);
 router.use(userRoute);
 router.use(verifyEmail);
 router.use(categoryRoute);
-router.use(settingsRoute); 
+router.use(settingsRoute);
 
 module.exports = router;

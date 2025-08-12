@@ -13,6 +13,7 @@ const indexRoute = require("./routes/indexRoute");
 
 const conditionCsrf = require("./middleware/conditionalCsrf");
 const { refreshUserSession } = require("./middleware/authMiddleware");
+const settingsMiddleware = require("./middleware/settingsMiddleware");
 
 app.set("view engine", "ejs");
 app.set("views", [
@@ -47,6 +48,7 @@ app.use(
 // ✅ CSRF protection middleware
 app.use(conditionCsrf);
 app.use(refreshUserSession);
+app.use(settingsMiddleware);
 
 // Routes
 app.use(indexRoute);

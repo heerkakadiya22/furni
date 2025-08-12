@@ -9,10 +9,19 @@ exports.getSettings = async () => {
       twitter_icon: "",
       insta_icon: "",
       linkedin_icon: "",
+      email: "",
+      phone: "",
+      location: "",
+      sitename_logo: "",
+      logo: "",
+      terms: "",
+      privacy: "",
+      description: "",
+      theme_color: "",
     });
   }
 
-  return setting;
+  return setting.get({ plain: true });
 };
 
 exports.updateSettings = async (data) => {
@@ -24,7 +33,7 @@ exports.updateSettings = async (data) => {
     await setting.update(data);
   }
 
-  return setting;
+  return setting.get({ plain: true });
 };
 
 exports.clearIconByPlatform = async (platform) => {
@@ -63,18 +72,6 @@ exports.clearGeneralField = async (platform) => {
 
   setting[platform] = null;
   await setting.save();
-};
-
-exports.updateSettings = async (data) => {
-  let setting = await Setting.findOne();
-
-  if (!setting) {
-    setting = await Setting.create(data);
-  } else {
-    await setting.update(data);
-  }
-
-  return setting;
 };
 
 exports.clearTermsPrivacyField = async (field) => {

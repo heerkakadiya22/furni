@@ -131,7 +131,6 @@ exports.deleteTermsPrivacyField = async (req, res) => {
   }
 };
 
-
 exports.updateThemeColor = async (req, res) => {
   try {
     const { theme_color } = req.body;
