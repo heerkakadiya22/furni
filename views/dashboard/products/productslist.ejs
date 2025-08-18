@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+    data-template="vertical-menu-template-free">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>
+        <%= title %>
+    </title>
+
+    <meta name="description" content />
+    <%- include('../partials/head') %>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+
+        <link rel="stylesheet" href="/assets/admin/css/custom.css">
+</head>
+
+<body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            <!-- Sidebar -->
+            <%- include('../partials/sidebar') %>
+
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+                    <!-- Content -->
+                    <div class="container-xxl flex-grow-1 container-p-y">
+
+                        <%- include('../partials/breadcrumbs', { breadcrumbs: breadcrumbs }) %>
+
+                            <!-- Products Table -->
+                            <div class="card">
+                                <input type="hidden" id="csrfToken" value="<%= csrfToken %>">
+
+                                <div class="table table-bordered table-hover w-100">
+                                    <table class="table" id="productTable">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Category</th>
+                                                <th>Name</th>
+                                                <th>Description</th>
+                                                <th>Main Image</th>
+                                                <th>Old Price</th>
+                                                <th>New Price</th>
+                                                <th>Color</th>
+                                                <th>Tags</th>
+                                                <th>Active</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="productTableBody" class="table-border-bottom-0">
+                                            <tr>
+                                                <td colspan="11" class="text-center text-muted">Loading...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!--/ Products Table -->
+
+                    </div>
+                    <!-- / Content -->
+
+                    <%- include('../partials/footer') %>
+
+                        <div class="content-backdrop fade"></div>
+                </div>
+                <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+    <%- include('../partials/script') %>
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <script src="/assets/admin/js/products.js"></script>
+</body>
+
+</html>

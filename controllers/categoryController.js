@@ -91,7 +91,6 @@ exports.createCategory = async (req, res) => {
       return req.session.save(() => res.redirect("/addcategory"));
     }
 
-    // 🔍 Check for duplicate role
     const existingCategory = await categoryRepo.findByName(name);
     if (existingCategory) {
       req.session.error = "Name already exists.";

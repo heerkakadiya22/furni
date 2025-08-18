@@ -64,7 +64,6 @@ exports.handleRegister = async (req, res) => {
       email_expired,
     });
 
-    // Store token in session
     req.session.emailVerification = {
       token,
       email,
@@ -110,7 +109,6 @@ exports.handleLogin = async (req, res) => {
       return req.session.save(() => res.redirect("/auth?show=login"));
     }
 
-    // Check if the user has verified their email
     if (!user.verifiedAt) {
       const now = new Date();
       req.session.loginFormData = { email };
@@ -126,7 +124,6 @@ exports.handleLogin = async (req, res) => {
       return req.session.save(() => res.redirect("/auth?show=login"));
     }
 
-    // Login success
     req.session.user = {
       id: user.id,
       name: user.name,
@@ -136,7 +133,6 @@ exports.handleLogin = async (req, res) => {
     };
 
     if (user.roleId === 1) {
-      // Admin: open dashboard in new tab, redirect index in current
       return req.session.save(() => {
         return res.send(`
           <html>
@@ -153,7 +149,6 @@ exports.handleLogin = async (req, res) => {
         `);
       });
     } else {
-      // Non-admin user: redirect to index only
       return req.session.save(() => res.redirect("/"));
     }
   } catch (err) {

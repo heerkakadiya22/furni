@@ -27,6 +27,7 @@ app.set("views", [
   path.join(__dirname, "views/dashboard/manageuser"),
   path.join(__dirname, "views/dashboard/categories"),
   path.join(__dirname, "views/dashboard/settings"),
+  path.join(__dirname, "views/dashboard/products"),
 ]);
 
 app.use(express.json());

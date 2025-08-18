@@ -12,6 +12,7 @@ const userRoute = require("./usersRoute");
 const verifyEmail = require("./verifyEmailRoute");
 const categoryRoute = require("./categoryRoute");
 const settingsRoute = require("./settingsRoute");
+const productRoute = require("./productRoute");
 
 router.get("/", indexController.renderIndex);
 
@@ -25,5 +26,6 @@ router.use(userRoute);
 router.use(verifyEmail);
 router.use(categoryRoute);
 router.use(settingsRoute);
+router.use(productRoute);
 
 module.exports = router;
