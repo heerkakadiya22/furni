@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+    data-template="vertical-menu-template-free">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+        <%= title %>
+    </title>
+
+    <%- include('../partials/head') %>
+        <!-- Optional custom CSS -->
+        <link rel="stylesheet" href="/assets/admin/css/custom.css">
+</head>
+
+<body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            <%- include('../partials/sidebar') %>
+
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+                    <div class="container-xxl flex-grow-1 container-p-y">
+
+                        <%- include('../partials/breadcrumbs', { breadcrumbs: breadcrumbs }) %>
+
+                            <div class="card-body">
+                                <% if (error) { %>
+                                    <div class="alert alert-danger">
+                                        <%= error %>
+                                    </div>
+                                    <% } %>
+
+                                        <form
+                                            action="<%= product ? '/products/' + product.id + '/edit' : '/addproduct' %>"
+                                            method="POST" id="productForm" enctype="multipart/form-data" novalidate>
+
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                            <% if (product) { %>
+                                                <input type="hidden" name="id" value="<%= product.id %>">
+                                                <% } %>
+
+
+                                                    <!-- Main Image -->
+                                                    <div class="mb-3 col-md-6" id="mainImgContainer">
+                                                        <label class="form-label">Main Image</label>
+
+                                                        <div id="dropZone" class="drop-zone">
+                                                            <% if (product && product.main_img) { %>
+                                                                <img src="/assets/admin/img/products/<%= product.main_img %>"
+                                                                    class="preview-img" id="mainImgPreview">
+                                                                <% } else { %>
+                                                                    <div class="drop-zone-text" id="dropZoneText">
+                                                                        <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                                                                        <p>Drop your image here, or <span
+                                                                                class="browse-link">browse</span></p>
+                                                                        <small>Supports: JPG, JPEG, PNG</small>
+                                                                    </div>
+                                                                    <% } %>
+                                                                        <input type="file" name="main_img" id="main_img"
+                                                                            accept="image/*" hidden>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Sub Images -->
+                                                    <div class="mb-3 col-md-6" id="subImg">
+                                                        <label class="form-label">Sub Images</label>
+                                                        <div class="sub-img-grid" id="subImgContainer">
+
+                                                            <!-- Existing images (when editing) -->
+                                                            <% if (product && product.sub_img) { %>
+                                                                <% product.sub_img.split(",").forEach(img=> { %>
+                                                                    <div class="sub-img-preview">
+                                                                        <img src="/assets/admin/img/products/<%= img.trim() %>"
+                                                                            width="100">
+                                                                    </div>
+                                                                    <% }) %>
+                                                                        <% } %>
+
+                                                                            <!-- Add button -->
+                                                                            <label class="sub-img-upload" for="sub_img">
+                                                                                <span>+</span>
+                                                                            </label>
+                                                                            <input type="file" class="d-none"
+                                                                                id="sub_img" name="sub_img"
+                                                                                accept="image/*" multiple>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <!-- Category Dropdown -->
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="category_id">Category</label>
+                                                        <select class="form-select" name="category_id" id="category_id"
+                                                            required>
+                                                            <option value="">Select Category</option>
+                                                            <% categories.forEach(cat=> { %>
+                                                                <option value="<%= cat.id %>" <%=product &&
+                                                                    product.category_id===cat.id ? "selected" : "" %>>
+                                                                    <%= cat.name %>
+                                                                </option>
+                                                                <% }) %>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <!-- Product Name -->
+                                                        <div class="mb-3 col-md-6">
+                                                            <label class="form-label" for="name">Product Name</label>
+                                                            <input type="text" class="form-control" name="name"
+                                                                id="name" value="<%= product ? product.name : '' %>"
+                                                                required />
+                                                        </div>
+
+                                                        <!-- Material -->
+                                                        <div class="mb-3 col-md-6">
+                                                            <label class="form-label" for="material">Material</label>
+                                                            <input type="text" class="form-control" name="material"
+                                                                id="material"
+                                                                value="<%= product ? product.material : '' %>">
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Description -->
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="description">Description</label>
+                                                        <textarea class="form-control" name="description"
+                                                            id="description" rows="3">
+                                                            <%= product ? product.description : '' %>
+                                                        </textarea>
+                                                    </div>
+
+
+
+                                                    <div class="row">
+                                                        <!-- Old Price -->
+                                                        <div class="mb-3 col-md-6">
+                                                            <label class="form-label" for="oldPrice">Old Price</label>
+                                                            <input type="number" step="0.01" class="form-control"
+                                                                name="oldPrice" id="oldPrice"
+                                                                value="<%= product ? product.oldPrice : '' %>">
+                                                        </div>
+
+                                                        <!-- New Price -->
+                                                        <div class="mb-3 col-md-6">
+                                                            <label class="form-label" for="newPrice">New Price</label>
+                                                            <input type="number" step="0.01" class="form-control"
+                                                                name="newPrice" id="newPrice"
+                                                                value="<%= product ? product.newPrice : '' %>" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Color -->
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="color">Color</label>
+                                                        <input type="text" class="form-control" name="color" id="color"
+                                                            value="<%= product ? product.color : '' %>">
+                                                    </div>
+
+                                                    <!-- Tags -->
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="tags">Tags (comma
+                                                            separated)</label>
+                                                        <input type="text" class="form-control" name="tags" id="tags"
+                                                            value="<%= product ? product.tags : '' %>">
+                                                    </div>
+
+                                                    <!-- Dimension -->
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="dimention">Dimension</label>
+                                                        <input type="text" class="form-control" name="dimention"
+                                                            id="dimention"
+                                                            value="<%= product ? product.dimention : '' %>">
+                                                    </div>
+
+
+
+                                                    <!-- Active Checkbox -->
+                                                    <div class="form-check mb-3">
+                                                        <input class="form-check-input" type="checkbox" name="isActive"
+                                                            id="isActive" <%=product && product.isActive ? "checked"
+                                                            : "" %>>
+                                                        <label class="form-check-label" for="isActive">Active</label>
+                                                    </div>
+
+                                                    <!-- Submit -->
+                                                    <div class="d-grid">
+                                                        <button type="submit" class="btn btn-primary">
+                                                            <i class="bx bx-save"></i>
+                                                            <%= product ? "Save Changes" : "Create Product" %>
+                                                        </button>
+                                                    </div>
+
+                                        </form>
+
+                                        <div class="text-center mt-3">
+                                            <a href="/products" class="btn btn-outline-secondary">
+                                                <i class="bx bx-left-arrow-alt"></i> Back to Product List
+                                            </a>
+                                        </div>
+                            </div>
+                    </div>
+                </div>
+
+                <%- include('../partials/footer') %>
+                    <div class="content-backdrop fade"></div>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+
+    <%- include('../partials/script') %>
+
+        <!-- jQuery Validate -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+        <script src="/assets/admin/vendor/libs/jquery/jquery-validation.js"></script>
+        <script src="/assets/admin/vendor/js/custom.js"></script>
+        <script>
+            const subImgInput = document.getElementById("sub_img");
+            const subImgContainer = document.getElementById("subImgContainer");
+
+            subImgInput.addEventListener("change", function () {
+                const files = Array.from(this.files);
+
+                files.forEach(file => {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+
+                        const wrapper = document.createElement("div");
+                        wrapper.classList.add("sub-img-preview");
+
+                        const img = document.createElement("img");
+                        img.src = e.target.result;
+
+                        const removeBtn = document.createElement("button");
+                        removeBtn.innerHTML = "×";
+                        removeBtn.classList.add("remove-btn");
+                        removeBtn.onclick = function () {
+                            wrapper.remove();
+                        };
+
+                        wrapper.appendChild(img);
+                        wrapper.appendChild(removeBtn);
+
+                        subImgContainer.insertBefore(wrapper, subImgContainer.querySelector(".sub-img-upload"));
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+
+            const dropZone = document.getElementById("dropZone");
+            const inputFile = document.getElementById("main_img");
+            const dropZoneText = document.getElementById("dropZoneText");
+
+            // Click to browse
+            dropZone.addEventListener("click", () => inputFile.click());
+
+            // When file is selected
+            inputFile.addEventListener("change", function () {
+                if (this.files.length) {
+                    previewFile(this.files[0]);
+                }
+            });
+
+            // Drag & drop events
+            dropZone.addEventListener("dragover", (e) => {
+                e.preventDefault();
+                dropZone.classList.add("drop-zone-over");
+            });
+
+            dropZone.addEventListener("dragleave", () => {
+                dropZone.classList.remove("drop-zone-over");
+            });
+
+            dropZone.addEventListener("drop", (e) => {
+                e.preventDefault();
+                dropZone.classList.remove("drop-zone-over");
+                if (e.dataTransfer.files.length) {
+                    inputFile.files = e.dataTransfer.files; // attach dropped file
+                    previewFile(e.dataTransfer.files[0]);
+                }
+            });
+
+            function previewFile(file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const preview = document.getElementById("mainImgPreview");
+                    if (preview) {
+                        preview.src = e.target.result;
+                    } else {
+                        const img = document.createElement("img");
+                        img.src = e.target.result;
+                        img.classList.add("preview-img");
+                        img.id = "mainImgPreview";
+                        dropZone.appendChild(img);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+
+        </script>
+</body>
+
+</html>

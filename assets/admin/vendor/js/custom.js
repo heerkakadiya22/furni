@@ -113,3 +113,6 @@ function togglePassword(inputId, iconId) {
     icon.classList.add("fa-eye");
   }
 }
+
+//sub img products
+

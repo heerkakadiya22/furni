@@ -52,7 +52,7 @@ const updateProfile = async (req, res) => {
 
     req.session.error = "Please correct the errors in your form.";
     return req.session.save(() => {
-      res.redirect("/profile"); // ✅ return here to stop further execution
+      res.redirect("/profile"); 
     });
   }
   try {

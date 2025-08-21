@@ -47,7 +47,7 @@ $(document).ready(function () {
     <td>${tags}</td>
     <td>${isActive}</td>
     <td>
-      <a class="btn btn-sm btn-info" href="/products/${product.id}/edit">
+      <a class="btn btn-sm btn-info" href="/products/${product.id}/edit" >
         <i class="fas fa-pencil-alt"></i> Edit
       </a>
       <button class="btn btn-sm btn-danger btn-delete-product" data-id="${
@@ -83,6 +83,7 @@ $(document).ready(function () {
         language: {
           lengthMenu: "_MENU_",
           searchPlaceholder: "Search products...",
+          emptyTable: "No products found.",
         },
         dom:
           "<'d-flex align-items-center justify-content-between flex-wrap mb-2 mt-2 m-3'<'custom-title'><'d-flex align-items-center ml-auto' f l <'custom-addproduct'>>>" +
@@ -98,11 +99,6 @@ $(document).ready(function () {
           <i class="nav-icon fas fa-plus"></i> Add Product
         </a>
       `);
-    },
-    error: function () {
-      $("#productTableBody").html(
-        `<tr><td colspan="11" class="text-center text-danger">Error loading products.</td></tr>`
-      );
     },
   });
 });
@@ -124,12 +120,12 @@ $(document).on("click", ".toggle-desc", function () {
 const csrfToken = document.getElementById("csrfToken").value;
 
 document.addEventListener("click", async (e) => {
-  const btn = e.target.closest(".btn-delete-user");
+  const btn = e.target.closest(".btn-delete-product");
   if (!btn) return;
 
-  const userId = btn.dataset.id;
+  const productId = btn.dataset.id;
   const confirm = await swal({
-    title: "Delete user?",
+    title: "Delete product?",
     text: "This action cannot be undone!",
     icon: "warning",
     buttons: ["Cancel", "Yes"],
@@ -139,10 +135,11 @@ document.addEventListener("click", async (e) => {
   if (!confirm) return;
 
   try {
-    const res = await fetch(`/users/${userId}`, {
+    const res = await fetch(`/products/${productId}`, {
       method: "DELETE",
       headers: { "CSRF-Token": csrfToken },
     });
+
     const data = await res.json();
 
     swal(
@@ -151,6 +148,6 @@ document.addEventListener("click", async (e) => {
       data.success ? "success" : "error"
     ).then(() => data.success && btn.closest("tr").remove());
   } catch {
-    swal("Error!", "Failed to delete user.", "error");
+    swal("Error!", "Failed to delete product.", "error");
   }
 });
