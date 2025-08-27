@@ -8,6 +8,7 @@ const {
   getSubImages,
 } = require("../helper/productHelper");
 
+// Fetch All Products (API)
 exports.getAllProducts = async (req, res) => {
   try {
     const products = await productRepository.findAll();
@@ -18,15 +19,12 @@ exports.getAllProducts = async (req, res) => {
   }
 };
 
+// Render Product List Page
 exports.renderProductListPage = async (req, res) => {
   try {
     const userId = req.session.user.id;
     const user = await authRepository.findById(userId);
-
     const products = await productRepository.findAll();
-
-    console.log("Rendering view: productslist");
-    console.log("Products count:", products.length);
 
     res.render("productslist", {
       ...user.dataValues,
@@ -46,6 +44,7 @@ exports.renderProductListPage = async (req, res) => {
   }
 };
 
+// Render Add/Edit Form
 exports.renderProductForm = async (req, res) => {
   try {
     const productId = req.params.id;
@@ -60,17 +59,9 @@ exports.renderProductForm = async (req, res) => {
       product = await productRepository.findById(productId);
       if (!product) {
         req.session.error = "Product not found.";
-        req.session.save(() => {
-          return res.redirect("/products");
-        });
+        return res.redirect("/products");
       }
     }
-
-    const breadcrumbs = [
-      { label: "Home", url: "/dashboard" },
-      { label: "Products", url: "/products" },
-      { label: product ? "Edit Product" : "Add Product" },
-    ];
 
     res.render("productform", {
       ...user.dataValues,
@@ -78,7 +69,11 @@ exports.renderProductForm = async (req, res) => {
       currentPage: "products",
       product,
       categories,
-      breadcrumbs,
+      breadcrumbs: [
+        { label: "Home", url: "/dashboard" },
+        { label: "Products", url: "/products" },
+        { label: product ? "Edit Product" : "Add Product" },
+      ],
       error: req.session.error || null,
       csrfToken: req.csrfToken(),
       user: req.session.user,
@@ -91,6 +86,7 @@ exports.renderProductForm = async (req, res) => {
   }
 };
 
+// Save Product (Add / Edit)
 exports.handleProductSave = async (req, res) => {
   const isEdit = !!req.params.id;
   const productId = req.params.id;
@@ -98,27 +94,20 @@ exports.handleProductSave = async (req, res) => {
 
   try {
     let existingProduct = null;
+
     if (isEdit) {
       existingProduct = await productRepository.findById(productId);
       if (!existingProduct) {
         return res.status(404).send("Product not found.");
       }
 
-      if (req.files.main_img && existingProduct.main_img) {
+      if (req.files?.main_img && existingProduct.main_img) {
         deleteOldImage(existingProduct.main_img);
-      }
-
-      if (req.files.sub_img && existingProduct.sub_img) {
-        existingProduct.sub_img
-          .split(",")
-          .forEach((img) => deleteOldImage(img.trim()));
       }
     }
 
     const mainImage = getMainImage(req, existingProduct?.main_img);
     const subImages = getSubImages(req, existingProduct?.sub_img);
-
-    console.log("FILES:", req.files);
 
     const productData = {
       category_id: formData.category_id,
@@ -149,6 +138,7 @@ exports.handleProductSave = async (req, res) => {
   }
 };
 
+// Delete Product
 exports.deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;

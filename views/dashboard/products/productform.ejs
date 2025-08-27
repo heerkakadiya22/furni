@@ -69,17 +69,26 @@
                                                         <label class="form-label">Sub Images</label>
                                                         <div class="sub-img-grid" id="subImgContainer">
 
-                                                            <!-- Existing images (when editing) -->
                                                             <% if (product && product.sub_img) { %>
-                                                                <% product.sub_img.split(",").forEach(img=> { %>
+                                                                <% product.sub_img.split(",").forEach((img, index)=> {
+                                                                    %>
                                                                     <div class="sub-img-preview">
-                                                                        <img src="/assets/admin/img/products/<%= img.trim() %>"
-                                                                            width="100">
+                                                                        <label>
+                                                                            <img src="/assets/admin/img/products/<%= img.trim() %>"
+                                                                                width="100">
+                                                                            <input type="file"
+                                                                                name="replace_sub_img[<%= index %>]"
+                                                                                class="d-none replace-input"
+                                                                                accept="image/*">
+                                                                            <input type="hidden"
+                                                                                name="replace_old_<%= index %>"
+                                                                                value="<%= img.trim() %>">
+                                                                        </label>
                                                                     </div>
                                                                     <% }) %>
                                                                         <% } %>
 
-                                                                            <!-- Add button -->
+                                                                            <!-- Add new images -->
                                                                             <label class="sub-img-upload" for="sub_img">
                                                                                 <span>+</span>
                                                                             </label>
@@ -88,6 +97,7 @@
                                                                                 accept="image/*" multiple>
                                                         </div>
                                                     </div>
+
 
 
                                                     <!-- Category Dropdown -->
@@ -219,90 +229,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
         <script src="/assets/admin/vendor/libs/jquery/jquery-validation.js"></script>
         <script src="/assets/admin/vendor/js/custom.js"></script>
-        <script>
-            const subImgInput = document.getElementById("sub_img");
-            const subImgContainer = document.getElementById("subImgContainer");
-
-            subImgInput.addEventListener("change", function () {
-                const files = Array.from(this.files);
-
-                files.forEach(file => {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-
-                        const wrapper = document.createElement("div");
-                        wrapper.classList.add("sub-img-preview");
-
-                        const img = document.createElement("img");
-                        img.src = e.target.result;
-
-                        const removeBtn = document.createElement("button");
-                        removeBtn.innerHTML = "×";
-                        removeBtn.classList.add("remove-btn");
-                        removeBtn.onclick = function () {
-                            wrapper.remove();
-                        };
-
-                        wrapper.appendChild(img);
-                        wrapper.appendChild(removeBtn);
-
-                        subImgContainer.insertBefore(wrapper, subImgContainer.querySelector(".sub-img-upload"));
-                    };
-                    reader.readAsDataURL(file);
-                });
-            });
-
-            const dropZone = document.getElementById("dropZone");
-            const inputFile = document.getElementById("main_img");
-            const dropZoneText = document.getElementById("dropZoneText");
-
-            // Click to browse
-            dropZone.addEventListener("click", () => inputFile.click());
-
-            // When file is selected
-            inputFile.addEventListener("change", function () {
-                if (this.files.length) {
-                    previewFile(this.files[0]);
-                }
-            });
-
-            // Drag & drop events
-            dropZone.addEventListener("dragover", (e) => {
-                e.preventDefault();
-                dropZone.classList.add("drop-zone-over");
-            });
-
-            dropZone.addEventListener("dragleave", () => {
-                dropZone.classList.remove("drop-zone-over");
-            });
-
-            dropZone.addEventListener("drop", (e) => {
-                e.preventDefault();
-                dropZone.classList.remove("drop-zone-over");
-                if (e.dataTransfer.files.length) {
-                    inputFile.files = e.dataTransfer.files; // attach dropped file
-                    previewFile(e.dataTransfer.files[0]);
-                }
-            });
-
-            function previewFile(file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const preview = document.getElementById("mainImgPreview");
-                    if (preview) {
-                        preview.src = e.target.result;
-                    } else {
-                        const img = document.createElement("img");
-                        img.src = e.target.result;
-                        img.classList.add("preview-img");
-                        img.id = "mainImgPreview";
-                        dropZone.appendChild(img);
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
-
-        </script>
+        <script src="/assets/admin/vendor/js/product.js"></script>
 </body>
 
 </html>

@@ -2,86 +2,69 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-//for image
-const uploadDir = path.join(__dirname, "../assets/admin/img/products");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadDir);
+    cb(null, path.join(__dirname, "../assets/admin/img/products"));
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
+    cb(null, Date.now() + path.extname(file.originalname));
   },
 });
 
-const upload = multer({
-  storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    console.log("📂 Multer sees file:", file.fieldname, file.originalname);
-    const filetypes = /jpeg|jpg|png|gif/;
-    const extname = filetypes.test(
-      path.extname(file.originalname).toLowerCase()
-    );
-    const mimetype = filetypes.test(file.mimetype);
-    if (extname && mimetype) {
-      return cb(null, true);
-    } else {
-      const error = new Error("Only images allowed (jpeg, jpg, png, gif)");
-      error.code = "INVALID_FILETYPE";
-      return cb(error);
-    }
-  },
-});
-
-const deleteOldImage = (imagePathFromDB) => {
-  if (!imagePathFromDB) return;
-
-  const imageFilename = path.basename(imagePathFromDB);
-  const fullPath = path.join(
-    __dirname,
-    "../assets/admin/img/products",
-    imageFilename
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = /jpeg|jpg|png|gif/;
+  const extname = allowedTypes.test(
+    path.extname(file.originalname).toLowerCase()
   );
-
-  fs.unlink(fullPath, (err) => {
-    if (err && err.code !== "ENOENT") {
-      console.error("❌ Failed to delete image:", err);
-    } else if (!err) {
-      console.log("🗑️ Deleted image:", imageFilename);
-    } else {
-      console.warn("⚠️ Image not found:", fullPath);
-    }
-  });
+  const mimetype = allowedTypes.test(file.mimetype);
+  if (mimetype && extname) cb(null, true);
+  else cb(new Error("Only image files are allowed!"));
 };
 
-// function getImagePath(req, oldImage) {
-//   if (req.file) {
-//     return req.file.filename;
-//   }
-//   return oldImage || null;
-// }
+const upload = multer({ storage, fileFilter });
+
+function deleteOldImage(imagePathFromDB) {
+  if (imagePathFromDB) {
+    const fullPath = path.join(
+      __dirname,
+      "../assets/admin/img/products",
+      imagePathFromDB
+    );
+    if (fs.existsSync(fullPath)) fs.unlinkSync(fullPath);
+  }
+}
 
 function getMainImage(req, oldImage) {
-  if (req.files && req.files.main_img && req.files.main_img[0]) {
-    return req.files.main_img[0].filename;
+  const mainFile = req.files.find((f) => f.fieldname === "main_img");
+  if (mainFile) {
+    if (oldImage) deleteOldImage(oldImage);
+    return mainFile.filename;
   }
-  return oldImage || null;
+  return oldImage;
 }
 
 function getSubImages(req, oldSubImages) {
-  if (req.files && req.files.sub_img && req.files.sub_img.length > 0) {
-    return req.files.sub_img.map((f) => f.filename).join(",");
+  let subImages = oldSubImages ? oldSubImages.split(",") : [];
+
+  const replaceFiles = req.files.filter((f) =>
+    f.fieldname.startsWith("replace_sub_img")
+  );
+  replaceFiles.forEach((file) => {
+    const match = file.fieldname.match(/\[(\d+)\]/);
+    if (match) {
+      const index = parseInt(match[1]);
+      const oldFile = req.body[`replace_old_${index}`];
+      if (oldFile) deleteOldImage(oldFile);
+      subImages[index] = file.filename;
+    }
+  });
+
+  const newSubFiles = req.files.filter((f) => f.fieldname === "sub_img");
+  if (newSubFiles.length > 0) {
+    subImages = subImages.concat(newSubFiles.map((f) => f.filename));
   }
-  return oldSubImages || null;
+
+  return subImages.join(",");
 }
 
-module.exports = {
-  upload,
-  deleteOldImage,
-  getMainImage,
-  getSubImages,
-};
+module.exports = { upload, deleteOldImage, getMainImage, getSubImages };
