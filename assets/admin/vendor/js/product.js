@@ -1,92 +1,117 @@
-  const subImgInput = document.getElementById("sub_img");
-            const subImgContainer = document.getElementById("subImgContainer");
+(function () {
+  const addBtn = document.getElementById("addSubImgBtn");
+  const subImgContainer = document.getElementById("subImgContainer");
+  const hiddenInputsContainer = document.getElementById("subImgInputs");
 
-            subImgInput.addEventListener("change", function () {
-                const files = Array.from(this.files);
+  // helper to generate unique id for mapping preview <-> hidden input
+  const uid = () =>
+    Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 
-                files.forEach(file => {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
+  addBtn.addEventListener("click", () => {
+    // create a temporary picker input and click it
+    const picker = document.createElement("input");
+    picker.type = "file";
+    picker.accept = "image/*";
+    picker.multiple = true; // allow multi-select in a single pick
+    picker.style.display = "none";
+    document.body.appendChild(picker);
 
-                        const wrapper = document.createElement("div");
-                        wrapper.classList.add("sub-img-preview");
+    picker.addEventListener("change", () => {
+      if (!picker.files || picker.files.length === 0) {
+        picker.remove();
+        return;
+      }
 
-                        const img = document.createElement("img");
-                        img.src = e.target.result;
+      Array.from(picker.files).forEach((file) => {
+        const id = uid();
 
-                        const removeBtn = document.createElement("button");
-                        removeBtn.innerHTML = "×";
-                        removeBtn.classList.add("remove-btn");
-                        removeBtn.onclick = function () {
-                            wrapper.remove();
-                        };
+        // create hidden single-file input that will be submitted
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        const hidden = document.createElement("input");
+        hidden.type = "file";
+        hidden.name = "sub_img"; // same field name for multer to collect multiples
+        hidden.files = dt.files;
+        hidden.dataset.uid = id;
+        hiddenInputsContainer.appendChild(hidden);
 
-                        wrapper.appendChild(img);
-                        wrapper.appendChild(removeBtn);
+        // create preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const wrap = document.createElement("div");
+          wrap.className = "sub-img-preview";
+          wrap.dataset.uid = id;
+          wrap.innerHTML = `
+            <img src="${e.target.result}" width="100">
+            <button type="button" class="remove-btn" aria-label="Remove image">×</button>
+          `;
+          // insert before addBtn so + stays at end
+          subImgContainer.insertBefore(wrap, addBtn);
 
-                        subImgContainer.insertBefore(wrapper, subImgContainer.querySelector(".sub-img-upload"));
-                    };
-                    reader.readAsDataURL(file);
-                });
-            });
+          // remove handler -> remove preview + hidden input
+          wrap.querySelector(".remove-btn").addEventListener("click", () => {
+            wrap.remove();
+            const corresponding = hiddenInputsContainer.querySelector(
+              'input[data-uid="' + id + '"]'
+            );
+            if (corresponding) corresponding.remove();
+          });
+        };
+        reader.readAsDataURL(file);
+      });
 
-            document.querySelectorAll(".replace-input").forEach(input => {
-                input.addEventListener("change", function () {
-                    const file = this.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            this.previousElementSibling.src = e.target.result;
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
-            });
+      // cleanup picker
+      picker.remove();
+    });
 
+    // open file dialog
+    picker.click();
+  });
+})();
 
-            const dropZone = document.getElementById("dropZone");
-            const inputFile = document.getElementById("main_img");
-            const dropZoneText = document.getElementById("dropZoneText");
+const dropZone = document.getElementById("dropZone");
+const inputFile = document.getElementById("main_img");
+const dropZoneText = document.getElementById("dropZoneText");
 
-            dropZone.addEventListener("click", () => inputFile.click());
+dropZone.addEventListener("click", () => inputFile.click());
 
-            inputFile.addEventListener("change", function () {
-                if (this.files.length) {
-                    previewFile(this.files[0]);
-                }
-            });
+inputFile.addEventListener("change", function () {
+  if (this.files.length) {
+    previewFile(this.files[0]);
+  }
+});
 
-            dropZone.addEventListener("dragover", (e) => {
-                e.preventDefault();
-                dropZone.classList.add("drop-zone-over");
-            });
+dropZone.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  dropZone.classList.add("drop-zone-over");
+});
 
-            dropZone.addEventListener("dragleave", () => {
-                dropZone.classList.remove("drop-zone-over");
-            });
+dropZone.addEventListener("dragleave", () => {
+  dropZone.classList.remove("drop-zone-over");
+});
 
-            dropZone.addEventListener("drop", (e) => {
-                e.preventDefault();
-                dropZone.classList.remove("drop-zone-over");
-                if (e.dataTransfer.files.length) {
-                    inputFile.files = e.dataTransfer.files; 
-                    previewFile(e.dataTransfer.files[0]);
-                }
-            });
+dropZone.addEventListener("drop", (e) => {
+  e.preventDefault();
+  dropZone.classList.remove("drop-zone-over");
+  if (e.dataTransfer.files.length) {
+    inputFile.files = e.dataTransfer.files;
+    previewFile(e.dataTransfer.files[0]);
+  }
+});
 
-            function previewFile(file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const preview = document.getElementById("mainImgPreview");
-                    if (preview) {
-                        preview.src = e.target.result;
-                    } else {
-                        const img = document.createElement("img");
-                        img.src = e.target.result;
-                        img.classList.add("preview-img");
-                        img.id = "mainImgPreview";
-                        dropZone.appendChild(img);
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
+function previewFile(file) {
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const preview = document.getElementById("mainImgPreview");
+    if (preview) {
+      preview.src = e.target.result;
+    } else {
+      const img = document.createElement("img");
+      img.src = e.target.result;
+      img.classList.add("preview-img");
+      img.id = "mainImgPreview";
+      dropZone.appendChild(img);
+    }
+  };
+  reader.readAsDataURL(file);
+}

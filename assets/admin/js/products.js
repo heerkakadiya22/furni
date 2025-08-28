@@ -20,7 +20,7 @@ $(document).ready(function () {
             : '<i class="fas fa-times text-danger"></i>';
 
           const mainImgTag = product.main_img
-            ? `<img src="${product.main_img}" class="product-img" alt="main" />`
+            ? `<img src="/assets/admin/img/products/${product.main_img}" class="product-img" alt="main" height="40px" width="40px" />`
             : `<span class="text-muted">No image</span>`;
           // const subImgTag = product.sub_img
           //   ? `<img src="${product.sub_img}" class="product-img" alt="sub" />`
@@ -31,15 +31,22 @@ $(document).ready(function () {
     <td>${category}</td>
     <td><strong>${product.name || "N/A"}</strong></td>
     <td>
-      <div class="product-description" id="desc-${product.id}">
-        ${descriptionText}
-      </div>
-      ${
-        descriptionText.length > 100
-          ? `<a href="javascript:void(0);" class="toggle-desc text-primary" data-id="${product.id}">Show more</a>`
-          : ""
-      }
-    </td>
+  ${
+    product.description
+      ? `
+        <div class="product-description" id="desc-${product.id}">
+          ${descriptionText}
+        </div>
+        ${
+          descriptionText.length > 100
+            ? `<a href="javascript:void(0);" class="toggle-desc text-primary" data-id="${product.id}">Show more</a>`
+            : ""
+        }
+      `
+      : `<span class="text-muted">N/A</span>`
+  }
+</td>
+
     <td>${mainImgTag}</td>
     <td>${oldPrice}</td>
     <td>${newPrice}</td>

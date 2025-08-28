@@ -88,15 +88,18 @@
                                                                     <% }) %>
                                                                         <% } %>
 
-                                                                            <!-- Add new images -->
-                                                                            <label class="sub-img-upload" for="sub_img">
+                                                                            <!-- “+” button to add sub images -->
+                                                                            <button type="button" class="sub-img-upload"
+                                                                                id="addSubImgBtn">
                                                                                 <span>+</span>
-                                                                            </label>
-                                                                            <input type="file" class="d-none"
-                                                                                id="sub_img" name="sub_img"
-                                                                                accept="image/*" multiple>
+                                                                            </button>
+
+                                                                            <!-- Hidden container where created file-inputs will be appended (they hold the actual files) -->
+                                                                            <div id="subImgInputs"
+                                                                                style="display:none;"></div>
                                                         </div>
                                                     </div>
+
 
 
 

@@ -61,7 +61,9 @@ function getSubImages(req, oldSubImages) {
 
   const newSubFiles = req.files.filter((f) => f.fieldname === "sub_img");
   if (newSubFiles.length > 0) {
-    subImages = subImages.concat(newSubFiles.map((f) => f.filename));
+    newSubFiles.forEach((f) => {
+      subImages.push(f.filename);
+    });
   }
 
   return subImages.join(",");
