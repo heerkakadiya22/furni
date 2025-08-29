@@ -114,5 +114,4 @@ function togglePassword(inputId, iconId) {
   }
 }
 
-//sub img products
 

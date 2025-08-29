@@ -63,11 +63,11 @@
                                                     <!-- Active Checkbox -->
                                                     <div class="form-check mb-3">
                                                         <input class="form-check-input" type="checkbox" name="isActive"
-                                                            id="isActive" <%=category && category.isActive ? "checked"
-                                                            : "" %>
-                                                        />
+                                                            id="isActive" <%=!category || category.isActive ? "checked"
+                                                            : "" %> />
                                                         <label class="form-check-label" for="isActive">isActive</label>
                                                     </div>
+
 
                                                     <!-- Submit -->
                                                     <div class="d-grid">
