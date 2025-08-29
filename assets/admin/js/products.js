@@ -14,7 +14,6 @@ $(document).ready(function () {
           const oldPrice = product.oldPrice ? `₹${product.oldPrice}` : "N/A";
           const newPrice = product.newPrice ? `₹${product.newPrice}` : "N/A";
           const color = product.color || "N/A";
-          const tags = product.tags || "N/A";
           const isActive = product.isActive
             ? '<i class="fas fa-check text-success"></i>'
             : '<i class="fas fa-times text-danger"></i>';
@@ -51,7 +50,6 @@ $(document).ready(function () {
     <td>${oldPrice}</td>
     <td>${newPrice}</td>
     <td>${color}</td>
-    <td>${tags}</td>
     <td>${isActive}</td>
     <td>
       <a class="btn btn-sm btn-info" href="/products/${product.id}/edit" >
@@ -67,7 +65,7 @@ $(document).ready(function () {
 `;
         });
       } else {
-        rows = `<tr><td colspan="11" class="text-center text-muted">No products found.</td></tr>`;
+        rows = `<tr><td colspan="10" class="text-center text-muted">No products found.</td></tr>`;
       }
 
       $("#productTableBody").html(rows);

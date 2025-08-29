@@ -60,7 +60,7 @@ exports.renderCategoryForm = async (req, res) => {
     res.render("categoryform", {
       ...user.dataValues,
       title: category ? "Edit Category" : "Add Category",
-      currentPage: "categories",
+      currentPage: "Category",
       category,
       breadcrumbs,
       error: req.session.error || null,

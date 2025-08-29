@@ -206,6 +206,39 @@ a.more {
   }
 }
 
+/* custom styles */
+/* Active and hover state */
+.dropdown-menu .dropdown-item.active,
+.dropdown-menu .dropdown-item:active,
+.dropdown-menu .dropdown-item:hover {
+  background-color: #7fac9c !important;
+  color: #fff !important;
+}
+
+.dropdown-menu {
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.dropdown .btn {
+  background-color: #3b5d50 !important;
+}
+
+.product-thumbnail {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.product-old-price {
+  text-decoration: line-through;
+  color: #888;
+  margin-left: 8px;
+  font-size: 0.9rem;
+}
+/* custom styles */
+
 .btn {
   font-weight: 600;
   padding: 12px 30px;
