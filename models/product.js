@@ -28,6 +28,16 @@ module.exports = (sequelize, DataTypes) => {
       },
       dimention: DataTypes.STRING,
       material: DataTypes.STRING,
+
+      sku: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
+      comments: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
     },
     {
       sequelize,

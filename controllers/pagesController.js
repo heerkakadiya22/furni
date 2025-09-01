@@ -198,3 +198,17 @@ exports.renderTermsAndPrivacy = async (req, res) => {
     res.status(500).send("Something went wrong.");
   }
 };
+
+exports.renderWishlist = (req, res) => {
+  try {
+    res.render("Wishlist", {
+      title: "Wishlist",
+      csrfToken: req.csrfToken(),
+      currentPage: "Wishllist",
+      session: req.session,
+    });
+  } catch (error) {
+    console.error("Error rendering Wishlist page:", error);
+    res.status(500).send("Something went wrong.");
+  }
+};

@@ -21,56 +21,52 @@ $(document).ready(function () {
           const mainImgTag = product.main_img
             ? `<img src="/assets/admin/img/products/${product.main_img}" class="product-img" alt="main" height="40px" width="40px" />`
             : `<span class="text-muted">No image</span>`;
-          // const subImgTag = product.sub_img
-          //   ? `<img src="${product.sub_img}" class="product-img" alt="sub" />`
-          //   : `<span class="text-muted">No image</span>`;
-          rows += `
-  <tr>
-    <td>${index + 1}</td>
-    <td>${category}</td>
-    <td><strong>${product.name || "N/A"}</strong></td>
-    <td>
-  ${
-    product.description
-      ? `
-        <div class="product-description" id="desc-${product.id}">
-          ${descriptionText}
-        </div>
-        ${
-          descriptionText.length > 100
-            ? `<a href="javascript:void(0);" class="toggle-desc text-primary" data-id="${product.id}">Show more</a>`
-            : ""
-        }
-      `
-      : `<span class="text-muted">N/A</span>`
-  }
-</td>
 
-    <td>${mainImgTag}</td>
-    <td>${oldPrice}</td>
-    <td>${newPrice}</td>
-    <td>${color}</td>
-    <td>${isActive}</td>
-    <td>
-      <a class="btn btn-sm btn-info" href="/products/${product.id}/edit" >
-        <i class="fas fa-pencil-alt"></i> Edit
-      </a>
-      <button class="btn btn-sm btn-danger btn-delete-product" data-id="${
-        product.id
-      }">
-        <i class="fas fa-trash"></i> Delete
-      </button>
-    </td>
-  </tr>
-`;
+          rows += `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${category}</td>
+          <td><strong>${product.name || "N/A"}</strong></td>
+          <td>
+            ${
+              product.description
+                ? `
+                  <div class="product-description" id="desc-${product.id}">
+                    ${descriptionText}
+                  </div>
+                  ${
+                    descriptionText.length > 100
+                      ? `<a href="javascript:void(0);" class="toggle-desc text-primary" data-id="${product.id}">Show more</a>`
+                      : ""
+                  }
+                `
+                : `<span class="text-muted">N/A</span>`
+            }
+          </td>
+          <td>${mainImgTag}</td>
+          <td>${oldPrice}</td>
+          <td>${newPrice}</td>
+          <td>${color}</td>
+          <td>${isActive}</td>
+          <td>
+            <a class="btn btn-sm btn-info" href="/products/${product.id}/edit">
+              <i class="fas fa-pencil-alt"></i> Edit
+            </a>
+            <button class="btn btn-sm btn-danger btn-delete-product" data-id="${
+              product.id
+            }">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </td>
+        </tr>`;
         });
       } else {
-        rows = `<tr><td colspan="10" class="text-center text-muted">No products found.</td></tr>`;
+        rows = ""; // keep tbody empty, DataTables will show "No products found."
       }
 
       $("#productTableBody").html(rows);
 
-      const table = $("#productTable").DataTable({
+      $("#productTable").DataTable({
         destroy: true,
         paging: true,
         lengthChange: true,
@@ -88,7 +84,7 @@ $(document).ready(function () {
         language: {
           lengthMenu: "_MENU_",
           searchPlaceholder: "Search products...",
-          emptyTable: "No products found.",
+          emptyTable: "No products found.", // DataTables handles this
         },
         dom:
           "<'d-flex align-items-center justify-content-between flex-wrap mb-2 mt-2 m-3'<'custom-title'><'d-flex align-items-center ml-auto' f l <'custom-addproduct'>>>" +
@@ -100,10 +96,10 @@ $(document).ready(function () {
         '<h5 class="card-title m-3">All Products</h5>'
       );
       $("#productTable_wrapper .custom-addproduct").html(`
-        <a href="/addproduct" class="btn btn-primary mr-4 mt-2 mb-2">
-          <i class="nav-icon fas fa-plus"></i> Add Product
-        </a>
-      `);
+    <a href="/addproduct" class="btn btn-primary mr-4 mt-2 mb-2">
+      <i class="nav-icon fas fa-plus"></i> Add Product
+    </a>
+  `);
     },
   });
 });
