@@ -1,6 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const crypto = require("crypto");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -69,4 +70,17 @@ function getSubImages(req, oldSubImages) {
   return subImages.join(",");
 }
 
-module.exports = { upload, deleteOldImage, getMainImage, getSubImages };
+//for sku generate dynamically
+const generateSKU = (prefix = "PRD") => {
+  const datePart = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+  const randomPart = crypto.randomBytes(2).toString("hex").toUpperCase(); // 4 chars
+  return `${prefix}-${datePart}-${randomPart}`;
+};
+
+module.exports = {
+  upload,
+  deleteOldImage,
+  getMainImage,
+  getSubImages,
+  generateSKU,
+};

@@ -1,11 +1,11 @@
 const productRepository = require("../repositories/productRepository");
 const authRepository = require("../repositories/authRepository");
 const categoryRepo = require("../repositories/categoryRepository");
-const { validationResult } = require("express-validator");
 const {
   deleteOldImage,
   getMainImage,
   getSubImages,
+  generateSKU,
 } = require("../helper/productHelper");
 
 // Fetch All Products (API)
@@ -101,9 +101,13 @@ exports.handleProductSave = async (req, res) => {
         return res.status(404).send("Product not found.");
       }
 
+      formData.sku = existingProduct.sku;
+
       if (req.files?.main_img && existingProduct.main_img) {
         deleteOldImage(existingProduct.main_img);
       }
+    } else {
+      formData.sku = generateSKU("PRD");
     }
 
     const mainImage = getMainImage(req, existingProduct?.main_img);
@@ -122,6 +126,7 @@ exports.handleProductSave = async (req, res) => {
       tags: formData.tags || null,
       dimention: formData.dimention || null,
       isActive: formData.isActive ? true : false,
+      sku: formData.sku,
     };
 
     if (isEdit) {
@@ -133,7 +138,6 @@ exports.handleProductSave = async (req, res) => {
     res.redirect("/products");
   } catch (error) {
     console.error("❌ Error saving product:", error.message);
-    console.error(error.stack);
     res.status(500).send("Something went wrong while saving the product.");
   }
 };

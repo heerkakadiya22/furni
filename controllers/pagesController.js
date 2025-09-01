@@ -20,10 +20,8 @@ exports.renderShop = async (req, res) => {
   try {
     const { category, search } = req.query;
 
-    // Get all products with category (already handled in repo)
     let products = await productRepository.findAll();
 
-    // Build categories list from products
     let categories = [];
     if (products.length > 0) {
       const uniq = Array.from(
@@ -32,7 +30,6 @@ exports.renderShop = async (req, res) => {
       categories = uniq.map((name) => ({ name }));
     }
 
-    // Apply filters
     if (category && category !== "all") {
       products = products.filter(
         (p) => p.category?.name?.toLowerCase() === category.toLowerCase()
@@ -147,8 +144,10 @@ exports.renderThanks = (req, res) => {
 
 exports.renderProductDetails = async (req, res) => {
   try {
-    const productId = req.params.id;
-    const product = await Product.findByPk(productId);
+    const productSKU = req.params.sku;
+    const product = await Product.findOne({
+      where: { sku: productSKU },
+    });
 
     if (!product) {
       return res.status(404).render("404", { title: "Product not found" });
@@ -157,7 +156,6 @@ exports.renderProductDetails = async (req, res) => {
     product.sub_img = product.sub_img
       ? product.sub_img.split(",").filter(Boolean)
       : [];
-
     const relatedProducts = await Product.findAll({
       where: {
         category_id: product.category_id,

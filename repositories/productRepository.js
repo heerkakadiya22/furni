@@ -55,6 +55,10 @@ class ProductRepository {
     await product.destroy();
     return true;
   }
+
+  async findBySku(sku) {
+    return await Product.findOne({ where: { sku } });
+  }
 }
 
 module.exports = new ProductRepository();
