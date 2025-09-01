@@ -1,4 +1,6 @@
 const productRepository = require("../repositories/productRepository");
+const { Product } = require("../models");
+const { Op } = require("sequelize");
 
 exports.renderBlog = (req, res) => {
   try {
@@ -140,6 +142,41 @@ exports.renderThanks = (req, res) => {
   } catch (error) {
     console.error("Error rendering about page:", error);
     res.status(500).send("Something went wrong.");
+  }
+};
+
+exports.renderProductDetails = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const product = await Product.findByPk(productId);
+
+    if (!product) {
+      return res.status(404).render("404", { title: "Product not found" });
+    }
+
+    product.sub_img = product.sub_img
+      ? product.sub_img.split(",").filter(Boolean)
+      : [];
+
+    const relatedProducts = await Product.findAll({
+      where: {
+        category_id: product.category_id,
+        id: { [Op.ne]: product.id },
+      },
+      limit: 4,
+    });
+
+    res.render("productDetails", {
+      title: product.name,
+      product,
+      relatedProducts,
+      csrfToken: req.csrfToken(),
+      currentPage: "Product Details",
+      session: req.session,
+    });
+  } catch (error) {
+    console.error("Error fetching product details:", error);
+    res.status(500).send("Something went wrong");
   }
 };
 
