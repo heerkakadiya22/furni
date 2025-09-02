@@ -156,6 +156,8 @@ exports.renderProductDetails = async (req, res) => {
     product.sub_img = product.sub_img
       ? product.sub_img.split(",").filter(Boolean)
       : [];
+
+    // Related products
     const relatedProducts = await Product.findAll({
       where: {
         category_id: product.category_id,
@@ -164,6 +166,9 @@ exports.renderProductDetails = async (req, res) => {
       limit: 4,
     });
 
+    const wishlist = req.session.wishlist || [];
+    const isInWishlist = wishlist.includes(product.sku);
+
     res.render("productDetails", {
       title: product.name,
       product,
@@ -171,6 +176,7 @@ exports.renderProductDetails = async (req, res) => {
       csrfToken: req.csrfToken(),
       currentPage: "Product Details",
       session: req.session,
+      isInWishlist,
     });
   } catch (error) {
     console.error("Error fetching product details:", error);
@@ -222,8 +228,8 @@ exports.renderWishlist = async (req, res) => {
   }
 };
 
-// Add to Wishlist
-exports.addToWishlist = (req, res) => {
+// Toggle wishlist: add or remove
+exports.toggleWishlist = (req, res) => {
   if (!req.session?.user) {
     return res.status(401).json({ message: "Login required" });
   }
@@ -231,15 +237,22 @@ exports.addToWishlist = (req, res) => {
   const { sku } = req.body;
   if (!sku) return res.status(400).json({ message: "SKU required" });
 
-  if (!req.session.wishlist) {
-    req.session.wishlist = [];
-  }
+  if (!req.session.wishlist) req.session.wishlist = [];
 
-  if (!req.session.wishlist.includes(sku)) {
+  let action;
+  if (req.session.wishlist.includes(sku)) {
+    // Remove from wishlist
+    req.session.wishlist = req.session.wishlist.filter(item => item !== sku);
+    action = "removed";
+  } else {
+    // Add to wishlist
     req.session.wishlist.push(sku);
+    action = "added";
   }
 
-  res
-    .status(200)
-    .json({ message: "Added to wishlist", wishlist: req.session.wishlist });
+  res.status(200).json({
+    message: `Product ${action} to wishlist`,
+    action,
+    wishlist: req.session.wishlist,
+  });
 };

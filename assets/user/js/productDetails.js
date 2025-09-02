@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const sku = btn.dataset.sku;
 
     try {
-      const res = await fetch("/wishlist/add", {
+      const res = await fetch("/wishlist", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -22,16 +22,22 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
       if (res.ok) {
+        const data = await res.json();
         const icon = btn.querySelector("i");
-        if (icon) {
+
+        if (data.action === "added") {
           icon.classList.remove("bi-heart");
           icon.classList.add("bi-heart-fill");
           icon.style.color = "red";
+          showWishlistNotification("Product added to wishlist!");
+        } else {
+          icon.classList.remove("bi-heart-fill");
+          icon.classList.add("bi-heart");
+          icon.style.color = "";
+          showWishlistNotification("Product removed from wishlist!");
         }
-
-        showWishlistNotification("Product added to wishlist!");
       } else {
-        console.error("Failed to add to wishlist");
+        console.error("Failed to toggle wishlist");
       }
     } catch (err) {
       console.error(err);

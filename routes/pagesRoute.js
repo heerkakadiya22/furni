@@ -13,6 +13,6 @@ router.get("/thanks", pageController.renderThanks);
 router.get("/product/:sku", pageController.renderProductDetails);
 router.get("/terms-and-privacy", pageController.renderTermsAndPrivacy);
 router.get("/wishlist", pageController.renderWishlist);
-router.post("/wishlist/add", pageController.addToWishlist);
+router.post("/wishlist", pageController.toggleWishlist);
 
 module.exports = router;
