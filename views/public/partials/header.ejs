@@ -90,9 +90,12 @@
 						<% } %>
 
 							<li>
-								<a class="nav-link <%= currentPage === 'Wishlist' ? 'active' : '' %>" href="/wishlist">
-									<i class="fa-regular fa-heart fa-xl me-2" style="color: #ffffff;"></i>
-								</a>
+								<% if (session && session.user) { %>
+									<a class="nav-link <%= currentPage === 'Wishlist' ? 'active' : '' %>"
+										href="/wishlist">
+										<i class="fa-regular fa-heart fa-xl me-2" style="color: #ffffff;"></i>
+									</a>
+									<% } %>
 							</li>
 
 							<li>

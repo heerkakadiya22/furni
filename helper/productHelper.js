@@ -71,10 +71,12 @@ function getSubImages(req, oldSubImages) {
 }
 
 //for sku generate dynamically
-const generateSKU = (prefix = "PRD") => {
+const generateSKU = (prefix = "PRD", name = "", category = "") => {
+  const catPart = category ? category.slice(0, 3).toUpperCase() : "CAT";
+  const namePart = name ? name.slice(0, 3).toUpperCase() : "PRO";
   const datePart = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-  const randomPart = crypto.randomBytes(2).toString("hex").toUpperCase(); // 4 chars
-  return `${prefix}-${datePart}-${randomPart}`;
+  const randomPart = crypto.randomBytes(2).toString("hex").toUpperCase();
+  return `${prefix}-${catPart}${namePart}-${datePart}-${randomPart}`;
 };
 
 module.exports = {

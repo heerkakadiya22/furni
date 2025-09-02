@@ -197,16 +197,49 @@ exports.renderTermsAndPrivacy = async (req, res) => {
   }
 };
 
-exports.renderWishlist = (req, res) => {
+exports.renderWishlist = async (req, res) => {
   try {
+    const wishlist = req.session.wishlist || [];
+
+    let productsInWishlist = [];
+    if (wishlist.length > 0) {
+      productsInWishlist = await productRepository.findBySkus(wishlist);
+    }
+
+    console.log("Wishlist session:", req.session.wishlist);
+    console.log("Products to render:", productsInWishlist);
+
     res.render("Wishlist", {
       title: "Wishlist",
       csrfToken: req.csrfToken(),
-      currentPage: "Wishllist",
+      currentPage: "Wishlist",
       session: req.session,
+      products: productsInWishlist,
     });
   } catch (error) {
     console.error("Error rendering Wishlist page:", error);
     res.status(500).send("Something went wrong.");
   }
+};
+
+// Add to Wishlist
+exports.addToWishlist = (req, res) => {
+  if (!req.session?.user) {
+    return res.status(401).json({ message: "Login required" });
+  }
+
+  const { sku } = req.body;
+  if (!sku) return res.status(400).json({ message: "SKU required" });
+
+  if (!req.session.wishlist) {
+    req.session.wishlist = [];
+  }
+
+  if (!req.session.wishlist.includes(sku)) {
+    req.session.wishlist.push(sku);
+  }
+
+  res
+    .status(200)
+    .json({ message: "Added to wishlist", wishlist: req.session.wishlist });
 };

@@ -40,6 +40,25 @@
 
         <div class="untree_co-section before-footer-section">
             <div class="container">
+                <% const wishlist=session.wishlist || []; %>
+
+                    <% if (products.length===0) { %>
+                        <p>No products in your wishlist.</p>
+                        <% } else { %>
+                            <% products.forEach(product=> { %>
+                                <div class="product">
+                                    <img src="<%= product.image %>" alt="<%= product.name %>">
+                                    <h3>
+                                        <%= product.name %>
+                                    </h3>
+                                    <button class="wishlist-btn" data-sku="<%= product.sku %>">
+                                        <i class="<%= wishlist.includes(product.sku) ? 'bi bi-heart-fill' : 'bi bi-heart' %>"
+                                            style="<%= wishlist.includes(product.sku) ? 'color:red;' : '' %>"></i>
+                                    </button>
+                                </div>
+                                <% }) %>
+                                    <% } %>
+
 
             </div>
         </div>

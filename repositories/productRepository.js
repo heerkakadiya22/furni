@@ -1,4 +1,5 @@
 const { Product, Category } = require("../models");
+const { Op } = require("sequelize");
 
 class ProductRepository {
   async create(productData) {
@@ -58,6 +59,12 @@ class ProductRepository {
 
   async findBySku(sku) {
     return await Product.findOne({ where: { sku } });
+  }
+
+  async findBySkus(skus) {
+    return await Product.findAll({
+      where: { sku: { [Op.in]: skus } },
+    });
   }
 }
 
