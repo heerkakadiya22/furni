@@ -1,5 +1,5 @@
 const productRepository = require("../repositories/productRepository");
-const { Product } = require("../models");
+const { Product, Wishlist } = require("../models");
 const { Op } = require("sequelize");
 
 exports.renderBlog = (req, res) => {
@@ -166,8 +166,13 @@ exports.renderProductDetails = async (req, res) => {
       limit: 4,
     });
 
-    const wishlist = req.session.wishlist || [];
-    const isInWishlist = wishlist.includes(product.sku);
+    let isInWishlist = false;
+    if (req.session?.user) {
+      const wishlistItem = await Wishlist.findOne({
+        where: { userId: req.session.user.id, sku: product.sku },
+      });
+      isInWishlist = !!wishlistItem;
+    }
 
     res.render("productDetails", {
       title: product.name,
@@ -205,22 +210,27 @@ exports.renderTermsAndPrivacy = async (req, res) => {
 
 exports.renderWishlist = async (req, res) => {
   try {
-    const wishlist = req.session.wishlist || [];
+    if (!req.session?.user) return res.redirect("/auth");
 
-    let productsInWishlist = [];
-    if (wishlist.length > 0) {
-      productsInWishlist = await productRepository.findBySkus(wishlist);
-    }
+    const userId = req.session.user.id;
 
-    console.log("Wishlist session:", req.session.wishlist);
-    console.log("Products to render:", productsInWishlist);
+    const wishlists = await Wishlist.findAll({
+      where: { userId },
+      include: [
+        {
+          model: Product,
+          attributes: ["name", "newPrice", "oldPrice", "main_img", "sku"],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
 
     res.render("Wishlist", {
       title: "Wishlist",
       csrfToken: req.csrfToken(),
       currentPage: "Wishlist",
       session: req.session,
-      products: productsInWishlist,
+      products: wishlists,
     });
   } catch (error) {
     console.error("Error rendering Wishlist page:", error);
@@ -229,30 +239,57 @@ exports.renderWishlist = async (req, res) => {
 };
 
 // Toggle wishlist: add or remove
-exports.toggleWishlist = (req, res) => {
+exports.toggleWishlist = async (req, res) => {
   if (!req.session?.user) {
     return res.status(401).json({ message: "Login required" });
   }
 
   const { sku } = req.body;
+  const userId = req.session.user.id;
+
   if (!sku) return res.status(400).json({ message: "SKU required" });
 
-  if (!req.session.wishlist) req.session.wishlist = [];
+  try {
+    const existing = await Wishlist.findOne({ where: { userId, sku } });
 
-  let action;
-  if (req.session.wishlist.includes(sku)) {
-    // Remove from wishlist
-    req.session.wishlist = req.session.wishlist.filter(item => item !== sku);
-    action = "removed";
-  } else {
-    // Add to wishlist
-    req.session.wishlist.push(sku);
-    action = "added";
+    let action;
+    if (existing) {
+      await existing.destroy();
+      action = "removed";
+    } else {
+      await Wishlist.create({ userId, sku });
+      action = "added";
+    }
+
+    res.status(200).json({ action, message: `Product ${action} to wishlist` });
+  } catch (err) {
+    console.error("Wishlist error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// DELETE: remove from wishlist
+exports.removeFromWishlist = async (req, res) => {
+  if (!req.session?.user) {
+    return res.status(401).json({ message: "Login required" });
   }
 
-  res.status(200).json({
-    message: `Product ${action} to wishlist`,
-    action,
-    wishlist: req.session.wishlist,
-  });
+  const { sku } = req.params;
+  const userId = req.session.user.id;
+
+  if (!sku) return res.status(400).json({ message: "SKU required" });
+
+  try {
+    const existing = await Wishlist.findOne({ where: { userId, sku } });
+
+    if (!existing) {
+      return res.status(404).json({ message: "Product not found in wishlist" });
+    }
+
+    await existing.destroy();
+    res.status(200).json({ message: "Product removed from wishlist" });
+  } catch (err) {
+    console.error("Wishlist remove error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
 };

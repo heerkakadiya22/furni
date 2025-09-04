@@ -15,3 +15,18 @@ const settingsMiddleware = async (req, res, next) => {
 };
 
 module.exports = settingsMiddleware;
+
+const currencyFormatter = (req, res, next) => {
+  res.locals.formatCurrency = (amount, locale = "en-IN", currency = "INR") => {
+    if (typeof amount !== "number") amount = parseFloat(amount) || 0;
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: currency,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+  next();
+};
+
+module.exports = currencyFormatter;

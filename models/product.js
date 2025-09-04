@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "category_id",
         as: "category",
       });
+      Product.hasMany(models.Wishlist, { foreignKey: "sku", sourceKey: "sku" });
     }
   }
 

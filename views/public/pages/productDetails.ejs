@@ -87,10 +87,11 @@
                                     <!-- Price -->
                                     <div class="price-box">
                                         <span class="d-block text-muted small">PRICE</span>
-                                        <h4 class="fw-bold mb-0 price-text">₹<%= product.newPrice %>
+                                        <h4 class="fw-bold mb-0 price-text">
+                                            <%= formatCurrency(product.newPrice) %>
                                         </h4>
                                         <div class="product-old-price">
-                                            ₹<%= product.oldPrice %>
+                                            <%= formatCurrency(product.oldPrice) %>
                                         </div>
                                     </div>
 
@@ -154,19 +155,19 @@
                                                     <%= product.material %>
                                                 </span>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <!-- Color -->
-                                <div class="mb-3">
-                                    <p class="fw-semibold mb-1">Color</p>
-                                    <div class="d-flex gap-2">
-                                        <% if (product.color) { %>
-                                            <span class="color-circle" style="background:<%= product.color %>"></span>
-                                            <% } else { %>
-                                                <p class="text-muted">No color available</p>
-                                                <% } %>
+                                            <div class="d-flex justify-content-between py-1">
+                                                <span class="text-muted">Color</span>
+                                                <span>
+                                                    <% if (product.color) { %>
+                                                        <span class="color-circle"
+                                                            style="background:<%= product.color %>"></span>
+                                                        <% } else { %>
+                                                            <p class="text-muted">No color available</p>
+                                                            <% } %>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 

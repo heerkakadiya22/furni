@@ -14,5 +14,6 @@ router.get("/product/:sku", pageController.renderProductDetails);
 router.get("/terms-and-privacy", pageController.renderTermsAndPrivacy);
 router.get("/wishlist", pageController.renderWishlist);
 router.post("/wishlist", pageController.toggleWishlist);
+router.delete("/wishlist/:sku", pageController.removeFromWishlist);
 
 module.exports = router;

@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "roleId",
         as: "role",
       });
+      User.hasMany(models.Wishlist, { foreignKey: "userId" });
     }
   }
 

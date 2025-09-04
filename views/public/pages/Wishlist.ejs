@@ -40,32 +40,97 @@
 
         <div class="untree_co-section before-footer-section">
             <div class="container">
-                <% const wishlist=session.wishlist || []; %>
+                <div class="row mb-5">
+                    <form class="col-md-12" method="post">
+                        <div class="site-blocks-table">
+                            <table class="table">
+                                <thead class="table">
+                                    <tr>
+                                        <th></th>
+                                        <th>Image</th>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Added On</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (products.length===0) { %>
+                                        <tr>
+                                            <td colspan="5">No products in your wishlist.</td>
+                                        </tr>
+                                        <% } else { %>
+                                            <% products.forEach(item=> { %>
+                                                <tr>
+                                                    <td>
+                                                        <a href="#" class="btn btn-black btn-sm remove-wishlist"
+                                                            data-sku="<%= item.Product.sku %>">
+                                                            ✕
+                                                        </a>
+                                                    </td>
+                                                    <input type="hidden" id="csrfToken" value="<%= csrfToken %>">
 
-                    <% if (products.length===0) { %>
-                        <p>No products in your wishlist.</p>
-                        <% } else { %>
-                            <% products.forEach(product=> { %>
-                                <div class="product">
-                                    <img src="<%= product.image %>" alt="<%= product.name %>">
-                                    <h3>
-                                        <%= product.name %>
-                                    </h3>
-                                    <button class="wishlist-btn" data-sku="<%= product.sku %>">
-                                        <i class="<%= wishlist.includes(product.sku) ? 'bi bi-heart-fill' : 'bi bi-heart' %>"
-                                            style="<%= wishlist.includes(product.sku) ? 'color:red;' : '' %>"></i>
-                                    </button>
-                                </div>
-                                <% }) %>
-                                    <% } %>
+                                                    <td class="product-thumbnail">
+                                                        <a href="/product/<%= item.Product.sku %>">
+                                                            <img src="/assets/admin/img/products/<%= item.Product.main_img %>"
+                                                                alt="<%= item.Product.name %>" class="img-fluid">
+                                                        </a>
+                                                    </td>
+                                                    <td class="product-name">
+                                                        <h2 class="h5 text-black">
+                                                            <a href="/product/<%= item.Product.sku %>"
+                                                                style="text-decoration: none;">
+                                                                <%= item.Product.name %>
+                                                            </a>
+                                                        </h2>
+                                                    </td>
 
+                                                    <td>
+                                                        <%= formatCurrency(item.Product.newPrice) %>
+                                                            <% if(item.Product.oldPrice) { %>
+                                                                <div class="product-old-price">
+                                                                    <%= formatCurrency(item.Product.oldPrice) %>
+                                                                </div>
+                                                                <% } %>
+                                                    </td>
+                                                    <td class="product-added">
+                                                        <%= new Date(item.createdAt).toLocaleDateString('en-US', {
+                                                            year: 'numeric' , month: 'long' , day: 'numeric' }) %>
+                                                    </td>
+                                                    <td class="product-addtocart">
+                                                        <a href="/cart/add/<%= item.Product.sku %>"
+                                                            class="btn btn-primary btn-sm">
+                                                            <i class="fa fa-shopping-cart"></i> Add To Cart
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
+                                                    <% } %>
+                                </tbody>
 
+                            </table>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row mb-5">
+                            <div class="col-md-6">
+                                <a href="shop" class="btn btn-outline-black btn-sm btn-block text-white">
+                                    Continue Shopping
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <%- include('../partials/footer') %>
 
             <%- include('../partials/script') %>
+                <script src="/assets/user/js/productDetails.js"></script>
 </body>
 
 </html>

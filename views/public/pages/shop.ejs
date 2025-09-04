@@ -87,9 +87,11 @@
                                     <h3 class="product-title">
                                         <%= product.name %>
                                     </h3>
-                                    <strong class="product-price">₹<%= product.newPrice %></strong>
+                                    <strong class="product-price">
+                                        <%= formatCurrency(product.newPrice) %>
+                                    </strong>
                                     <div class="product-old-price">
-                                        ₹<%= product.oldPrice %>
+                                        <%= formatCurrency(product.oldPrice) %>
                                     </div>
                                     <span class="icon-cross">
                                         <img src="/assets/user/images/cross.svg" class="img-fluid">
