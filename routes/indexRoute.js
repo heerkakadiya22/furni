@@ -13,11 +13,14 @@ const verifyEmail = require("./verifyEmailRoute");
 const categoryRoute = require("./categoryRoute");
 const settingsRoute = require("./settingsRoute");
 const productRoute = require("./productRoute");
+const wishlistRoute = require("./wishlistRoute");
+const shopRoute = require("./shopRoute");
 
 router.get("/", indexController.renderIndex);
 
 router.use(authRoute);
 router.use(pagesRoute);
+router.use(shopRoute);
 router.use(dashboardRoute);
 router.use(passwordRoute);
 router.use(roleRoute);
@@ -27,5 +30,6 @@ router.use(verifyEmail);
 router.use(categoryRoute);
 router.use(settingsRoute);
 router.use(productRoute);
+router.use(wishlistRoute);
 
 module.exports = router;

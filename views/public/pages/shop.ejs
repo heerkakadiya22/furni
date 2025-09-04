@@ -42,7 +42,8 @@
 
                 <!-- Search + Category Filter -->
                 <form method="GET" action="/shop" class="row mb-5">
-                    <div class="col-md-4 mb-2">
+
+                    <div class="col-md-2 mb-2">
                         <div class="dropdown">
                             <button class="btn dropdown-toggle w-100 border" type="button" data-bs-toggle="dropdown">
                                 <%= selectedCategory==="all" ? "All Categories" : selectedCategory %>
@@ -65,10 +66,13 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="col-md-6 mb-2">
+
+                    <div class="col-md-8 mb-2">
                         <input type="text" name="search" placeholder="Search products..." class="form-control"
                             value="<%= searchQuery %>">
                     </div>
+
+
                     <div class="col-md-2 mb-2">
                         <button type="submit" class="btn btn-primary w-100">Filter</button>
                     </div>
