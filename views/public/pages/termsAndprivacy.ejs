@@ -45,14 +45,12 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12 col-md-4 col-lg-3 mb-2">
-                        <h2 class="mb-2 justify-content-between ">
-                            <%= title %>
-                        </h2>
+
                         <div class="policy-content">
                             <% if (type==='terms' ) { %>
-                                <%= settings.terms.replace(/<[^>]*>?/gm, '') %>
+                                <%- settings.terms || "No terms available." %>
                                     <% } else if (type==='privacy' ) { %>
-                                        <%= settings.privacy.replace(/<[^>]*>?/gm, '') %>
+                                        <%- settings.privacy || "No privacy policy available." %>
                                             <% } %>
                         </div>
                     </div>

@@ -13,7 +13,10 @@ const indexRoute = require("./routes/indexRoute");
 
 const conditionCsrf = require("./middleware/conditionalCsrf");
 const { refreshUserSession } = require("./middleware/authMiddleware");
-const settingsMiddleware = require("./middleware/settingsMiddleware");
+const {
+  settingsMiddleware,
+  currencyFormatter,
+} = require("./middleware/settingsMiddleware");
 
 app.set("view engine", "ejs");
 app.set("views", [
@@ -50,6 +53,7 @@ app.use(
 app.use(conditionCsrf);
 app.use(refreshUserSession);
 app.use(settingsMiddleware);
+app.use(currencyFormatter);
 
 // Routes
 app.use(indexRoute);

@@ -1,4 +1,3 @@
-
 exports.renderBlog = (req, res) => {
   try {
     res.render("blog", {
@@ -97,7 +96,6 @@ exports.renderThanks = (req, res) => {
   }
 };
 
-
 exports.renderTermsAndPrivacy = async (req, res) => {
   try {
     const type = req.query.type || "terms";
@@ -108,7 +106,7 @@ exports.renderTermsAndPrivacy = async (req, res) => {
       type,
       title: pageTitle,
       csrfToken: req.csrfToken(),
-      currentPage: type === "terms" ? "Terms & Conditions" : "Privacy Policy",
+      currentPage: pageTitle,
       session: req.session,
     });
   } catch (error) {
@@ -116,5 +114,3 @@ exports.renderTermsAndPrivacy = async (req, res) => {
     res.status(500).send("Something went wrong.");
   }
 };
-
-

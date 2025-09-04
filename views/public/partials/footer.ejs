@@ -37,7 +37,7 @@
                 <div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">Furni<span>.</span></a></div>
                 <% if (settings.description) { %>
                     <p class="mb-4">
-                        <%= settings.description.replace(/<[^>]*>?/gm, '') %>
+                        <%- settings.description %>
                     </p>
                     <% } %>
 

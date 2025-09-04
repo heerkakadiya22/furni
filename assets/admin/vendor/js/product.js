@@ -1,18 +1,17 @@
+// ===== Sub Images Upload with Preview and Removal =====
 (function () {
   const addBtn = document.getElementById("addSubImgBtn");
   const subImgContainer = document.getElementById("subImgContainer");
   const hiddenInputsContainer = document.getElementById("subImgInputs");
 
-  // helper to generate unique id for mapping preview <-> hidden input
   const uid = () =>
     Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 
   addBtn.addEventListener("click", () => {
-    // create a temporary picker input and click it
     const picker = document.createElement("input");
     picker.type = "file";
     picker.accept = "image/*";
-    picker.multiple = true; // allow multi-select in a single pick
+    picker.multiple = true;
     picker.style.display = "none";
     document.body.appendChild(picker);
 
@@ -25,17 +24,15 @@
       Array.from(picker.files).forEach((file) => {
         const id = uid();
 
-        // create hidden single-file input that will be submitted
         const dt = new DataTransfer();
         dt.items.add(file);
         const hidden = document.createElement("input");
         hidden.type = "file";
-        hidden.name = "sub_img"; // same field name for multer to collect multiples
+        hidden.name = "sub_img";
         hidden.files = dt.files;
         hidden.dataset.uid = id;
         hiddenInputsContainer.appendChild(hidden);
 
-        // create preview
         const reader = new FileReader();
         reader.onload = (e) => {
           const wrap = document.createElement("div");
@@ -45,10 +42,9 @@
             <img src="${e.target.result}" width="100">
             <button type="button" class="remove-btn" aria-label="Remove image">×</button>
           `;
-          // insert before addBtn so + stays at end
+
           subImgContainer.insertBefore(wrap, addBtn);
 
-          // remove handler -> remove preview + hidden input
           wrap.querySelector(".remove-btn").addEventListener("click", () => {
             wrap.remove();
             const corresponding = hiddenInputsContainer.querySelector(
@@ -60,15 +56,14 @@
         reader.readAsDataURL(file);
       });
 
-      // cleanup picker
       picker.remove();
     });
 
-    // open file dialog
     picker.click();
   });
 })();
 
+// ===== Main Image Upload with Preview =====
 const dropZone = document.getElementById("dropZone");
 const inputFile = document.getElementById("main_img");
 const dropZoneText = document.getElementById("dropZoneText");
@@ -115,3 +110,41 @@ function previewFile(file) {
   };
   reader.readAsDataURL(file);
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  // ===== Color Picker =====
+  const colorPicker = document.getElementById("colorPicker");
+  if (colorPicker) {
+    const colorHex = document.getElementById("colorHex");
+    const colorHidden = document.getElementById("colorHidden");
+
+    colorPicker.addEventListener("input", () => {
+      colorHex.value = colorPicker.value.toUpperCase();
+      colorHidden.value = colorPicker.value.toUpperCase();
+    });
+  }
+
+  // ===== Froala Editor =====
+  const desc = document.querySelector("#description");
+  if (desc) {
+    new FroalaEditor(desc, {
+      heightMin: 200,
+      heightMax: 400,
+      toolbarButtons: [
+        "bold",
+        "italic",
+        "underline",
+        "strikeThrough",
+        "|",
+        "formatOL",
+        "formatUL",
+        "|",
+        "insertLink",
+        "insertImage",
+        "|",
+        "undo",
+        "redo",
+      ],
+    });
+  }
+});

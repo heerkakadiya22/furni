@@ -46,7 +46,7 @@ $(document).ready(function () {
           <td>${mainImgTag}</td>
           <td>${oldPrice}</td>
           <td>${newPrice}</td>
-          <td>${color}</td>
+          <td><span class="color-circle" style="background:${color}"></span></td>
           <td>${isActive}</td>
           <td>
             <a class="btn btn-sm btn-info" href="/products/${product.id}/edit">
@@ -61,7 +61,7 @@ $(document).ready(function () {
         </tr>`;
         });
       } else {
-        rows = ""; // keep tbody empty, DataTables will show "No products found."
+        rows = "";
       }
 
       $("#productTableBody").html(rows);
@@ -84,7 +84,7 @@ $(document).ready(function () {
         language: {
           lengthMenu: "_MENU_",
           searchPlaceholder: "Search products...",
-          emptyTable: "No products found.", // DataTables handles this
+          emptyTable: "No products found.",
         },
         dom:
           "<'d-flex align-items-center justify-content-between flex-wrap mb-2 mt-2 m-3'<'custom-title'><'d-flex align-items-center ml-auto' f l <'custom-addproduct'>>>" +
@@ -102,53 +102,53 @@ $(document).ready(function () {
   `);
     },
   });
-});
 
-$(document).on("click", ".toggle-desc", function () {
-  const id = $(this).data("id");
-  const descDiv = $(`#desc-${id}`);
+  $(document).on("click", ".toggle-desc", function () {
+    const id = $(this).data("id");
+    const descDiv = $(`#desc-${id}`);
 
-  if (descDiv.hasClass("expanded")) {
-    descDiv.removeClass("expanded");
-    $(this).text("Show more");
-  } else {
-    descDiv.addClass("expanded");
-    $(this).text("Show less");
-  }
-});
-
-//delete handle
-const csrfToken = document.getElementById("csrfToken").value;
-
-document.addEventListener("click", async (e) => {
-  const btn = e.target.closest(".btn-delete-product");
-  if (!btn) return;
-
-  const productId = btn.dataset.id;
-  const confirm = await swal({
-    title: "Delete product?",
-    text: "This action cannot be undone!",
-    icon: "warning",
-    buttons: ["Cancel", "Yes"],
-    dangerMode: true,
+    if (descDiv.hasClass("expanded")) {
+      descDiv.removeClass("expanded");
+      $(this).text("Show more");
+    } else {
+      descDiv.addClass("expanded");
+      $(this).text("Show less");
+    }
   });
 
-  if (!confirm) return;
+  //delete handle
+  const csrfToken = document.getElementById("csrfToken").value;
 
-  try {
-    const res = await fetch(`/products/${productId}`, {
-      method: "DELETE",
-      headers: { "CSRF-Token": csrfToken },
+  document.addEventListener("click", async (e) => {
+    const btn = e.target.closest(".btn-delete-product");
+    if (!btn) return;
+
+    const productId = btn.dataset.id;
+    const confirm = await swal({
+      title: "Delete product?",
+      text: "This action cannot be undone!",
+      icon: "warning",
+      buttons: ["Cancel", "Yes"],
+      dangerMode: true,
     });
 
-    const data = await res.json();
+    if (!confirm) return;
 
-    swal(
-      data.success ? "Deleted!" : "Error!",
-      data.message,
-      data.success ? "success" : "error"
-    ).then(() => data.success && btn.closest("tr").remove());
-  } catch {
-    swal("Error!", "Failed to delete product.", "error");
-  }
+    try {
+      const res = await fetch(`/products/${productId}`, {
+        method: "DELETE",
+        headers: { "CSRF-Token": csrfToken },
+      });
+
+      const data = await res.json();
+
+      swal(
+        data.success ? "Deleted!" : "Error!",
+        data.message,
+        data.success ? "success" : "error"
+      ).then(() => data.success && btn.closest("tr").remove());
+    } catch {
+      swal("Error!", "Failed to delete product.", "error");
+    }
+  });
 });

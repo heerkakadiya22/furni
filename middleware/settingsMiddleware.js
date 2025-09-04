@@ -5,7 +5,6 @@ const settingsMiddleware = async (req, res, next) => {
     const latestSettings = await settingRepo.getSettings();
     req.session.settings = latestSettings;
     res.locals.settings = latestSettings;
-
     next();
   } catch (err) {
     console.error("Settings middleware error:", err);
@@ -13,8 +12,6 @@ const settingsMiddleware = async (req, res, next) => {
     next();
   }
 };
-
-module.exports = settingsMiddleware;
 
 const currencyFormatter = (req, res, next) => {
   res.locals.formatCurrency = (amount, locale = "en-IN", currency = "INR") => {
@@ -29,4 +26,7 @@ const currencyFormatter = (req, res, next) => {
   next();
 };
 
-module.exports = currencyFormatter;
+module.exports = {
+  settingsMiddleware,
+  currencyFormatter,
+};

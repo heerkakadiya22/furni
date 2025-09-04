@@ -58,7 +58,7 @@
                                     <button class="btn-cart-custom wishlist-btn position-absolute top-0 end-0 m-2"
                                         data-sku="<%= product.sku %>">
                                         <i class="<%= isInWishlist ? 'bi bi-heart-fill' : 'bi bi-heart' %>"
-                                            style="<%= isInWishlist ? 'color:red;' : '' %>"></i>
+                                            style="<%= isInWishlist ? 'color:#3b5d50;' : '' %>"></i>
                                     </button>
 
                                 </div>
@@ -131,7 +131,7 @@
                                         <!-- Description Tab -->
                                         <div class="tab-pane fade show active" id="description" role="tabpanel">
                                             <p class="text-muted">
-                                                <%= product.description %>
+                                                <%- product.description %>
                                             </p>
                                         </div>
 

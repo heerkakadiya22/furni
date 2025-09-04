@@ -159,3 +159,11 @@
   background: transparent;
   flex: 1;
 }
+
+.color-circle {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+}
