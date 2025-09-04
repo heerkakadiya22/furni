@@ -6,8 +6,9 @@ class ProductRepository {
     return await Product.create(productData);
   }
 
-  async findAll() {
+  async findAll(filters = {}) {
     return await Product.findAll({
+      where: filters,
       include: [
         {
           model: Category,

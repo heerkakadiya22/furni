@@ -20,7 +20,7 @@ exports.renderShop = async (req, res) => {
   try {
     const { category, search } = req.query;
 
-    let products = await productRepository.findAll();
+    let products = await productRepository.findAll({ isActive: true });
 
     let categories = [];
     if (products.length > 0) {
