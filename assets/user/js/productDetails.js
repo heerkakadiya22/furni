@@ -69,6 +69,17 @@ document.addEventListener("DOMContentLoaded", function () {
         if (res.ok) {
           btn.closest("tr").remove();
           showWishlistNotification(data.message);
+
+          const wishlistTable = document.querySelector("#wishlistTable tbody");
+          if (wishlistTable && wishlistTable.children.length === 0) {
+            wishlistTable.innerHTML = `
+            <tr>
+              <td colspan="5" class="text-center text-muted">
+                Product not found in wishlist
+              </td>
+            </tr>
+          `;
+          }
         } else {
           alert(data.message || "Failed to remove product");
         }
@@ -126,22 +137,8 @@ document.addEventListener("DOMContentLoaded", function () {
     msg.style.fontSize = "13px";
     msg.textContent = message;
 
-    const button = document.createElement("button");
-    button.textContent = "Learn More";
-    button.style.padding = "8px 12px";
-    button.style.background = "#ffffff";
-    button.style.color = "#000000";
-    button.style.border = "none";
-    button.style.borderRadius = "8px";
-    button.style.cursor = "pointer";
-    button.style.fontSize = "13px";
-    button.onclick = () => {
-      window.location.href = "/wishlist";
-    };
-
     notification.appendChild(header);
     notification.appendChild(msg);
-    notification.appendChild(button);
     document.body.appendChild(notification);
 
     setTimeout(() => {
@@ -154,3 +151,45 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 5000);
   }
 });
+
+//shop.ejs
+
+const searchBox = document.getElementById("searchBox");
+const categoryBtn = document.getElementById("categoryBtn");
+const categoryMenu = document.getElementById("categoryMenu");
+const filterBtn = document.getElementById("filterBtn");
+const products = document.querySelectorAll(".product-item-wrapper");
+
+let selectedCategory = "all";
+
+// Handle category selection
+categoryMenu.addEventListener("click", (e) => {
+  if (e.target.dataset.category) {
+    selectedCategory = e.target.dataset.category.toLowerCase();
+    categoryBtn.textContent = e.target.textContent;
+  }
+});
+
+// Filter function
+function filterProducts() {
+  const searchValue = searchBox.value.toLowerCase();
+
+  products.forEach((product) => {
+    const name = product.dataset.name.toLowerCase();
+    const category = product.dataset.category?.toLowerCase();
+
+    const matchesSearch = name.includes(searchValue);
+    const matchesCategory =
+      selectedCategory === "all" || category === selectedCategory;
+
+    if (matchesSearch && matchesCategory) {
+      product.style.display = "block";
+    } else {
+      product.style.display = "none";
+    }
+  });
+}
+
+// Events
+filterBtn.addEventListener("click", filterProducts);
+searchBox.addEventListener("input", filterProducts);

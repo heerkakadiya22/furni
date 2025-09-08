@@ -41,50 +41,39 @@
             <div class="container">
 
                 <!-- Search + Category Filter -->
-                <form method="GET" action="/shop" class="row mb-5">
-
+                <div class="row mb-5">
                     <div class="col-md-2 mb-2">
                         <div class="dropdown">
-                            <button class="btn dropdown-toggle w-100 border" type="button" data-bs-toggle="dropdown">
-                                <%= selectedCategory==="all" ? "All Categories" : selectedCategory %>
+                            <button id="categoryBtn" class="btn dropdown-toggle w-100 border" type="button"
+                                data-bs-toggle="dropdown">
+                                All Categories
                             </button>
-                            <ul class="dropdown-menu w-100">
-                                <li>
-                                    <a class="dropdown-item <%= selectedCategory === " all" ? "active" : "" %>"
-                                        href="/shop?category=all&search=<%= searchQuery %>">
-                                            All Categories
-                                    </a>
-                                </li>
+                            <ul class="dropdown-menu w-100" id="categoryMenu">
+                                <li><a class="dropdown-item" data-category="all">All Categories</a></li>
                                 <% categories.forEach(cat=> { %>
-                                    <li>
-                                        <a class="dropdown-item <%= selectedCategory === cat.name ? " active" : "" %>"
-                                            href="/shop?category=<%= cat.name %>&search=<%= searchQuery %>">
-                                                    <%= cat.name %>
-                                        </a>
-                                    </li>
+                                    <li><a class="dropdown-item" data-category="<%= cat.name %>">
+                                            <%= cat.name %>
+                                        </a></li>
                                     <% }) %>
                             </ul>
                         </div>
                     </div>
 
                     <div class="col-md-8 mb-2">
-                        <input type="text" name="search" placeholder="Search products..." class="form-control"
-                            value="<%= searchQuery %>">
+                        <input type="text" id="searchBox" placeholder="Search products..." class="form-control">
                     </div>
-
 
                     <div class="col-md-2 mb-2">
-                        <button type="submit" class="btn btn-primary w-100">Filter</button>
+                        <button id="filterBtn" class="btn btn-primary w-100">Filter</button>
                     </div>
-                </form>
-
+                </div>
                 <!-- Products Grid -->
                 <div class="row" id="product-container">
                     <% if (products && products.length> 0) { %>
                         <% products.forEach((product, index)=> { %>
                             <div class="col-12 col-md-4 col-lg-3 mb-5 product-item-wrapper"
+                                data-name="<%= product.name %>" data-category="<%= product.category?.name %>"
                                 style="display: <%= index < 8 ? 'block' : 'none' %>;">
-
                                 <a class="product-item" href="/product/<%= product.sku %>">
                                     <img src="/assets/admin/img/products/<%= product.main_img %>"
                                         class="img-fluid product-thumbnail">
@@ -124,7 +113,7 @@
 
         <%- include('../partials/footer') %>
             <%- include('../partials/script') %>
-
+                <script src="/assets/user/js/productDetails.js"></script>
 </body>
 
 </html>
