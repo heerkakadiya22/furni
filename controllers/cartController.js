@@ -38,10 +38,6 @@ exports.renderCart = async (req, res) => {
 
 exports.addToCart = async (req, res) => {
   try {
-    console.log("=== Add to Cart ===");
-    console.log("Request body:", req.body);
-    console.log("Session user:", req.session.user);
-
     const { productId, quantity } = req.body;
     if (!productId) {
       console.error("Error: productId is missing");
@@ -54,17 +50,13 @@ exports.addToCart = async (req, res) => {
 
     if (req.session.user) {
       const userId = req.session.user.id;
-      console.log(`Logged in user ID: ${userId}`);
 
       let cartItem = await cartRepo.findCartItem(userId, productId);
-      console.log("Existing cart item:", cartItem);
 
       if (cartItem) {
         await cartRepo.updateCartItem(cartItem, cartItem.quantity + qty);
-        console.log("Cart item updated");
       } else {
         await cartRepo.createCartItem(userId, productId, qty);
-        console.log("Cart item created");
       }
     } else {
       console.log("User not logged in, using session cart");

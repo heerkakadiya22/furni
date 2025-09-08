@@ -84,7 +84,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <%= formatCurrency(item.product.price * item.quantity) %>
+                                                    <%= formatCurrency(item.product.newPrice * item.quantity) %>
                                                 </td>
                                                 <td><a href="/cart/remove/<%= item.product.id %>"
                                                         class="btn btn-black btn-sm">X</a></td>
@@ -175,6 +175,7 @@
         <%- include('../partials/footer') %>
 
             <%- include('../partials/script') %>
-</body>
+                <script src="/assets/user/js/cart_script.js"></script>
+</body> 
 
 </html>

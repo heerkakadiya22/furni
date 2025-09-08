@@ -2,7 +2,7 @@ module.exports = {
   calculateCartTotals(cartItems) {
     let subtotal = 0;
     cartItems.forEach((item) => {
-      subtotal += item.product.price * item.quantity;
+      subtotal += item.product.newPrice * item.quantity;
     });
     const total = subtotal;
     return { subtotal, total };

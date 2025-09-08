@@ -1,4 +1,5 @@
 const productRepository = require("../repositories/productRepository");
+const cartRepo = require("../repositories/cartRepository");
 const { Product, Wishlist } = require("../models");
 const { Op } = require("sequelize");
 
@@ -49,7 +50,6 @@ exports.renderProductDetails = async (req, res) => {
       ? product.sub_img.split(",").filter(Boolean)
       : [];
 
-    // Related products
     const relatedProducts = await Product.findAll({
       where: {
         category_id: product.category_id,
@@ -66,6 +66,27 @@ exports.renderProductDetails = async (req, res) => {
       isInWishlist = !!wishlistItem;
     }
 
+    let cartQuantity = 1;
+
+    if (req.session.user) {
+      console.log("Logged-in user detected:", req.session.user.id);
+      const cartItem = await cartRepo.findCartItem(
+        req.session.user.id,
+        product.id
+      );
+      if (cartItem) cartQuantity = cartItem.quantity;
+      console.log("DB cart quantity:", cartQuantity);
+    } else {
+      console.log("Guest user, checking session cart");
+      if (req.session.cart) {
+        const cartItem = req.session.cart.find(
+          (item) => item.productId === product.id
+        );
+        if (cartItem) cartQuantity = cartItem.quantity;
+        console.log("Session cart quantity:", cartQuantity);
+      }
+    }
+
     res.render("productDetails", {
       title: product.name,
       product,
@@ -74,6 +95,7 @@ exports.renderProductDetails = async (req, res) => {
       currentPage: "Product Details",
       session: req.session,
       isInWishlist,
+      cartQuantity,
     });
   } catch (error) {
     console.error("Error fetching product details:", error);
