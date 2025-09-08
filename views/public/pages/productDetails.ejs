@@ -110,63 +110,61 @@
                                 <div class="product-tabs mt-4">
 
                                     <!-- Tab headers -->
-                                    <ul class="nav custom-tabs border-bottom mb-3" id="productTab" role="tablist">
-                                        <li class="nav-item" role="presentation">
-                                            <button class="nav-link active" id="description-tab" data-bs-toggle="tab"
-                                                data-bs-target="#description" type="button" role="tab">
-                                                DESCRIPTION
-                                            </button>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <button class="nav-link" id="details-tab" data-bs-toggle="tab"
-                                                data-bs-target="#details" type="button" role="tab">
-                                                DETAILS
-                                            </button>
-                                        </li>
-                                    </ul>
 
-                                    <!-- Tab contents -->
-                                    <div class="tab-content" id="productTabContent">
+                                    <div class="mb-4">
+                                        <ul class="nav custom-tabs border-bottom mb-3" id="productTab" role="tablist">
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link active" id="description-tab"
+                                                    data-bs-toggle="tab" data-bs-target="#description" type="button"
+                                                    role="tab">
+                                                    DESCRIPTION
+                                                </button>
+                                            </li>
+                                        </ul>
+                                        <p class="text-muted">
+                                            <%- product.description %>
+                                        </p>
+                                    </div>
 
-                                        <!-- Description Tab -->
-                                        <div class="tab-pane fade show active" id="description" role="tabpanel">
-                                            <p class="text-muted">
-                                                <%- product.description %>
-                                            </p>
+
+                                    <!-- Details Block -->
+                                    <div>
+                                        <ul class="nav custom-tabs border-bottom mb-3" id="productTab" role="tablist">
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link active" id="details-tab" data-bs-toggle="tab"
+                                                    data-bs-target="#details" type="button" role="tab">
+                                                    DETAILS
+                                                </button>
+                                            </li>
+                                        </ul>
+                                        <div class="d-flex justify-content-between py-1">
+                                            <span class="text-muted">Brand</span>
+                                            <span>
+                                                <%= product.name %>
+                                            </span>
                                         </div>
-
-                                        <!-- Details Tab -->
-                                        <div class="tab-pane fade" id="details" role="tabpanel">
-                                            <div class="d-flex justify-content-between py-1">
-                                                <span class="text-muted">Brand</span>
-                                                <span>
-                                                    <%= product.name %>
-                                                </span>
-                                            </div>
-                                            <div class="d-flex justify-content-between py-1">
-                                                <span class="text-muted">Size</span>
-                                                <span>
-                                                    <%= product.dimention %>
-                                                </span>
-                                            </div>
-                                            <div class="d-flex justify-content-between py-1">
-                                                <span class="text-muted">Material</span>
-                                                <span>
-                                                    <%= product.material %>
-                                                </span>
-                                            </div>
-
-                                            <div class="d-flex justify-content-between py-1">
-                                                <span class="text-muted">Color</span>
-                                                <span>
-                                                    <% if (product.color) { %>
-                                                        <span class="color-circle"
-                                                            style="background:<%= product.color %>"></span>
-                                                        <% } else { %>
-                                                            <p class="text-muted">No color available</p>
-                                                            <% } %>
-                                                </span>
-                                            </div>
+                                        <div class="d-flex justify-content-between py-1">
+                                            <span class="text-muted">Size</span>
+                                            <span>
+                                                <%= product.dimention %>
+                                            </span>
+                                        </div>
+                                        <div class="d-flex justify-content-between py-1">
+                                            <span class="text-muted">Material</span>
+                                            <span>
+                                                <%= product.material %>
+                                            </span>
+                                        </div>
+                                        <div class="d-flex justify-content-between py-1">
+                                            <span class="text-muted">Color</span>
+                                            <span>
+                                                <% if (product.color) { %>
+                                                    <span class="color-circle"
+                                                        style="background:<%= product.color %>"></span>
+                                                    <% } else { %>
+                                                        <span class="text-muted">No color available</span>
+                                                        <% } %>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>

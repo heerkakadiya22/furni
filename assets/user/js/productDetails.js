@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  //Wishlist remove (X button)
+  // Remove from wishlist page
   document.body.addEventListener("click", async function (e) {
     const btn = e.target.closest(".remove-wishlist");
     if (btn) {
@@ -67,19 +67,23 @@ document.addEventListener("DOMContentLoaded", function () {
         const data = await res.json();
 
         if (res.ok) {
-          btn.closest("tr").remove();
-          showWishlistNotification(data.message);
+          const row = btn.closest("tr");
+          const wishlistTable = document.querySelector("#wishlistTable");
 
-          const wishlistTable = document.querySelector("#wishlistTable tbody");
-          if (wishlistTable && wishlistTable.children.length === 0) {
+          row.remove();
+
+          // Check if no <tr> left inside tbody
+          if (wishlistTable.querySelectorAll("tr").length === 0) {
             wishlistTable.innerHTML = `
             <tr>
-              <td colspan="5" class="text-center text-muted">
+              <td colspan="6" class="text-center text-muted">
                 Product not found in wishlist
               </td>
             </tr>
           `;
           }
+
+          showWishlistNotification(data.message);
         } else {
           alert(data.message || "Failed to remove product");
         }

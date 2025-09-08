@@ -54,10 +54,11 @@
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="wishlistTable">
                                     <% if (products.length===0) { %>
                                         <tr>
-                                            <td colspan="5">No products in your wishlist.</td>
+                                            <td colspan="6" class="text-center text-muted">No products in your wishlist.
+                                            </td>
                                         </tr>
                                         <% } else { %>
                                             <% products.forEach(item=> { %>
@@ -73,7 +74,8 @@
                                                     <td class="product-thumbnail">
                                                         <a href="/product/<%= item.Product.sku %>">
                                                             <img src="/assets/admin/img/products/<%= item.Product.main_img %>"
-                                                                alt="<%= item.Product.name %>" class="img-fluid">
+                                                                alt="<%= item.Product.name %>"
+                                                                class="img-fluid rounded-3">
                                                         </a>
                                                     </td>
                                                     <td class="product-name">
