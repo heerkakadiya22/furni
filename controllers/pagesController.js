@@ -54,20 +54,6 @@ exports.renderAbout = (req, res) => {
   }
 };
 
-exports.renderCart = (req, res) => {
-  try {
-    res.render("cart", {
-      title: "Cart",
-      csrfToken: req.csrfToken(),
-      currentPage: "Cart",
-      session: req.session,
-    });
-  } catch (error) {
-    console.error("Error rendering about page:", error);
-    res.status(500).send("Something went wrong.");
-  }
-};
-
 exports.renderCheckout = (req, res) => {
   try {
     res.render("checkout", {

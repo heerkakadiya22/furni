@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+
   // Remove from wishlist page
   document.body.addEventListener("click", async function (e) {
     const btn = e.target.closest(".remove-wishlist");

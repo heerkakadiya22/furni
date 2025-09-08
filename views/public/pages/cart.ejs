@@ -55,65 +55,46 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="product-thumbnail">
-                                            <img src="/assets/user/images/product-1.png" alt="Image" class="img-fluid">
-                                        </td>
-                                        <td class="product-name">
-                                            <h2 class="h5 text-black">Product
-                                                1</h2>
-                                        </td>
-                                        <td>$49.00</td>
-                                        <td>
-                                            <div class="input-group mb-3 d-flex align-items-center quantity-container"
-                                                style="max-width: 120px;">
-                                                <div class="input-group-prepend">
-                                                    <button class="btn btn-outline-black decrease"
-                                                        type="button">&minus;</button>
-                                                </div>
-                                                <input type="text" class="form-control text-center quantity-amount"
-                                                    value="1" placeholder aria-label="Example text with button addon"
-                                                    aria-describedby="button-addon1">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-outline-black increase"
-                                                        type="button">&plus;</button>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                        <td>$49.00</td>
-                                        <td><a href="#" class="btn btn-black btn-sm">X</a></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td class="product-thumbnail">
-                                            <img src="/assets/user/images/product-2.png" alt="Image" class="img-fluid">
-                                        </td>
-                                        <td class="product-name">
-                                            <h2 class="h5 text-black">Product
-                                                2</h2>
-                                        </td>
-                                        <td>$49.00</td>
-                                        <td>
-                                            <div class="input-group mb-3 d-flex align-items-center quantity-container"
-                                                style="max-width: 120px;">
-                                                <div class="input-group-prepend">
-                                                    <button class="btn btn-outline-black decrease"
-                                                        type="button">&minus;</button>
-                                                </div>
-                                                <input type="text" class="form-control text-center quantity-amount"
-                                                    value="1" placeholder aria-label="Example text with button addon"
-                                                    aria-describedby="button-addon1">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-outline-black increase"
-                                                        type="button">&plus;</button>
-                                                </div>
-                                            </div>
-
-                                        </td>
-                                        <td>$49.00</td>
-                                        <td><a href="#" class="btn btn-black btn-sm">X</a></td>
-                                    </tr>
+                                    <% if(cart.length> 0){ %>
+                                        <% cart.forEach(item=> { %>
+                                            <tr>
+                                                <td class="product-thumbnail">
+                                                    <img src="/assets/admin/img/products/<%= item.product.main_img %>"
+                                                        class="img-fluid" alt="Image">
+                                                </td>
+                                                <td class="product-name">
+                                                    <h2 class="h5 text-black">
+                                                        <%= item.product.name %>
+                                                    </h2>
+                                                </td>
+                                                <td>
+                                                    <%= formatCurrency(item.product.newPrice) %>
+                                                </td>
+                                                <td>
+                                                    <div class="quantity-box">
+                                                        <div
+                                                            class="quantity-container d-flex align-items-center rounded-pill">
+                                                            <button class="qty-btn decrease"
+                                                                type="button">&minus;</button>
+                                                            <input type="text" class="qty-input"
+                                                                value="<%= item.quantity %>" min="1">
+                                                            <button class="qty-btn increase"
+                                                                type="button">&plus;</button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <%= formatCurrency(item.product.price * item.quantity) %>
+                                                </td>
+                                                <td><a href="/cart/remove/<%= item.product.id %>"
+                                                        class="btn btn-black btn-sm">X</a></td>
+                                            </tr>
+                                            <% }) %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="6" class="text-center">Your cart is empty</td>
+                                                    </tr>
+                                                    <% } %>
                                 </tbody>
                             </table>
                         </div>
@@ -161,7 +142,9 @@
                                         <span class="text-black">Subtotal</span>
                                     </div>
                                     <div class="col-md-6 text-right">
-                                        <strong class="text-black">$230.00</strong>
+                                        <strong class="text-black">
+                                            <%= formatCurrency(subtotal) %>
+                                        </strong>
                                     </div>
                                 </div>
                                 <div class="row mb-5">
@@ -169,7 +152,9 @@
                                         <span class="text-black">Total</span>
                                     </div>
                                     <div class="col-md-6 text-right">
-                                        <strong class="text-black">$230.00</strong>
+                                        <strong class="text-black">
+                                            <%= formatCurrency(total) %>
+                                        </strong>
                                     </div>
                                 </div>
 
