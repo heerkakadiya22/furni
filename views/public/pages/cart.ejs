@@ -16,7 +16,6 @@
 </head>
 
 <body>
-
     <%- include('../partials/Header') %>
 
         <!-- Start Hero Section -->
@@ -30,9 +29,7 @@
                             </h1>
                         </div>
                     </div>
-                    <div class="col-lg-7">
-
-                    </div>
+                    <div class="col-lg-7"></div>
                 </div>
             </div>
         </div>
@@ -57,7 +54,10 @@
                                 <tbody>
                                     <% if(cart.length> 0){ %>
                                         <% cart.forEach(item=> { %>
-                                            <tr>
+                                            <input type="hidden" id="csrfToken" value="<%= csrfToken %>">
+
+                                            <tr data-id="<%= item.product.id %>"
+                                                data-price="<%= item.product.newPrice %>">
                                                 <td class="product-thumbnail">
                                                     <img src="/assets/admin/img/products/<%= item.product.main_img %>"
                                                         class="img-fluid" alt="Image">
@@ -77,17 +77,20 @@
                                                             <button class="qty-btn decrease"
                                                                 type="button">&minus;</button>
                                                             <input type="text" class="qty-input"
-                                                                value="<%= item.quantity %>" min="1">
+                                                                value="<%= item.quantity %>" min="1"
+                                                                data-id="<%= item.product.id %>">
                                                             <button class="qty-btn increase"
                                                                 type="button">&plus;</button>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>
+                                                <td class="row-subtotal">
                                                     <%= formatCurrency(item.product.newPrice * item.quantity) %>
                                                 </td>
-                                                <td><a href="/cart/remove/<%= item.product.id %>"
-                                                        class="btn btn-black btn-sm">X</a></td>
+                                                <td>
+                                                    <a href="/cart/remove/<%= item.product.id %>"
+                                                        class="btn btn-black btn-sm">X</a>
+                                                </td>
                                             </tr>
                                             <% }) %>
                                                 <% } else { %>
@@ -105,8 +108,7 @@
                     <div class="col-md-6">
                         <div class="row mb-5">
                             <div class="col-md-6 mb-3 mb-md-0">
-                                <button class="btn btn-black btn-sm btn-block">Update
-                                    Cart</button>
+                                <button class="btn btn-black btn-sm btn-block">Update Cart</button>
                             </div>
                             <div class="col-md-6">
                                 <a href="shop" class="btn btn-outline-black btn-sm btn-block text-white">
@@ -123,8 +125,7 @@
                                 <input type="text" class="form-control py-3" id="coupon" placeholder="Coupon Code">
                             </div>
                             <div class="col-md-4">
-                                <button class="btn btn-black">Apply
-                                    Coupon</button>
+                                <button class="btn btn-black">Apply Coupon</button>
                             </div>
                         </div>
                     </div>
@@ -133,8 +134,7 @@
                             <div class="col-md-7">
                                 <div class="row">
                                     <div class="col-md-12 text-right border-bottom mb-5">
-                                        <h3 class="text-black h4 text-uppercase">Cart
-                                            Totals</h3>
+                                        <h3 class="text-black h4 text-uppercase">Cart Totals</h3>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -142,7 +142,7 @@
                                         <span class="text-black">Subtotal</span>
                                     </div>
                                     <div class="col-md-6 text-right">
-                                        <strong class="text-black">
+                                        <strong class="text-black" id="cartSubtotal">
                                             <%= formatCurrency(subtotal) %>
                                         </strong>
                                     </div>
@@ -152,17 +152,19 @@
                                         <span class="text-black">Total</span>
                                     </div>
                                     <div class="col-md-6 text-right">
-                                        <strong class="text-black">
+                                        <strong class="text-black" id="cartTotal">
                                             <%= formatCurrency(total) %>
                                         </strong>
                                     </div>
                                 </div>
 
+
                                 <div class="row">
                                     <div class="col-md-12">
                                         <button class="btn btn-black btn-lg py-3 btn-block"
-                                            onclick="window.location='checkout'">Proceed
-                                            To Checkout</button>
+                                            onclick="window.location='checkout'">
+                                            Proceed To Checkout
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -173,9 +175,8 @@
         </div>
 
         <%- include('../partials/footer') %>
-
             <%- include('../partials/script') %>
                 <script src="/assets/user/js/cart_script.js"></script>
-</body> 
+</body>
 
 </html>

@@ -36,50 +36,42 @@ exports.renderCart = async (req, res) => {
   }
 };
 
-exports.addToCart = async (req, res) => {
+exports.addOrUpdateCart = async (req, res) => {
   try {
     const { productId, quantity } = req.body;
+    const qty = parseInt(quantity) || 1;
+
     if (!productId) {
-      console.error("Error: productId is missing");
       return res
         .status(400)
         .json({ success: false, message: "Product ID missing" });
     }
 
-    const qty = parseInt(quantity) || 1;
-
     if (req.session.user) {
       const userId = req.session.user.id;
-
       let cartItem = await cartRepo.findCartItem(userId, productId);
 
       if (cartItem) {
-        await cartRepo.updateCartItem(cartItem, cartItem.quantity + qty);
+        await cartRepo.updateCartItem(cartItem, qty);
       } else {
         await cartRepo.createCartItem(userId, productId, qty);
       }
     } else {
-      console.log("User not logged in, using session cart");
       if (!req.session.cart) req.session.cart = [];
       const index = req.session.cart.findIndex(
         (item) => item.productId == productId
       );
 
       if (index !== -1) {
-        req.session.cart[index].quantity += qty;
-        console.log("Session cart item updated", req.session.cart[index]);
+        req.session.cart[index].quantity = qty;
       } else {
         req.session.cart.push({ productId, quantity: qty });
-        console.log(
-          "Session cart item added",
-          req.session.cart[req.session.cart.length - 1]
-        );
       }
     }
 
-    res.json({ success: true, message: "Product added to cart" });
+    res.json({ success: true, message: "Cart updated" });
   } catch (error) {
-    console.error("Add to cart ERROR:", error);
+    console.error("Cart add/update ERROR:", error);
     res.status(500).json({ success: false, message: "Something went wrong" });
   }
 };
