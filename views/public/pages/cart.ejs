@@ -41,23 +41,29 @@
                     <form class="col-md-12" method="post">
                         <div class="site-blocks-table">
                             <table class="table">
-                                <thead>
+                                <thead class="table">
                                     <tr>
+                                        <th class="product-remove"></th>
                                         <th class="product-thumbnail">Image</th>
                                         <th class="product-name">Product</th>
                                         <th class="product-price">Price</th>
                                         <th class="product-quantity">Quantity</th>
                                         <th class="product-total">Total</th>
-                                        <th class="product-remove">Remove</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="cartTable">
                                     <% if(cart.length> 0){ %>
                                         <% cart.forEach(item=> { %>
                                             <input type="hidden" id="csrfToken" value="<%= csrfToken %>">
 
                                             <tr data-id="<%= item.product.id %>"
                                                 data-price="<%= item.product.newPrice %>">
+
+                                                <td>
+                                                    <a href="/cart/remove/<%= item.product.id %>"
+                                                        class="btn btn-black btn-sm remove-cart">X</a>
+                                                </td>
+
                                                 <td class="product-thumbnail">
                                                     <img src="/assets/admin/img/products/<%= item.product.main_img %>"
                                                         class="img-fluid" alt="Image">
@@ -71,26 +77,32 @@
                                                     <%= formatCurrency(item.product.newPrice) %>
                                                 </td>
                                                 <td>
-                                                    <div class="quantity-box">
+                                                    <div class="quantity-box" style="    width: 66%;
+    margin-left: 20%;">
                                                         <div
-                                                            class="quantity-container d-flex align-items-center rounded-pill">
-                                                            <button class="qty-btn decrease"
-                                                                type="button">&minus;</button>
-                                                            <input type="text" class="qty-input"
+                                                            class="quantity-container d-flex align-items-center rounded-pill border p-1">
+                                                            <button
+                                                                class="btn btn-sm btn-outline-secondary qty-btn decrease"
+                                                                type="button">
+                                                                &minus;
+                                                            </button>
+                                                            <input type="text"
+                                                                class="form-control qty-input text-center mx-1"
                                                                 value="<%= item.quantity %>" min="1"
-                                                                data-id="<%= item.product.id %>">
-                                                            <button class="qty-btn increase"
-                                                                type="button">&plus;</button>
+                                                                data-id="<%= item.product.id %>" style="width: 60px;">
+                                                            <button
+                                                                class="btn btn-sm btn-outline-secondary qty-btn increase"
+                                                                type="button">
+                                                                &plus;
+                                                            </button>
                                                         </div>
                                                     </div>
+
                                                 </td>
                                                 <td class="row-subtotal">
                                                     <%= formatCurrency(item.product.newPrice * item.quantity) %>
                                                 </td>
-                                                <td>
-                                                    <a href="/cart/remove/<%= item.product.id %>"
-                                                        class="btn btn-black btn-sm">X</a>
-                                                </td>
+
                                             </tr>
                                             <% }) %>
                                                 <% } else { %>
@@ -107,9 +119,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row mb-5">
-                            <div class="col-md-6 mb-3 mb-md-0">
-                                <button class="btn btn-black btn-sm btn-block">Update Cart</button>
-                            </div>
+
                             <div class="col-md-6">
                                 <a href="shop" class="btn btn-outline-black btn-sm btn-block text-white">
                                     Continue Shopping

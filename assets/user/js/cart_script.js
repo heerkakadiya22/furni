@@ -1,8 +1,4 @@
-// ===============================
-// CART SCRIPT
-// ===============================
-
-// Quantity buttons inside cart table
+// Quantity buttons
 document.addEventListener("click", async function (e) {
   if (e.target.classList.contains("qty-btn")) {
     const input = e.target
@@ -16,7 +12,6 @@ document.addEventListener("click", async function (e) {
 
     input.value = value;
 
-    // If we are on cart page (row exists)
     const row = e.target.closest("tr[data-id]");
     if (row) {
       const productId = row.dataset.id;
@@ -36,7 +31,7 @@ document.addEventListener("click", async function (e) {
   }
 });
 
-// Input validation: only numbers allowed
+// Input validation
 document.addEventListener("input", function (e) {
   if (e.target.classList.contains("qty-input")) {
     let value = e.target.value.replace(/\D/g, "");
@@ -81,9 +76,8 @@ if (addBtn) {
   });
 }
 
-// ===============================
+
 // Helper Functions
-// ===============================
 
 // Send update request to backend
 async function updateCart(productId, quantity, csrfToken) {
