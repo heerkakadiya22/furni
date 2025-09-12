@@ -39,6 +39,36 @@ document.addEventListener("input", function (e) {
   }
 });
 
+document.addEventListener("click", async function (e) {
+  if (e.target.classList.contains("remove-cart")) {
+    e.preventDefault();
+    const btn = e.target;
+    const productId = btn.dataset.id;
+    const csrfToken = document.getElementById("csrfToken").value;
+
+    try {
+      const res = await fetch(`/cart/remove/${productId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "x-csrf-token": csrfToken,
+        },
+      });
+
+      if (res.ok) {
+        const row = btn.closest("tr");
+        row.remove();
+        recalcCartTotals();
+        showCartNotification("Item removed from cart!");
+      } else {
+        console.error("Failed to remove item");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+});
+
 // Add to Cart from product details page
 const addBtn = document.getElementById("addToCartBtn");
 if (addBtn) {
@@ -75,8 +105,6 @@ if (addBtn) {
     }
   });
 }
-
-
 // Helper Functions
 
 // Send update request to backend
@@ -102,7 +130,6 @@ async function updateCart(productId, quantity, csrfToken) {
     showCartNotification("Something went wrong while updating cart.");
   }
 }
-
 
 function recalcCartTotals() {
   let subtotal = 0;

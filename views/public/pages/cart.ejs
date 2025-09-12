@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Untree.co">
-    <link rel="shortcut icon" href="favicon.png">
+    <link rel="shortcut icon">
 
     <meta name="description" content />
     <meta name="keywords" content="bootstrap, bootstrap4" />
@@ -29,13 +29,15 @@
                             </h1>
                         </div>
                     </div>
-                    <div class="col-lg-7"></div>
+                    <div class="col-lg-7">
+
+                    </div>
                 </div>
             </div>
         </div>
         <!-- End Hero Section -->
 
-        <div class="untree_co-section before-footer-section">
+        <div class="untree_co-section before-footer-section" style="margin-top: -16%;">
             <div class="container">
                 <div class="row mb-5">
                     <form class="col-md-12" method="post">
@@ -51,34 +53,39 @@
                                         <th class="product-total">Total</th>
                                     </tr>
                                 </thead>
+
+                                <input type="hidden" id="csrfToken" value="<%= csrfToken %>">
                                 <tbody id="cartTable">
                                     <% if(cart.length> 0){ %>
                                         <% cart.forEach(item=> { %>
-                                            <input type="hidden" id="csrfToken" value="<%= csrfToken %>">
 
                                             <tr data-id="<%= item.product.id %>"
                                                 data-price="<%= item.product.newPrice %>">
 
                                                 <td>
-                                                    <a href="/cart/remove/<%= item.product.id %>"
-                                                        class="btn btn-black btn-sm remove-cart">X</a>
+                                                    <button class="btn btn-black btn-sm remove-cart"
+                                                        data-id="<%= item.product.id %>">X</button>
+                                                </td>
+                                                <td class="product-thumbnail">
+                                                    <a href="/product/<%= item.product.sku %>">
+                                                        <img src="/assets/admin/img/products/<%= item.product.main_img %>"
+                                                            class="img-fluid rounded-3" alt="Image">
+                                                    </a>
+                                                </td>
+                                                <td class="product-name" style="  width: 30%;">
+                                                    <a href="/product/<%= item.product.sku %>"
+                                                        style="text-decoration: none;">
+                                                        <h2 class="h5 text-black">
+                                                            <%= item.product.name %>
+                                                        </h2>
+                                                    </a>
                                                 </td>
 
-                                                <td class="product-thumbnail">
-                                                    <img src="/assets/admin/img/products/<%= item.product.main_img %>"
-                                                        class="img-fluid" alt="Image">
-                                                </td>
-                                                <td class="product-name">
-                                                    <h2 class="h5 text-black">
-                                                        <%= item.product.name %>
-                                                    </h2>
-                                                </td>
                                                 <td>
                                                     <%= formatCurrency(item.product.newPrice) %>
                                                 </td>
                                                 <td>
-                                                    <div class="quantity-box" style="    width: 66%;
-    margin-left: 20%;">
+                                                    <div class="quantity-box" style="width: 60%; margin-left: 25%;">
                                                         <div
                                                             class="quantity-container d-flex align-items-center rounded-pill border p-1">
                                                             <button

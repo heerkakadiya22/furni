@@ -5,11 +5,8 @@ const { Op } = require("sequelize");
 
 exports.renderShop = async (req, res) => {
   try {
-    console.time("shop-products");
     const products = await productRepository.findAll({ isActive: true });
-    console.timeEnd("shop-products");
 
-    console.time("shop-categories");
     let categories = [];
     if (products.length > 0) {
       const uniq = Array.from(
@@ -17,9 +14,7 @@ exports.renderShop = async (req, res) => {
       );
       categories = uniq.map((name) => ({ name }));
     }
-    console.timeEnd("shop-categories");
 
-    console.time("shop-render");
     res.render("shop", {
       title: "Shop",
       csrfToken: req.csrfToken(),
@@ -28,7 +23,6 @@ exports.renderShop = async (req, res) => {
       products,
       categories,
     });
-    console.timeEnd("shop-render");
   } catch (error) {
     console.error("Error rendering shop page:", error);
     res.status(500).send("Something went wrong.");

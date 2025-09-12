@@ -48,7 +48,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-
   // Remove from wishlist page
   document.body.addEventListener("click", async function (e) {
     const btn = e.target.closest(".remove-wishlist");
@@ -157,44 +156,47 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-//shop.ejs
+// Shop page filtering
+document.addEventListener("DOMContentLoaded", () => {
+  const searchBox = document.getElementById("searchBox");
+  const categoryBtn = document.getElementById("categoryBtn");
+  const categoryMenu = document.getElementById("categoryMenu");
+  const filterBtn = document.getElementById("filterBtn");
+  const products = document.querySelectorAll(".product-item-wrapper");
 
-const searchBox = document.getElementById("searchBox");
-const categoryBtn = document.getElementById("categoryBtn");
-const categoryMenu = document.getElementById("categoryMenu");
-const filterBtn = document.getElementById("filterBtn");
-const products = document.querySelectorAll(".product-item-wrapper");
+  if (
+    searchBox &&
+    categoryBtn &&
+    categoryMenu &&
+    filterBtn &&
+    products.length > 0
+  ) {
+    let selectedCategory = "all";
 
-let selectedCategory = "all";
+    categoryMenu.addEventListener("click", (e) => {
+      if (e.target.dataset.category) {
+        selectedCategory = e.target.dataset.category.toLowerCase();
+        categoryBtn.textContent = e.target.textContent;
+      }
+    });
 
-// Handle category selection
-categoryMenu.addEventListener("click", (e) => {
-  if (e.target.dataset.category) {
-    selectedCategory = e.target.dataset.category.toLowerCase();
-    categoryBtn.textContent = e.target.textContent;
+    function filterProducts() {
+      const searchValue = searchBox.value.toLowerCase();
+
+      products.forEach((product) => {
+        const name = product.dataset.name.toLowerCase();
+        const category = product.dataset.category?.toLowerCase();
+
+        const matchesSearch = name.includes(searchValue);
+        const matchesCategory =
+          selectedCategory === "all" || category === selectedCategory;
+
+        product.style.display =
+          matchesSearch && matchesCategory ? "block" : "none";
+      });
+    }
+
+    filterBtn.addEventListener("click", filterProducts);
+    searchBox.addEventListener("input", filterProducts);
   }
 });
-
-// Filter function
-function filterProducts() {
-  const searchValue = searchBox.value.toLowerCase();
-
-  products.forEach((product) => {
-    const name = product.dataset.name.toLowerCase();
-    const category = product.dataset.category?.toLowerCase();
-
-    const matchesSearch = name.includes(searchValue);
-    const matchesCategory =
-      selectedCategory === "all" || category === selectedCategory;
-
-    if (matchesSearch && matchesCategory) {
-      product.style.display = "block";
-    } else {
-      product.style.display = "none";
-    }
-  });
-}
-
-// Events
-filterBtn.addEventListener("click", filterProducts);
-searchBox.addEventListener("input", filterProducts);

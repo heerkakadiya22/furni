@@ -32,6 +32,19 @@ class ProductRepository {
     });
   }
 
+  async findByIds(ids) {
+    return await Product.findAll({
+      where: { id: { [Op.in]: ids } },
+      include: [
+        {
+          model: Category,
+          as: "category",
+          attributes: ["id", "name"],
+        },
+      ],
+    });
+  }
+
   async findByName(name) {
     return await Product.findOne({
       where: { name },

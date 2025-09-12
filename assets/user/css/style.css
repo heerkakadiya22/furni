@@ -1054,10 +1054,11 @@ textarea {
   padding: 30px;
   text-align: center;
   border-width: 0px !important;
-  vertical-align: middle;
+  vertical-align: inherit;
   color: rgba(0, 0, 0, 0.8);
   font-size: 18px;
 }
+
 .site-blocks-table td {
   padding: 20px;
   text-align: center;

@@ -10,16 +10,26 @@ exports.renderCart = async (req, res) => {
       cartItems = await cartRepo.getUserCart(req.session.user.id);
     } else {
       const sessionCart = req.session.cart || [];
-      const productIds = sessionCart.map((i) => i.productId);
-      const products = await productRepo.findBySkus(productIds);
+      if (sessionCart.length > 0) {
+        const productIds = sessionCart.map((i) => i.productId);
 
-      cartItems = sessionCart.map((item) => {
-        const product = products.find((p) => p.sku == item.productId);
-        return { product, quantity: item.quantity };
-      });
+        const products = await productRepo.findByIds(productIds);
+
+        cartItems = sessionCart
+          .map((item) => {
+            const product = products.find((p) => p.id == item.productId);
+            if (!product) {
+              return null;
+            }
+            return { product, quantity: item.quantity };
+          })
+          .filter(Boolean);
+      }
     }
 
-    const totals = cartHelper.calculateCartTotals(cartItems);
+    const totals = cartItems.length
+      ? cartHelper.calculateCartTotals(cartItems)
+      : { subtotal: 0, total: 0 };
 
     res.render("cart", {
       title: "Cart",
@@ -31,7 +41,6 @@ exports.renderCart = async (req, res) => {
       session: req.session,
     });
   } catch (error) {
-    console.error(error);
     res.status(500).send("Something went wrong");
   }
 };
@@ -86,9 +95,9 @@ exports.removeFromCart = async (req, res) => {
       req.session.cart = req.session.cart.filter((i) => i.productId != id);
     }
 
-    res.redirect("/cart");
+    res.json({ success: true, message: "Item removed from cart" });
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Something went wrong");
+    console.error("Cart remove ERROR:", error);
+    res.status(500).json({ success: false, message: "Something went wrong" });
   }
 };

@@ -98,7 +98,7 @@
                                     <!-- Quantity -->
 
 
-                                    <div class="quantity-box" style="    width: 66%;     margin-left: 35%;">
+                                    <div class="quantity-box" style="width: 66%;margin-left: 35%;">
                                         <div
                                             class="quantity-container d-flex align-items-center rounded-pill border p-1">
                                             <button class="btn btn-sm btn-outline-secondary qty-btn decrease"
@@ -199,11 +199,12 @@
 
         <%- include('../partials/footer') %>
             <%- include('../partials/script') %>
-                <script>
-                    window.isLoggedIn = <%= session?.user ? true : false %>;
-                    console.log("Logged in?", window.isLoggedIn);
-                </script>
+                <script src="/assets/user/js/productDetails.js"></script>
                 <script src="/assets/user/js/cart_script.js"></script>
+                <script>
+                    window.isLoggedIn = <%= (session && session.user) ? true : false %>;
+                    console.log("Logged in?", window.isLoggedIn, typeof window.isLoggedIn);
+                </script>
 </body>
 
 </html>
