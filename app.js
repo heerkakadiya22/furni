@@ -8,7 +8,6 @@ const CONFIG = require("./config/config");
 const ENV = process.env.NODE_ENV || "development";
 require("./config/db");
 
-// Routes
 const indexRoute = require("./routes/indexRoute");
 
 const conditionCsrf = require("./middleware/conditionalCsrf");
@@ -36,10 +35,9 @@ app.set("views", [
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Serve static files FIRST
+
 app.use("/assets", express.static(path.join(__dirname, "assets")));
 
-// ✅ Setup session
 app.use(
   session({
     secret: CONFIG[ENV].secretKey,
@@ -49,13 +47,12 @@ app.use(
   })
 );
 
-// ✅ CSRF protection middleware
+
 app.use(conditionCsrf);
 app.use(refreshUserSession);
 app.use(settingsMiddleware);
 app.use(currencyFormatter);
 
-// Routes
 app.use(indexRoute);
 
 const PORT = process.env.PORT || 3000;

@@ -116,7 +116,7 @@ exports.handleLogin = async (req, res) => {
 
       if (user.email_expired && new Date(user.email_expired) < now) {
         req.session.error = "Verification link expired.";
-        req.session.resendEligibleEmail = user.email; // show resend
+        req.session.resendEligibleEmail = user.email; 
       } else {
         req.session.error = "Please verify your email to continue.";
       }

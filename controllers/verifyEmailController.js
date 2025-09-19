@@ -10,7 +10,6 @@ exports.verifyEmail = async (req, res) => {
   }
 
   try {
-    // Step 1: Fetch user
     const user = await authRepo.findByEmail(email);
     console.log("🔍 User fetched:", {
       email: user?.email,
@@ -21,7 +20,7 @@ exports.verifyEmail = async (req, res) => {
     if (!user) return res.send("User not found.");
 
     if (user.verifiedAt) {
-      return res.send("✅ Email already verified.");
+      return res.send("Email already verified.");
     }
 
     const now = new Date();

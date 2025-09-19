@@ -72,7 +72,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
           row.remove();
 
-          // Check if no <tr> left inside tbody
           if (wishlistTable.querySelectorAll("tr").length === 0) {
             wishlistTable.innerHTML = `
             <tr>

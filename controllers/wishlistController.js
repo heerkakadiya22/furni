@@ -11,7 +11,7 @@ exports.renderWishlist = async (req, res) => {
       include: [
         {
           model: Product,
-          attributes: ["name", "newPrice", "oldPrice", "main_img", "sku"],
+          attributes: ["id", "name", "newPrice", "oldPrice", "main_img", "sku"],
         },
       ],
       order: [["createdAt", "DESC"]],

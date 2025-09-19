@@ -1,7 +1,6 @@
 const { Sequelize } = require("sequelize");
 const CONFIG = require("./config");
 
-// Get current environment: development, production, etc.
 const env = process.env.NODE_ENV || "development";
 const dbConfig = CONFIG[env];
 
@@ -17,7 +16,6 @@ const sequelize = new Sequelize(
   }
 );
 
-// Test DB connection
 sequelize
   .authenticate()
   .then(() => {

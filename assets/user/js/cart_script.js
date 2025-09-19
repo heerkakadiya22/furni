@@ -57,9 +57,21 @@ document.addEventListener("click", async function (e) {
 
       if (res.ok) {
         const row = btn.closest("tr");
+        const cartTable = document.querySelector("#cartTable");
         row.remove();
+
+        if (cartTable.querySelectorAll("tr").length === 0) {
+          cartTable.innerHTML = `
+            <tr>
+              <td colspan="6" class="text-center text-muted">
+                Product not found in cart
+              </td>
+            </tr>
+          `;
+        }
+
         recalcCartTotals();
-        showCartNotification("Item removed from cart!");
+        showCartNotification(data.message);
       } else {
         console.error("Failed to remove item");
       }
@@ -69,17 +81,16 @@ document.addEventListener("click", async function (e) {
   }
 });
 
-// Add to Cart from product details page
-const addBtn = document.getElementById("addToCartBtn");
-if (addBtn) {
-  addBtn.addEventListener("click", async () => {
+// Add to Cart
+function handleAddToCart(btn) {
+  btn.addEventListener("click", async () => {
     const csrfToken = document.getElementById("csrfToken").value;
-    const container = addBtn.closest(".product-detail") || document;
+    const container = btn.closest(".product-detail") || document;
     const qtyInput = container.querySelector(".qty-input");
 
     const productData = {
-      productId: addBtn.dataset.id,
-      quantity: parseInt(qtyInput.value) || 1,
+      productId: btn.dataset.id,
+      quantity: qtyInput ? parseInt(qtyInput.value) || 1 : 1,
     };
 
     try {
@@ -93,19 +104,23 @@ if (addBtn) {
       });
 
       const result = await response.json();
-
-      if (result.success) {
-        showCartNotification(`Added ${productData.quantity} item(s) to cart!`);
-      } else {
-        showCartNotification(result.message || "Failed to add item.");
-      }
+      if (result.success) showCartNotification(`Added to cart!`);
+      else showCartNotification(result.message || "Failed to add item.");
     } catch (err) {
       console.error("Add to cart ERROR:", err);
       showCartNotification("Something went wrong while adding product.");
     }
   });
 }
-// Helper Functions
+
+// Product Detail page
+const addBtn = document.getElementById("addToCartBtn");
+if (addBtn) handleAddToCart(addBtn);
+
+// Wishlist page
+document
+  .querySelectorAll(".add-to-cart")
+  .forEach((btn) => handleAddToCart(btn));
 
 // Send update request to backend
 async function updateCart(productId, quantity, csrfToken) {
@@ -151,6 +166,8 @@ function formatCurrency(amount) {
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   }).format(amount);
 }
 
