@@ -99,8 +99,10 @@
                                                         <%= new Date(item.createdAt).toLocaleDateString('en-US', {
                                                             year: 'numeric' , month: 'long' , day: 'numeric' }) %>
                                                     </td>
+                                                    
                                                     <td class="product-addtocart">
                                                         <a href="javascript:void(0)" data-id="<%= item.Product.id %>"
+                                                            data-sku="<%= item.Product.sku %>"
                                                             class="btn btn-secondary btn-sm add-to-cart">
                                                             <i class="fa fa-shopping-cart"></i> Add To Cart
                                                         </a>

@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Remove from wishlist page
   document.body.addEventListener("click", async function (e) {
-    const btn = e.target.closest(".remove-wishlist");
+    const btn = e.target.closest([".remove-wishlist", ".add-to-cart"]);
     if (btn) {
       e.preventDefault();
 
@@ -74,15 +74,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
           if (wishlistTable.querySelectorAll("tr").length === 0) {
             wishlistTable.innerHTML = `
-            <tr>
-              <td colspan="6" class="text-center text-muted">
-                Product not found in wishlist
-              </td>
-            </tr>
-          `;
+          <tr>
+            <td colspan="6" class="text-center text-muted">
+              Product not found in wishlist
+            </td>
+          </tr>
+        `;
           }
 
-          showWishlistNotification(data.message);
+          if (btn.classList.contains("add-to-cart")) {
+            showWishlistNotification("Added to cart!");
+          } else {
+            showWishlistNotification(data.message);
+          }
         } else {
           alert(data.message || "Failed to remove product");
         }
