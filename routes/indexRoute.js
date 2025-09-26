@@ -18,6 +18,7 @@ const shopRoute = require("./shopRoute");
 const cartRoute = require("./cartRoute");
 const checkoutRoute = require("./checkoutRoute");
 const userProfileRoute = require("./userProfileRoute");
+const userPasswordRoute = require("./userPasswordRoute");
 
 router.get("/", indexController.renderIndex);
 
@@ -37,5 +38,6 @@ router.use(wishlistRoute);
 router.use(cartRoute);
 router.use(checkoutRoute);
 router.use(userProfileRoute);
+router.use(userPasswordRoute);
 
 module.exports = router;
