@@ -6,6 +6,7 @@ const exemptPaths = [
   "/adduser",
   "/setting/general/update",
   "/addproduct",
+  "/user-profile",
 ];
 
 const exemptRegexPaths = [/^\/users\/\d+\/edit$/, /^\/products\/\d+\/edit$/];

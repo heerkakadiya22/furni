@@ -193,7 +193,13 @@
 
         <%- include('../partials/footer') %>
             <%- include('../partials/script') %>
+                <script>
+                    window.isLoggedIn = <%= (session && session.user) ? true : false %>;
+                    console.log("Logged in?", window.isLoggedIn, typeof window.isLoggedIn);
+                </script>
                 <script src="/assets/user/js/cart_script.js"></script>
+                <script src="/assets/user/js/checkout_script.js"></script>
+
 </body>
 
 </html>

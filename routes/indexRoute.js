@@ -16,6 +16,8 @@ const productRoute = require("./productRoute");
 const wishlistRoute = require("./wishlistRoute");
 const shopRoute = require("./shopRoute");
 const cartRoute = require("./cartRoute");
+const checkoutRoute = require("./checkoutRoute");
+const userProfileRoute = require("./userProfileRoute");
 
 router.get("/", indexController.renderIndex);
 
@@ -33,5 +35,7 @@ router.use(settingsRoute);
 router.use(productRoute);
 router.use(wishlistRoute);
 router.use(cartRoute);
+router.use(checkoutRoute);
+router.use(userProfileRoute);
 
 module.exports = router;

@@ -23,6 +23,7 @@ app.set("views", [
   path.join(__dirname, "views/public"),
   path.join(__dirname, "views/public/auth"),
   path.join(__dirname, "views/public/pages"),
+  path.join(__dirname, "views/public/account"),
   path.join(__dirname, "views/dashboard"),
   path.join(__dirname, "views/dashboard/roles"),
   path.join(__dirname, "views/dashboard/account"),
@@ -35,7 +36,6 @@ app.set("views", [
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 app.use("/assets", express.static(path.join(__dirname, "assets")));
 
 app.use(
@@ -46,7 +46,6 @@ app.use(
     saveUninitialized: false,
   })
 );
-
 
 app.use(conditionCsrf);
 app.use(refreshUserSession);
