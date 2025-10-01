@@ -63,13 +63,11 @@ exports.renderProductDetails = async (req, res) => {
     let cartQuantity = 1;
 
     if (req.session.user) {
-      console.log("Logged-in user detected:", req.session.user.id);
       const cartItem = await cartRepo.findCartItem(
         req.session.user.id,
         product.id
       );
       if (cartItem) cartQuantity = cartItem.quantity;
-      console.log("DB cart quantity:", cartQuantity);
     } else {
       console.log("Guest user, checking session cart");
       if (req.session.cart) {

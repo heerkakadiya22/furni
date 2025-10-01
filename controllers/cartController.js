@@ -45,7 +45,8 @@ exports.renderCart = async (req, res) => {
   }
 };
 
-exports.addOrUpdateCart = async (req, res) => {
+// Add to Cart
+exports.addToCart = async (req, res) => {
   try {
     const { productId, quantity } = req.body;
     const qty = parseInt(quantity) || 1;
@@ -61,7 +62,7 @@ exports.addOrUpdateCart = async (req, res) => {
       let cartItem = await cartRepo.findCartItem(userId, productId);
 
       if (cartItem) {
-        await cartRepo.updateCartItem(cartItem, qty);
+        await cartRepo.updateCartItem(cartItem, cartItem.quantity + qty);
       } else {
         await cartRepo.createCartItem(userId, productId, qty);
       }
@@ -72,15 +73,50 @@ exports.addOrUpdateCart = async (req, res) => {
       );
 
       if (index !== -1) {
-        req.session.cart[index].quantity = qty;
+        req.session.cart[index].quantity += qty;
       } else {
         req.session.cart.push({ productId, quantity: qty });
       }
     }
 
-    res.json({ success: true, message: "Cart updated" });
+    res.json({ success: true, message: "Item added to cart" });
   } catch (error) {
-    console.error("Cart add/update ERROR:", error);
+    console.error("Cart add ERROR:", error);
+    res.status(500).json({ success: false, message: "Something went wrong" });
+  }
+};
+
+// Update Cart Quantity
+exports.updateCartQuantity = async (req, res) => {
+  try {
+    const { productId, quantity } = req.body;
+    const qty = parseInt(quantity);
+
+    if (!productId || isNaN(qty) || qty < 1) {
+      return res.status(400).json({ success: false, message: "Invalid data" });
+    }
+
+    if (req.session.user) {
+      const userId = req.session.user.id;
+      let cartItem = await cartRepo.findCartItem(userId, productId);
+
+      if (cartItem) {
+        await cartRepo.updateCartItem(cartItem, qty);
+      }
+    } else {
+      if (!req.session.cart) req.session.cart = [];
+      const index = req.session.cart.findIndex(
+        (item) => item.productId == productId
+      );
+
+      if (index !== -1) {
+        req.session.cart[index].quantity = qty;
+      }
+    }
+
+    res.json({ success: true, message: "Quantity updated" });
+  } catch (error) {
+    console.error("Cart update ERROR:", error);
     res.status(500).json({ success: false, message: "Something went wrong" });
   }
 };

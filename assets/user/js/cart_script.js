@@ -94,7 +94,7 @@ function handleAddToCart(btn) {
     };
 
     try {
-      const response = await fetch("/cart", {
+      const response = await fetch("/cart/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -125,7 +125,7 @@ document
 // Send update request to backend
 async function updateCart(productId, quantity, csrfToken) {
   try {
-    const response = await fetch("/cart", {
+    const response = await fetch("/cart/update", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

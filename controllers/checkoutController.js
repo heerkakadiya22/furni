@@ -1,7 +1,14 @@
-exports.renderCheckout = (req, res) => {
+const authRepo = require("../repositories/authRepository");
+
+exports.renderCheckout = async (req, res) => {
   try {
+    const userId = req.session.user.id;
+    const user = await authRepo.findById(userId);
+
     res.render("checkout", {
       title: "checkout",
+      ...user.dataValues,
+      user: req.session.user,
       csrfToken: req.csrfToken(),
       currentPage: "checkout",
       session: req.session,
