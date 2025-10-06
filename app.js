@@ -16,6 +16,7 @@ const {
   settingsMiddleware,
   currencyFormatter,
 } = require("./middleware/settingsMiddleware");
+const { cartCount } = require("./middleware/cartCountMiddleware");
 
 app.set("view engine", "ejs");
 app.set("views", [
@@ -51,6 +52,7 @@ app.use(conditionCsrf);
 app.use(refreshUserSession);
 app.use(settingsMiddleware);
 app.use(currencyFormatter);
+app.use(cartCount);
 
 app.use(indexRoute);
 

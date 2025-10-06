@@ -104,6 +104,7 @@ function handleAddToCart(btn) {
       });
 
       const result = await response.json();
+
       if (result.success) showCartNotification(`Added to cart!`);
       else showCartNotification(result.message || "Failed to add item.");
     } catch (err) {
@@ -113,11 +114,9 @@ function handleAddToCart(btn) {
   });
 }
 
-// Product Detail page
 const addBtn = document.getElementById("addToCartBtn");
 if (addBtn) handleAddToCart(addBtn);
 
-// Wishlist page
 document
   .querySelectorAll(".add-to-cart")
   .forEach((btn) => handleAddToCart(btn));

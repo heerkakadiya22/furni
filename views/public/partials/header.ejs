@@ -19,6 +19,25 @@
 	.dropdown-item.text-danger:hover i {
 		color: #dc3545 !important;
 	}
+
+	.badge {
+		font-size: 0.75rem;
+		padding: 0.25em 0.5em;
+		border-radius: 50%;
+		color: white;
+	}
+
+	.position-relative {
+		position: relative;
+	}
+
+	.position-absolute {
+		position: absolute;
+	}
+
+	.translate-middle {
+		transform: translate(-50%, -50%);
+	}
 </style>
 
 <!-- Start Header/Navigation -->
@@ -106,11 +125,19 @@
 									<% } %>
 							</li>
 
-							<li>
+							<li class="nav-item position-relative">
 								<a class="nav-link <%= currentPage === 'cart' ? 'active' : '' %>" href="/cart">
 									<img src="/assets/user/images/cart.svg">
+									<% if (cartCount> 0) { %>
+										<span
+											class="badge bg-secondary position-absolute top-3 start-100 translate-middle">
+											<%= cartCount %>
+										</span>
+										<% } %>
 								</a>
 							</li>
+
+
 			</ul>
 
 		</div>

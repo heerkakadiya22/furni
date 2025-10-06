@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const registerRepo = require("../repositories/authRepository");
 const { v4: uuidv4 } = require("uuid");
 const sendVerificationEmail = require("../utils/sendVerificationEmail");
+const cartRepo = require("../repositories/cartRepository");
 
 exports.renderAuth = (req, res) => {
   const error = req.session.error || null;
@@ -116,7 +117,7 @@ exports.handleLogin = async (req, res) => {
 
       if (user.email_expired && new Date(user.email_expired) < now) {
         req.session.error = "Verification link expired.";
-        req.session.resendEligibleEmail = user.email; 
+        req.session.resendEligibleEmail = user.email;
       } else {
         req.session.error = "Please verify your email to continue.";
       }
@@ -132,6 +133,22 @@ exports.handleLogin = async (req, res) => {
       roleId: user.roleId,
     };
 
+    if (req.session.cart && req.session.cart.length > 0) {
+      for (let item of req.session.cart) {
+        const existing = await cartRepo.findCartItem(user.id, item.productId);
+        if (existing) {
+          await cartRepo.updateCartItem(
+            existing,
+            existing.quantity + item.quantity
+          );
+        } else {
+          await cartRepo.createCartItem(user.id, item.productId, item.quantity);
+        }
+      }
+      req.session.cart = [];
+    }
+
+    const redirectTo = req.query.redirect || "/";
     if (user.roleId === 1) {
       return req.session.save(() => {
         return res.send(`
@@ -139,7 +156,7 @@ exports.handleLogin = async (req, res) => {
             <head>
               <script>
                 window.open('/dashboard', '_blank');
-                window.location.href = '/';  
+                window.location.replace('${redirectTo}');
               </script>
             </head>
             <body>
@@ -149,7 +166,7 @@ exports.handleLogin = async (req, res) => {
         `);
       });
     } else {
-      return req.session.save(() => res.redirect("/"));
+      return req.session.save(() => res.redirect(redirectTo));
     }
   } catch (err) {
     console.error("Login error:", err);

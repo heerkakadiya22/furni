@@ -1,3 +1,4 @@
+const session = require("express-session");
 const authRepo = require("../repositories/authRepository");
 const { validationResult } = require("express-validator");
 
@@ -20,6 +21,7 @@ exports.renderPasswordPage = function (req, res) {
     success,
     action,
     email,
+    session: req.session,
     currentPage: "auth",
     title: "forget-password",
   });
