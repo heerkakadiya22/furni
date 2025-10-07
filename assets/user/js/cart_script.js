@@ -147,17 +147,26 @@ async function updateCart(productId, quantity, csrfToken) {
 
 function recalcCartTotals() {
   let subtotal = 0;
+
   document.querySelectorAll("tr[data-id]").forEach((row) => {
     const price = parseFloat(row.dataset.price);
     const qty = parseInt(row.querySelector(".qty-input").value) || 1;
     subtotal += price * qty;
   });
 
-  const total = subtotal;
+  const discount = 0;
+  const deliveryFee = 50; 
+
+  const total = subtotal - discount + deliveryFee;
 
   const subtotalEl = document.getElementById("cartSubtotal");
+  const discountEl = document.getElementById("cartDiscount");
+  const deliveryEl = document.getElementById("cartDelivery");
   const totalEl = document.getElementById("cartTotal");
+
   if (subtotalEl) subtotalEl.textContent = formatCurrency(subtotal);
+  if (discountEl) discountEl.textContent = formatCurrency(discount);
+  if (deliveryEl) deliveryEl.textContent = formatCurrency(deliveryFee);
   if (totalEl) totalEl.textContent = formatCurrency(total);
 }
 

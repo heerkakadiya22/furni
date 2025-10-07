@@ -27,6 +27,10 @@ exports.renderCart = async (req, res) => {
       }
     }
 
+    const hasItems = cartItems.length > 0;
+    const deliveryFee = hasItems ? 50 : 0;
+    const discount = hasItems ? 0 : 0;
+
     const totals = cartItems.length
       ? cartHelper.calculateCartTotals(cartItems)
       : { subtotal: 0, total: 0 };
@@ -36,6 +40,8 @@ exports.renderCart = async (req, res) => {
       cart: cartItems,
       subtotal: totals.subtotal.toFixed(2),
       total: totals.total.toFixed(2),
+      deliveryFee: deliveryFee.toFixed(2),
+      discount: discount.toFixed(2),
       csrfToken: req.csrfToken(),
       currentPage: "Cart",
       session: req.session,

@@ -4,8 +4,11 @@ module.exports = {
     cartItems.forEach((item) => {
       subtotal += item.product.newPrice * item.quantity;
     });
-    const total = subtotal;
-    return { subtotal, total };
+    const discount = 0;
+    const deliveryFee = 50;
+    const total = subtotal - discount + deliveryFee;
+
+    return { subtotal, total, discount, deliveryFee };
   },
 
   findCartItem(cartItems, productId) {

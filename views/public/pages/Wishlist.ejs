@@ -38,7 +38,7 @@
         </div>
         <!-- End Hero Section -->
 
-        <div class="untree_co-section before-footer-section">
+        <div class="untree_co-section before-footer-section" style="margin-top: -16%;">
             <div class="container">
                 <div class="row mb-5">
                     <form class="col-md-12" method="post">
@@ -46,8 +46,6 @@
                             <table class="table">
                                 <thead class="table">
                                     <tr>
-                                        <th></th>
-                                        <th>Image</th>
                                         <th>Product</th>
                                         <th>Price</th>
                                         <th>Added On</th>
@@ -63,28 +61,21 @@
                                         <% } else { %>
                                             <% products.forEach(item=> { %>
                                                 <tr>
-                                                    <td>
-                                                        <a href="#" class="btn btn-black btn-sm remove-wishlist"
-                                                            data-sku="<%= item.Product.sku %>">
-                                                            ✕
-                                                        </a>
-                                                    </td>
+
                                                     <input type="hidden" id="csrfToken" value="<%= csrfToken %>">
 
-                                                    <td class="product-thumbnail">
-                                                        <a href="/product/<%= item.Product.sku %>">
+                                                    <td class="product-name">
+                                                        <a href="/product/<%= item.Product.sku %>"
+                                                            style="text-decoration: none; display: flex;">
                                                             <img src="/assets/admin/img/products/<%= item.Product.main_img %>"
                                                                 alt="<%= item.Product.name %>"
-                                                                class="img-fluid rounded-3">
-                                                        </a>
-                                                    </td>
-                                                    <td class="product-name">
-                                                        <h2 class="h5 text-black">
-                                                            <a href="/product/<%= item.Product.sku %>"
-                                                                style="text-decoration: none;">
+                                                                class="img-fluid rounded-3"
+                                                                style="  max-width: 25%; margin-right: 5%;">
+
+                                                            <h2 class="h5 text-black align-content-center">
                                                                 <%= item.Product.name %>
-                                                            </a>
-                                                        </h2>
+                                                            </h2>
+                                                        </a>
                                                     </td>
 
                                                     <td>
@@ -105,6 +96,12 @@
                                                             data-sku="<%= item.Product.sku %>"
                                                             class="btn btn-secondary btn-sm add-to-cart">
                                                             <i class="fa fa-shopping-cart"></i> Add To Cart
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a href="#" class="btn btn-black btn-sm remove-wishlist"
+                                                            data-sku="<%= item.Product.sku %>">
+                                                            ✕
                                                         </a>
                                                     </td>
 

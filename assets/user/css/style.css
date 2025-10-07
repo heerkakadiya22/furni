@@ -1042,6 +1042,7 @@ textarea {
 }
 
 .site-blocks-table {
+  margin-top: 10%;
   overflow: auto;
 }
 .site-blocks-table .product-thumbnail {
@@ -1065,6 +1066,11 @@ textarea {
   vertical-align: middle;
   color: rgba(0, 0, 0, 0.8);
 }
+
+.product-name {
+  width: 45%;
+}
+
 .site-blocks-table tbody tr:first-child td {
   border-top: 1px solid #3b5d50 !important;
 }
