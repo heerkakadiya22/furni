@@ -126,16 +126,16 @@
 							</li>
 
 							<li class="nav-item position-relative">
-								<a class="nav-link <%= currentPage === 'cart' ? 'active' : '' %>" href="/cart">
-									<img src="/assets/user/images/cart.svg">
-									<% if (cartCount> 0) { %>
-										<span
-											class="badge bg-secondary position-absolute top-3 start-100 translate-middle">
-											<%= cartCount %>
-										</span>
-										<% } %>
+								<a class="nav-link" href="/cart">
+									<img src="/assets/user/images/cart.svg" alt="Cart">
+									<span id="cartCountBadge"
+										class="badge bg-secondary position-absolute top-2 start-100 translate-middle"
+										style="<%= cartCount > 0 ? '' : 'display:none;' %>">
+										<%= cartCount %>
+									</span>
 								</a>
 							</li>
+
 
 
 			</ul>

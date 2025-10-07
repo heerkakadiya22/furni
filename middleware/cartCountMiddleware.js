@@ -1,15 +1,32 @@
-const cartRepository = require("../repositories/cartRepository");
+const cartRepo = require("../repositories/cartRepository");
+const productRepo = require("../repositories/productRepository");
 
 async function cartCount(req, res, next) {
-  let count = 0;
+  let cartItems = [];
+
   if (req.session.user) {
-    const cartItems = await cartRepository.getUserCart(req.session.user.id);
-    count = cartItems.length;
+    cartItems = await cartRepo.getUserCart(req.session.user.id);
+  } else {
+    const sessionCart = req.session.cart || [];
+    if (sessionCart.length > 0) {
+      const productIds = sessionCart.map((i) => i.productId);
+      const products = await productRepo.findByIds(productIds);
+
+      cartItems = sessionCart
+        .map((item) => {
+          const product = products.find((p) => p.id == item.productId);
+          if (!product) return null;
+          return { product, quantity: item.quantity };
+        })
+        .filter(Boolean);
+    }
   }
-  res.locals.cartCount = count;
+
+  res.locals.cartCount = cartItems.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
   next();
 }
 
-module.exports = {
-  cartCount,
-};
+module.exports = { cartCount };

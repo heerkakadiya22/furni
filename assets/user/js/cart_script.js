@@ -54,11 +54,12 @@ document.addEventListener("click", async function (e) {
           "x-csrf-token": csrfToken,
         },
       });
+      const data = await res.json();
 
-      if (res.ok) {
+      if (res.ok && data.success) {
         const row = btn.closest("tr");
+        if (row) row.remove();
         const cartTable = document.querySelector("#cartTable");
-        row.remove();
 
         if (cartTable.querySelectorAll("tr").length === 0) {
           cartTable.innerHTML = `
@@ -71,6 +72,11 @@ document.addEventListener("click", async function (e) {
         }
 
         recalcCartTotals();
+        const badge = document.getElementById("cartCountBadge");
+        if (badge && data.cartCount !== undefined) {
+          badge.textContent = data.cartCount;
+          badge.style.display = data.cartCount > 0 ? "inline-block" : "none";
+        }
         showCartNotification(data.message);
       } else {
         console.error("Failed to remove item");
@@ -105,8 +111,14 @@ function handleAddToCart(btn) {
 
       const result = await response.json();
 
-      if (result.success) showCartNotification(`Added to cart!`);
-      else showCartNotification(result.message || "Failed to add item.");
+      if (result.success) {
+        showCartNotification(result.message || "Added to cart!");
+      }
+      const badge = document.getElementById("cartCountBadge");
+      if (badge) {
+        badge.textContent = result.cartCount;
+        badge.style.display = result.cartCount > 0 ? "inline-block" : "none";
+      } else showCartNotification(result.message || "Failed to add item.");
     } catch (err) {
       console.error("Add to cart ERROR:", err);
       showCartNotification("Something went wrong while adding product.");
@@ -155,7 +167,7 @@ function recalcCartTotals() {
   });
 
   const discount = 0;
-  const deliveryFee = 50; 
+  const deliveryFee = 50;
 
   const total = subtotal - discount + deliveryFee;
 

@@ -72,6 +72,11 @@ exports.addToCart = async (req, res) => {
       } else {
         await cartRepo.createCartItem(userId, productId, qty);
       }
+
+      const cartItems = await cartRepo.getUserCart(userId);
+      const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+      res.json({ success: true, message: "Item added to cart", cartCount });
     } else {
       if (!req.session.cart) req.session.cart = [];
       const index = req.session.cart.findIndex(
@@ -83,9 +88,21 @@ exports.addToCart = async (req, res) => {
       } else {
         req.session.cart.push({ productId, quantity: qty });
       }
-    }
+      const productIds = req.session.cart.map((i) => i.productId);
+      const products = await productRepo.findByIds(productIds);
 
-    res.json({ success: true, message: "Item added to cart" });
+      const cartItems = req.session.cart
+        .map((item) => {
+          const product = products.find((p) => p.id == item.productId);
+          if (!product) return null;
+          return { product, quantity: item.quantity };
+        })
+        .filter(Boolean);
+
+      const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+      res.json({ success: true, message: "Item added to cart", cartCount });
+    }
   } catch (error) {
     console.error("Cart add ERROR:", error);
     res.status(500).json({ success: false, message: "Something went wrong" });
@@ -133,11 +150,36 @@ exports.removeFromCart = async (req, res) => {
 
     if (req.session.user) {
       await cartRepo.removeCartItem(req.session.user.id, id);
+      const cartItems = await cartRepo.getUserCart(req.session.user.id);
+      const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+      return res.json({
+        success: true,
+        message: "Item removed from cart",
+        cartCount,
+      });
     } else {
       req.session.cart = req.session.cart.filter((i) => i.productId != id);
-    }
 
-    res.json({ success: true, message: "Item removed from cart" });
+      const productIds = req.session.cart.map((i) => i.productId);
+      const products = await productRepo.findByIds(productIds);
+
+      const cartItems = req.session.cart
+        .map((item) => {
+          const product = products.find((p) => p.id == item.productId);
+          if (!product) return null;
+          return { product, quantity: item.quantity };
+        })
+        .filter(Boolean);
+
+      const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+      return res.json({
+        success: true,
+        message: "Item removed from cart",
+        cartCount,
+      });
+    }
   } catch (error) {
     console.error("Cart remove ERROR:", error);
     res.status(500).json({ success: false, message: "Something went wrong" });
