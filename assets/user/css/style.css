@@ -231,6 +231,13 @@ a.more {
   border-radius: 20px;
 }
 
+.product-image {
+  margin-right: 5%;
+  width: 30%;
+  height: 150px;
+  object-fit: cover;
+}
+
 .product-old-price {
   text-decoration: line-through;
   color: #888;

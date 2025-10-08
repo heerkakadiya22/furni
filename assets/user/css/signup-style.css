@@ -231,6 +231,11 @@ textarea {
   -o-appearance: unset !important;
   -ms-appearance: unset !important;
 }
+textarea {
+  width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {

@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+    <link rel="shortcut icon" href="favicon.png">
+    <meta name="description" content />
+    <meta name="keywords" content="bootstrap, bootstrap4" />
+    <title>
+        <%= title %>
+    </title>
+    <%- include('../partials/Head') %>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="/assets/user/css/signup-style.css">
+        <style>
+            .signup-container label {
+                position: relative;
+                display: contents;
+                margin-bottom: -1%;
+            }
+
+            input[type="checkbox"] {
+                display: block !important;
+                visibility: visible !important;
+            }
+        </style>
+
+</head>
+
+<body>
+    <%- include('../partials/header') %>
+
+        <div class="hero">
+            <div class="container">
+                <div class="row justify-content-between">
+                    <div class="col-lg-5">
+                        <div class="intro-excerpt">
+                            <h1 id="form-heading">
+                                <%= title %>
+                            </h1>
+                        </div>
+                    </div>
+                    <div class="col-lg-7"></div>
+                </div>
+            </div>
+        </div>
+
+        <section class="signup">
+            <div class="signup-container">
+                <div class="signup-content">
+
+                    <div class="signup-form" style="width: 100%;">
+                        <!-- Saved Addresses -->
+                        <div class="saved-addresses mb-4">
+                            <h3 class="mb-3 fw-bold">Saved Addresses</h3>
+                            <% if (addresses && addresses.length> 0) { %>
+                                <% addresses.forEach((addr)=> { %>
+                                    <div class="saved-address card mb-2 shadow-sm p-3 position-relative"
+                                        data-id="<%= addr.id %>">
+                                        <div class="d-flex align-items-start">
+                                            <input type="radio" name="selectedAddress"
+                                                class="form-check-input me-3 mt-1" value="<%= addr.id %>"
+                                                data-addr='<%- JSON.stringify(addr) %>'>
+                                            <div>
+                                                <label class="mb-1 fw-semibold" style="cursor:pointer;">
+                                                    <%= addr.fullName %>
+                                                </label>
+                                                <p class="mb-0 text-muted">
+                                                    <%= addr.no %>, <%= addr.street %>, <%= addr.city %>, <%= addr.state
+                                                                    %> - <%= addr.zipCode %>
+                                                </p>
+                                                <% if(addr.landMark){ %>
+                                                    <p class="mb-0 text-muted"><small>Landmark: <%= addr.landMark %>
+                                                        </small></p>
+                                                    <% } %>
+                                                        <p class="mb-0 text-muted"><small>Type: <%= addr.type %></small>
+                                                        </p>
+                                                        <% if(addr.isDefault){ %>
+                                                            <span class="badge bg-success mt-1">Default</span>
+                                                            <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <p class="text-muted">No saved addresses yet.</p>
+                                            <% } %>
+                        </div>
+
+                        <!-- Add New Address -->
+                        <div class="saved-address add-new-address card shadow-sm p-3 text-center mb-4 d-flex">
+                            <input type="radio" name="selectedAddress" value="new" id="newAddress"
+                                class="form-check-input me-2">
+                            <label for="newAddress" class="fw-semibold text-primary"
+                                style="cursor:pointer; font-size:1.1rem;">
+                                + Add New Address
+                            </label>
+                        </div>
+
+
+                        <hr>
+
+                        <% if (success) { %>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <%= success %>
+                            </div>
+                            <% } %>
+                                <% if (error) { %>
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <%= error %>
+                                    </div>
+                                    <% } %>
+
+                                        <!-- Address Form -->
+                                        <form action="/user-address" method="POST" id="addressForm"
+                                            class="validation-form" novalidate>
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                            <input type="hidden" name="user_id" value="<%= user_id %>">
+                                            <input type="hidden" name="id" id="addressId"
+                                                value="<%= editAddress ? editAddress.id : '' %>">
+
+                                            <div class="form-group mb-3">
+                                                <input type="text" class="form-control" name="name" id="name"
+                                                    placeholder="Full Name"
+                                                    value="<%= editAddress ? editAddress.fullName : '' %>" required />
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label for="number" class="form-label">Contact Number</label>
+                                                <input type="text" class="form-control" name="number" id="number"
+                                                    placeholder="Enter contact number"
+                                                    value="<%= editAddress ? editAddress.number : '' %>" required />
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group col-md-6 mb-3">
+                                                    <label for="no" class="form-label">House / Flat No.</label>
+                                                    <input type="text" class="form-control" name="no" id="no"
+                                                        placeholder="Enter house or flat number"
+                                                        value="<%= editAddress ? editAddress.no : '' %>" required />
+                                                </div>
+                                                <div class="form-group col-md-6 mb-3">
+                                                    <label for="street" class="form-label">Street</label>
+                                                    <input type="text" class="form-control" name="street" id="street"
+                                                        placeholder="Enter street name"
+                                                        value="<%= editAddress ? editAddress.street : '' %>" required />
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group col-md-6 mb-3">
+                                                    <label for="city" class="form-label">City</label>
+                                                    <input type="text" class="form-control" name="city" id="city"
+                                                        placeholder="Enter city"
+                                                        value="<%= editAddress ? editAddress.city : '' %>" required />
+                                                </div>
+                                                <div class="form-group col-md-6 mb-3">
+                                                    <label for="state" class="form-label">State</label>
+                                                    <input type="text" class="form-control" name="state" id="state"
+                                                        placeholder="Enter state"
+                                                        value="<%= editAddress ? editAddress.state : '' %>" required />
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group col-md-6 mb-3">
+                                                    <label for="zipCode" class="form-label">Zip Code</label>
+                                                    <input type="text" class="form-control" name="zipCode" id="zipCode"
+                                                        placeholder="Enter zip code"
+                                                        value="<%= editAddress ? editAddress.zipCode : '' %>"
+                                                        required />
+                                                </div>
+                                                <div class="form-group col-md-6 mb-3">
+                                                    <label for="landMark" class="form-label">Landmark</label>
+                                                    <input type="text" class="form-control" name="landMark"
+                                                        id="landMark" placeholder="Enter landmark (optional)"
+                                                        value="<%= editAddress ? editAddress.landMark : '' %>" />
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group col-md-6 mb-3">
+                                                    <label for="country" class="form-label">Country</label>
+                                                    <input type="text" class="form-control" name="country" id="country"
+                                                        placeholder="Enter country"
+                                                        value="<%= editAddress ? editAddress.country : '' %>"
+                                                        required />
+                                                </div>
+                                                <div class="form-group col-md-6 mb-3">
+                                                    <label for="type" class="form-label">Address Type</label>
+                                                    <select name="type" id="type" class="form-select" required>
+                                                        <option value="">Select Type</option>
+                                                        <option value="Home" <%=editAddress && editAddress.type==="Home"
+                                                            ? 'selected' : '' %>>Home</option>
+                                                        <option value="Office" <%=editAddress &&
+                                                            editAddress.type==="Office" ? 'selected' : '' %>>Office
+                                                        </option>
+                                                        <option value="Other" <%=editAddress &&
+                                                            editAddress.type==="Other" ? 'selected' : '' %>>Other
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <div class="form-check">
+                                                    <input type="checkbox" name="isDefault" id="isDefault"
+                                                        class="form-check-input" <%=editAddress && editAddress.isDefault
+                                                        ? 'checked' : '' %> />
+                                                    <label class="form-check-label" for="isDefault">Set as default
+                                                        address</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group form-button">
+                                                <input type="submit" class="btn btn-primary"
+                                                    value="<%= editAddress ? 'Update Address' : 'Add Address' %>" />
+                                            </div>
+                                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <%- include('../partials/footer') %>
+            <%- include('../partials/script') %>
+
+                <script>
+                    const form = document.getElementById('addressForm');
+                    const addressIdInput = document.getElementById('addressId');
+
+                    document.querySelectorAll('input[name="selectedAddress"]').forEach(radio => {
+                        radio.addEventListener('change', function () {
+                            if (this.value === 'new') {
+                                // Reset form for adding new address
+                                form.reset();
+                                addressIdInput.value = '';
+                            } else {
+                                // Fill form with selected address data
+                                const addr = JSON.parse(this.dataset.addr);
+                                addressIdInput.value = addr.id;
+                                form.name.value = addr.fullName;
+                                form.number.value = addr.number;
+                                form.no.value = addr.no;
+                                form.street.value = addr.street;
+                                form.city.value = addr.city;
+                                form.state.value = addr.state;
+                                form.zipCode.value = addr.zipCode;
+                                form.landMark.value = addr.landMark || '';
+                                form.country.value = addr.country;
+                                form.type.value = addr.type;
+                                form.isDefault.checked = addr.isDefault;
+                            }
+                        });
+                    });
+                </script>
+                <!-- JS -->
+                <script src="/assets/user/vendor/jquery/jquery.min.js"></script>
+                <script src="/assets/user/js/alertmsg.js"></script>
+                <script
+                    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+                <script src="../assets/admin/vendor/libs/jquery/jquery-validation.js"></script>
+                <script src="../assets/admin/vendor/js/custom.js"></script>
+
+</body>
+
+</html>

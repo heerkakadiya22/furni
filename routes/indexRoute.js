@@ -19,6 +19,7 @@ const cartRoute = require("./cartRoute");
 const checkoutRoute = require("./checkoutRoute");
 const userProfileRoute = require("./userProfileRoute");
 const userPasswordRoute = require("./userPasswordRoute");
+const addressRoute = require("./addressRoute");
 
 router.get("/", indexController.renderIndex);
 
@@ -39,5 +40,6 @@ router.use(cartRoute);
 router.use(checkoutRoute);
 router.use(userProfileRoute);
 router.use(userPasswordRoute);
+router.use(addressRoute);
 
 module.exports = router;

@@ -21,6 +21,17 @@
                 display: contents;
                 margin-bottom: -1%;
             }
+
+            .custom-outline {
+                background-color: transparent !important;
+                color: #3b5d50 !important;
+                border: 1px solid #3b5d50 !important;
+            }
+
+            .custom-outline:hover {
+                background-color: #3b5d50 !important;
+                color: #fff !important;
+            }
         </style>
 
 </head>
@@ -104,12 +115,9 @@
                                             </div>
 
                                             <!-- Address -->
-                                            <div class="mb-3">
-                                                <label for="address" class="form-label d-block">Address</label>
-                                                <textarea name="address" id="address" class="form-control" rows="1"
-                                                    placeholder="Enter your address">
-                                                    <%= address %>
-                                                </textarea>
+                                            <div class="form-group">
+                                                <input type="text" name="address" id="address" class="form-control"
+                                                    placeholder="Enter your address" value="<%= address %>" required />
                                             </div>
 
                                             <!-- DOB & Gender -->
@@ -148,15 +156,23 @@
                                                 <input type="submit" class="btn btn-primary" value="Update Profile" />
                                             </div>
 
-                                            <p>Want to Change Password?<a href="/user-changePassword">Click Here!</a>
+
+
+                                            <p>Want to <a href="/user-changePassword">Change Password</a> ?
                                             </p>
 
                                         </form>
                     </div>
 
                     <div class="signup-image" style="    margin: 0 0px;">
-                        <figure><img src="/assets/user/images/sofap.png" alt="signup image" style="margin-top: 60%;">
+                        <figure><img src="/assets/user/images/sofap.png" alt="signup image" style="margin-top: 43%;">
                         </figure>
+                        <div class="form-group form-button" style="margin-left: 30%;">
+                            <a href="/user-address">
+                                <input type="button" class="btn btn-outline-primary custom-outline" value="Add Address"
+                                    style="width: 60%;" />
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -169,8 +185,9 @@
                 <script src="/assets/user/js/alertmsg.js"></script>
                 <script
                     src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
-                <script src="/assets/user/vendor/jquery/jquery-validation.js"></script>
-                <script src="/assets/admin/vendor/js/custom.js"></script>
+                <script src="../assets/admin/vendor/libs/jquery/jquery-validation.js"></script>
+                <script src="../assets/admin/vendor/js/custom.js"></script>
+
 
 </body>
 

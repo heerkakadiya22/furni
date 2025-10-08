@@ -153,9 +153,93 @@ $(function () {
     },
     errorPlacement: function (error, element) {
       if (element.attr("name") === "gender") {
-        // Append error after the last radio button inside the same form-group
         element.closest(".form-group").find(".form-check").last().after(error);
       } else if (element.closest(".input-group").length > 0) {
+        error.insertAfter(element.closest(".input-group"));
+      } else {
+        error.insertAfter(element);
+      }
+    },
+  });
+});
+
+$(function () {
+  $(".validation-form").validate({
+    rules: {
+      name: {
+        required: true,
+        pattern: "^[A-Za-z ]+$",
+      },
+      number: {
+        digits: true,
+        // minlength: 10,
+        maxlength: 10,
+      },
+      no: {
+        required: true,
+      },
+      street: {
+        required: true,
+      },
+      city: {
+        required: true,
+      },
+      state: {
+        required: true,
+      },
+      zipCode: {
+        digits: true,
+        maxlength: 6,
+      },
+      country: {
+        required: true,
+      },
+      type: {
+        required: true,
+      },
+    },
+    messages: {
+      name: {
+        required: "Name is required.",
+        pattern: "Name must contain only letters.",
+      },
+      number: {
+        digits: "Only digits allowed.",
+        maxlength: "Number cannot exceed 10 digits.",
+      },
+      no: {
+        required: "flat number is required.",
+      },
+      street: {
+        required: "Fill the Street name.",
+      },
+      city: {
+        required: "City name is required.",
+      },
+      state: {
+        required: "State name is required.",
+      },
+      zipCode: {
+        digits: "Only digits allowed.",
+        maxlength: "Zip code cannot exceed 6 digits.",
+      },
+      country: {
+        required: "Country name is required.",
+      },
+      type: {
+        required: "Address type is required.",
+      },
+    },
+    errorElement: "label",
+    errorClass: "error",
+    highlight: function (element) {
+      $(element).addClass("is-invalid");
+    },
+    unhighlight: function (element) {
+      $(element).removeClass("is-invalid");
+    },
+    errorPlacement: function (error, element) {
+      if (element.closest(".input-group").length > 0) {
         error.insertAfter(element.closest(".input-group"));
       } else {
         error.insertAfter(element);

@@ -1,0 +1,97 @@
+const addressRepository = require("../repositories/addressRepository");
+
+exports.renderAddressPage = async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+    const savedAddresses = await addressRepository.findAllByUser(userId);
+
+    const editId = req.query.editId || null;
+    let editAddress = null;
+
+    if (editId) {
+      const addr = await addressRepository.findById(editId);
+      if (addr && addr.user_id === userId) {
+        editAddress = addr;
+      }
+    }
+
+    const success = req.session.success || "";
+    const error = req.session.error || "";
+    req.session.success = null;
+    req.session.error = null;
+
+    
+    res.render("user-address", {
+      title: editId ? "Edit Address" : "Manage Addresses",
+      currentPage: "user-address",
+      csrfToken: req.csrfToken(),
+      user_id: userId,
+      session: req.session,
+      addresses: savedAddresses,
+      success,
+      error,
+      editAddress,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+};
+
+exports.saveAddress = async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+
+    const {
+      id,
+      name,
+      number,
+      no,
+      street,
+      city,
+      state,
+      zipCode,
+      landMark,
+      country,
+      type,
+      isDefault,
+    } = req.body;
+
+    const addressData = {
+      fullName: name,
+      number,
+      no,
+      street,
+      city,
+      state,
+      zipCode,
+      landMark,
+      country,
+      type,
+      isDefault: !!isDefault,
+      user_id: userId,
+    };
+
+    if (id && id.trim() !== "") {
+      const existing = await addressRepository.findById(id);
+      if (!existing || existing.user_id !== userId) {
+        req.session.error = "Address not found or unauthorized.";
+        return res.redirect("/user-address");
+      }
+
+      await addressRepository.update(id, addressData);
+      req.session.success = "Address updated successfully.";
+    } else {
+      await addressRepository.create(addressData);
+      req.session.success = "Address added successfully.";
+    }
+
+    req.session.save(() => {
+      return res.redirect("/user-address");
+    });
+  } catch (error) {
+    console.error("Error saving address:", error);
+    req.session.error = "Something went wrong while saving address.";
+    res.redirect("/user-address");
+  }
+};
