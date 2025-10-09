@@ -20,7 +20,6 @@ exports.renderAddressPage = async (req, res) => {
     req.session.success = null;
     req.session.error = null;
 
-    
     res.render("user-address", {
       title: editId ? "Edit Address" : "Manage Addresses",
       currentPage: "user-address",
@@ -93,5 +92,35 @@ exports.saveAddress = async (req, res) => {
     console.error("Error saving address:", error);
     req.session.error = "Something went wrong while saving address.";
     res.redirect("/user-address");
+  }
+};
+
+exports.deleteAddress = async (req, res) => {
+  const id = (req.params.id || "").trim();
+
+  if (!id) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Address ID is required" });
+  }
+
+  try {
+    const existing = await addressRepository.findById(id);
+
+    if (!existing || existing.user_id !== req.session.user?.id) {
+      return res.status(403).json({ success: false, message: "Unauthorized" });
+    }
+
+    await addressRepository.delete(id);
+
+    return res.json({ success: true, message: "Address deleted successfully" });
+  } catch (err) {
+    console.error(
+      `Error deleting address (UserID: ${req.session.user?.id}):`,
+      err
+    );
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
   }
 };
