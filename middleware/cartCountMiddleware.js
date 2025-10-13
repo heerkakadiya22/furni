@@ -22,10 +22,8 @@ async function cartCount(req, res, next) {
     }
   }
 
-  res.locals.cartCount = cartItems.reduce(
-    (sum, item) => sum + item.quantity,
-    0
-  );
+  res.locals.cartCount = cartItems.length;
+
   next();
 }
 
