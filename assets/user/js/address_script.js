@@ -111,8 +111,14 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".delete-address-btn").forEach((button) => {
     button.addEventListener("click", function () {
       const addressId = this.dataset.id;
+
+      const currentPath = window.location.pathname;
+      const deleteUrl = currentPath.includes("checkout")
+        ? `/checkout/${addressId}`
+        : `/user-address/${addressId}`;
+
       if (confirm("Are you sure you want to delete this address?")) {
-        fetch(`/user-address/${addressId}`, {
+        fetch(deleteUrl, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -132,6 +138,30 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Error deleting address.");
           });
       }
+    });
+  });
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  const radios = document.querySelectorAll("input[name='selectedAddress']");
+  const lastSelected = localStorage.getItem("lastSelectedAddress");
+
+  if (lastSelected) {
+    const target = document.querySelector(
+      `input[name='selectedAddress'][value='${lastSelected}']`
+    );
+    if (target) {
+      target.checked = true;
+    } else {
+      const defaultRadio = document.querySelector(
+        "input[name='selectedAddress'][data-addr*='\"isDefault\":true']"
+      );
+      if (defaultRadio) defaultRadio.checked = true;
+    }
+  }
+  radios.forEach((radio) => {
+    radio.addEventListener("change", function () {
+      localStorage.setItem("lastSelectedAddress", this.value);
     });
   });
 });

@@ -74,9 +74,10 @@
                                         <!-- Left: Radio + Address Info -->
                                         <div class="d-flex align-items-start">
                                             <input type="radio" name="selectedAddress"
-                                                class="form-check-input me-3 mt-1" value="<%= addr.id %>"
+                                                class="form-check-input me-3 mt-1 address-radio" value="<%= addr.id %>"
                                                 data-addr='<%- JSON.stringify(addr) %>' <%=addr.isDefault ? "checked"
-                                                : "" %> >
+                                                : "" %>
+                                            >
 
                                             <div>
                                                 <label class="mb-1 fw-semibold" style="cursor:pointer; font-size:1rem;">
@@ -102,29 +103,25 @@
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
-
-
-
                                     <% }) %>
                                         <% } else { %>
                                             <p class="text-muted">No saved addresses yet.</p>
                                             <% } %>
                         </div>
 
-
                         <!-- Add New Address -->
                         <div class="card shadow-sm p-2 mb-4 border rounded-2">
                             <div class="d-flex align-items-center justify-content-start px-3 py-2">
                                 <input type="radio" name="selectedAddress" value="new" id="newAddress"
                                     class="form-check-input me-3" style="transform: scale(1.1); cursor:pointer;"
-                                    <%=(!addresses || addresses.length===0) ? "checked" : "" %> >
+                                    <%=(!addresses || addresses.length===0) ? "checked" : "" %>
+                                >
                                 <label for="newAddress" class="fw-semibold text-primary mb-0"
                                     style="cursor:pointer; font-size:1.1rem;">
                                     + Add New Address
                                 </label>
                             </div>
                         </div>
-
 
 
 

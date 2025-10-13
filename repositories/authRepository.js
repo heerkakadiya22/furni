@@ -8,8 +8,8 @@ const findByEmail = async (email) => {
   return await User.findOne({ where: { email } });
 };
 
-const updatePasswordByEmail = (email, newPassword) => {
-  return User.update({ password: newPassword }, { where: { email } });
+const updatePasswordByEmail = async(email, newPassword) => {
+  return await User.update({ password: newPassword }, { where: { email } });
 };
 
 const findById = async (id) => {

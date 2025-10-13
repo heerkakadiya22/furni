@@ -56,17 +56,30 @@ exports.saveAddress = async (req, res) => {
       isDefault,
     } = req.body;
 
+    if (
+      !name ||
+      !number ||
+      !street ||
+      !city ||
+      !state ||
+      !zipCode ||
+      !country
+    ) {
+      req.session.error = "Please fill in all required fields before saving.";
+      return res.redirect("/user-address");
+    }
+
     const addressData = {
-      fullName: name,
-      number,
-      no,
-      street,
-      city,
-      state,
-      zipCode,
-      landMark,
-      country,
-      type,
+      fullName: name.trim(),
+      number: number.trim(),
+      no: no?.trim() || "",
+      street: street.trim(),
+      city: city.trim(),
+      state: state.trim(),
+      zipCode: zipCode.trim(),
+      landMark: landMark?.trim() || "",
+      country: country.trim(),
+      type: type?.trim() || "Home",
       isDefault: !!isDefault,
       user_id: userId,
     };

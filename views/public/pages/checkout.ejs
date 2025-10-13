@@ -13,6 +13,31 @@
         <title>
             <%= title %>
         </title>
+        <style>
+            label.error {
+                color: #ff0019;
+                font-size: 13px;
+                display: block;
+                margin-left: 15px;
+                margin-bottom: -20px;
+            }
+
+            input[type="checkbox"] {
+                display: block !important;
+                visibility: visible !important;
+            }
+
+            .custom-select {
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+                background-repeat: no-repeat;
+                background-position: right 10px center;
+                background-size: 18px;
+                padding-right: 2.5rem;
+            }
+        </style>
 </head>
 
 <body>
@@ -41,286 +66,303 @@
         <div class="untree_co-section">
             <div class="container">
 
-                <div class="row">
-                    <div class="col-md-6 mb-5 mb-md-0">
+                <div class="row mb-5">
+                    <div class="col-lg-6 col-md-6 mb-5 mb-md-0">
                         <h2 class="h3 mb-3 text-black">Billing Details</h2>
                         <div class="p-3 p-lg-5 border bg-white">
-                            <div class="form-group">
-                                <label for="c_country" class="text-black">Country <span
-                                        class="text-danger">*</span></label>
-                                <select id="c_country" class="form-control">
-                                    <option value="1">Select a country</option>
-                                    <option value="2">bangladesh</option>
-                                    <option value="3">Algeria</option>
-                                    <option value="4">Afghanistan</option>
-                                    <option value="5">Ghana</option>
-                                    <option value="6">Albania</option>
-                                    <option value="7">Bahrain</option>
-                                    <option value="8">Colombia</option>
-                                    <option value="9">Dominican
-                                        Republic</option>
-                                </select>
-                            </div>
-                            <div class="form-group mt-3">
-                                <input type="text" class="form-control" name="name" id="name" placeholder="Full Name"
-                                    value="<%= name %>" required />
-                            </div>
 
+                            <div class="saved-addresses mb-4">
+                                <h3 class="mb-3 fw-bold">Saved Addresses</h3>
+                                <% if (addresses && addresses.length> 0) { %>
+                                    <% addresses.forEach((addr)=> { %>
+                                        <div
+                                            class="saved-address d-flex align-items-start justify-content-between p-3 mb-2 border rounded shadow-sm">
+                                            <!-- Left: Radio + Address Info -->
+                                            <div class="d-flex align-items-start">
+                                                <input type="radio" name="selectedAddress"
+                                                    class="form-check-input me-3 mt-1 address-radio"
+                                                    value="<%= addr.id %>" data-addr='<%- JSON.stringify(addr) %>'
+                                                    <%=addr.isDefault ? "checked" : "" %>
+                                                >
 
-                            <div class="form-group row">
-                                <div class="col-md-12">
-                                    <label for="c_address" class="text-black">Address <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="c_address" name="c_address"
-                                        placeholder="Street address" value="<%= address %>">
-                                </div>
-                            </div>
+                                                <div>
+                                                    <label class="mb-1 fw-semibold"
+                                                        style="cursor:pointer; font-size:1rem;">
+                                                        <%= addr.fullName %>
+                                                    </label>
+                                                    <p class="mb-0 text-muted" style="font-size:0.875rem;">
+                                                        <%= addr.no %>, <%= addr.street %>, <%= addr.city %>, <%=
+                                                                        addr.state %> - <%= addr.zipCode %>
+                                                    </p>
+                                                    <p class="mb-0 text-muted" style="font-size:0.75rem;">
+                                                        <small>Type: <%= addr.type %></small>
+                                                    </p>
+                                                    <% if (addr.isDefault) { %>
+                                                        <span class="badge bg-success mt-1">Default</span>
+                                                        <% } %>
+                                                </div>
+                                            </div>
 
-                            <div class="form-group mt-3">
-                                <input type="text" class="form-control"
-                                    placeholder="Apartment, suite, unit etc. (optional)">
-                            </div>
-
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <label for="c_state_country" class="text-black">State / Country <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="c_state_country" name="c_state_country">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="c_postal_zip" class="text-black">Posta / Zip <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="c_postal_zip" name="c_postal_zip">
-                                </div>
+                                            <input type="hidden" id="csrfToken" value="<%= csrfToken %>">
+                                            <button type="button" class="delete-address-btn btn btn-link p-0 text-dark"
+                                                data-id="<%= addr.id %>"
+                                                style="font-size:1.2rem; background: transparent;border:none; cursor:pointer;">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <p class="text-muted">No saved addresses yet.</p>
+                                                <% } %>
                             </div>
 
-                            <div class="form-group row mb-5">
-                                <div class="col-md-6">
-                                    <label for="c_email_address" class="text-black">Email Address <span
-                                            class="text-danger">*</span></label>
-                                    <input type="email" class="form-control" name="email" id="email" placeholder="Email"
-                                        value="<%= email %>" required />
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="c_phone" class="text-black">Phone <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="phone" id="phone"
-                                        placeholder="Phone Number" value="<%= phone %>" />
+                            <!-- Add New Address -->
+                            <div class="card shadow-sm p-2 mb-4 border rounded-2">
+                                <div class="d-flex align-items-center justify-content-start px-3 py-2">
+                                    <input type="radio" name="selectedAddress" value="new" id="newAddress"
+                                        class="form-check-input me-3" style="transform: scale(1.1); cursor:pointer;"
+                                        <%=(!addresses || addresses.length===0) ? "checked" : "" %>
+                                    >
+                                    <label for="newAddress" class="fw-semibold text-primary mb-0"
+                                        style="cursor:pointer; font-size:1.1rem;">
+                                        + Add New Address
+                                    </label>
                                 </div>
                             </div>
 
 
-                            <div class="form-group">
-                                <label for="c_ship_different_address" class="text-black" data-bs-toggle="collapse"
-                                    href="#ship_different_address" role="button" aria-expanded="false"
-                                    aria-controls="ship_different_address"><input type="checkbox" value="1"
-                                        id="c_ship_different_address"> Ship To A
-                                    Different Address?</label>
-                                <div class="collapse" id="ship_different_address">
-                                    <div class="py-2">
 
-                                        <div class="form-group">
-                                            <label for="c_country" class="text-black">Country <span
-                                                    class="text-danger">*</span></label>
-                                            <select id="c_country" class="form-control">
-                                                <option value="1">Select a country</option>
-                                                <option value="2">bangladesh</option>
-                                                <option value="3">Algeria</option>
-                                                <option value="4">Afghanistan</option>
-                                                <option value="5">Ghana</option>
-                                                <option value="6">Albania</option>
-                                                <option value="7">Bahrain</option>
-                                                <option value="8">Colombia</option>
-                                                <option value="9">Dominican
-                                                    Republic</option>
-                                            </select>
-                                        </div>
+                            <!-- Address Form -->
+                            <form action="/checkout" method="POST" id="addressForm" class="validation-form" novalidate>
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <input type="hidden" name="user_id" value="<%= user_id %>">
+                                <input type="hidden" name="id" id="addressId"
+                                    value="<%= editAddress ? editAddress.id : '' %>">
+
+                                <div class="form-group mb-3">
+                                    <input type="text" class="form-control" name="name" id="name"
+                                        placeholder="Full Name" value="<%= editAddress ? editAddress.fullName : '' %>"
+                                        required />
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label for="number" class="form-label">Contact Number</label>
+                                    <input type="text" class="form-control" name="number" id="number"
+                                        placeholder="Enter contact number"
+                                        value="<%= editAddress ? editAddress.number : '' %>" required />
+                                </div>
 
 
-                                        <div class="form-group row">
-                                            <div class="col-md-12">
-                                                <label for="c_address" class="text-black">Address <span
-                                                        class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="c_address" name="c_address"
-                                                    placeholder="Street address">
-                                            </div>
-                                        </div>
 
-                                        <div class="form-group mt-3">
-                                            <input type="text" class="form-control"
-                                                placeholder="Apartment, suite, unit etc. (optional)">
-                                        </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6 mb-3">
+                                        <label for="type" class="form-label">Address Type</label>
+                                        <select name="type" id="type" class="form-control custom-select" required>
+                                            <option value="">Select Type</option>
+                                            <option value="Home" <%=editAddress && editAddress.type==="Home"
+                                                ? 'selected' : '' %>>Home</option>
+                                            <option value="Office" <%=editAddress && editAddress.type==="Office"
+                                                ? 'selected' : '' %>>Office
+                                            </option>
+                                            <option value="Other" <%=editAddress && editAddress.type==="Other"
+                                                ? 'selected' : '' %>>Other
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6 mb-3">
+                                        <label for="no" class="form-label">House / Flat No.</label>
+                                        <input type="text" class="form-control" name="no" id="no"
+                                            placeholder="Enter house or flat number"
+                                            value="<%= editAddress ? editAddress.no : '' %>" required />
+                                    </div>
+                                </div>
 
-                                        <div class="form-group row">
-                                            <div class="col-md-6">
-                                                <label for="c_state_country" class="text-black">State / Country <span
-                                                        class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="c_state_country"
-                                                    name="c_state_country">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="c_postal_zip" class="text-black">Posta / Zip <span
-                                                        class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="c_postal_zip"
-                                                    name="c_postal_zip">
-                                            </div>
-                                        </div>
+                                <div class="form-group mb-3">
+                                    <label for="street" class="form-label">Street</label>
+                                    <textarea name="street" id="street" cols="30" rows="2"
+                                        placeholder="Enter street name" class="form-control" required>
+                                        <%= editAddress ? editAddress.street : '' %>
+                                    </textarea>
+                                </div>
 
-                                        <div class="form-group row mb-5">
-                                            <div class="col-md-6">
-                                                <label for="c_email_address" class="text-black">Email Address <span
-                                                        class="text-danger">*</span></label>
-                                                <input type="email" class="form-control" name="email" id="email"
-                                                    placeholder="Email" required />
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="c_phone" class="text-black">Phone <span
-                                                        class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="phone" id="phone"
-                                                    placeholder="Phone Number" />
-                                            </div>
-                                        </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6 mb-3">
+                                        <label for="state" class="form-label">State</label>
+                                        <select name="state" id="state" class="form-control custom-select" required>
+                                            <option value="">Select State</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-md-6 mb-3">
+                                        <label for="city" class="form-label">City</label>
+                                        <select name="city" id="city" class="form-control custom-select" required>
+                                            <option value="">Select City</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="form-group col-md-6 mb-3">
+                                        <label for="country" class="form-label">Country</label>
+                                        <input type="text" class="form-control" name="country" id="country"
+                                            placeholder="Enter country"
+                                            value="<%= editAddress ? editAddress.country : '' %>" required />
+                                    </div>
+
+                                    <div class="form-group col-md-6 mb-3">
+                                        <label for="zipCode" class="form-label">Zip Code</label>
+                                        <input type="text" class="form-control" name="zipCode" id="zipCode"
+                                            placeholder="Enter zip code"
+                                            value="<%= editAddress ? editAddress.zipCode : '' %>" required />
                                     </div>
 
                                 </div>
-                            </div>
+                                <div class="form-group ">
+                                    <label for="landMark" class="form-label">Landmark (optional)</label>
+                                    <textarea name="landMark" id="landMark" cols="30" rows="2"
+                                        placeholder="Enter landmark" class="form-control">
+                                        <%= editAddress ? editAddress.landMark : '' %>
+                                    </textarea>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <div class="form-check">
+                                        <input type="checkbox" name="isDefault" id="isDefault" class="form-check-input"
+                                            <%=editAddress && editAddress.isDefault ? 'checked' : '' %> />
+                                        <label class="form-check-label" for="isDefault">Set as default
+                                            address</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group form-button">
+                                    <input type="submit" class="btn btn-primary"
+                                        value="<%= editAddress ? 'Update Address' : 'Add Address' %>" />
+                                </div>
+                            </form>
 
                         </div>
                     </div>
-                    <div class="col-md-6">
 
-                        <div class="row mb-5">
-                            <div class="col-md-12">
-                                <h2 class="h3 mb-3 text-black">Coupon Code</h2>
-                                <div class="p-3 p-lg-5 border bg-white">
 
-                                    <label for="c_code" class="text-black mb-3">Enter your
-                                        coupon code if you have one</label>
-                                    <div class="input-group w-75 couponcode-wrap">
-                                        <input type="text" class="form-control me-2" id="c_code"
-                                            placeholder="Coupon Code" aria-label="Coupon Code"
-                                            aria-describedby="button-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-black btn-sm" type="button"
-                                                id="button-addon2">Apply</button>
-                                        </div>
+                    <div class="col-lg-6 col-md-6">
+                        <h2 class="h3 mb-3 text-black">Your Order</h2>
+                        <div class="p-3 p-lg-5 border bg-white">
+                            <table class="table site-block-order-table mb-5">
+                                <thead>
+                                    <th>Product</th>
+                                    <th>Total</th>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Top Up T-Shirt <strong class="mx-2">x</strong>
+                                            1</td>
+                                        <td>$250.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Polo Shirt <strong class="mx-2">x</strong>
+                                            1</td>
+                                        <td>$100.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-black font-weight-bold"><strong>Cart
+                                                Subtotal</strong></td>
+                                        <td class="text-black">$350.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-black font-weight-bold"><strong>Order
+                                                Total</strong></td>
+                                        <td class="text-black font-weight-bold"><strong>$350.00</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="border p-3 mb-3">
+                                <h3 class="h6 mb-0"><a class="d-block" data-bs-toggle="collapse" href="#collapsebank"
+                                        role="button" aria-expanded="false" aria-controls="collapsebank">Direct
+                                        Bank Transfer</a></h3>
+
+                                <div class="collapse" id="collapsebank">
+                                    <div class="py-2">
+                                        <p class="mb-0">Make your
+                                            payment directly into our
+                                            bank account. Please use
+                                            your Order ID as the payment
+                                            reference. Your order won’t
+                                            be shipped until the funds
+                                            have cleared in our
+                                            account.</p>
                                     </div>
-
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row mb-5">
-                            <div class="col-md-12">
-                                <h2 class="h3 mb-3 text-black">Your Order</h2>
-                                <div class="p-3 p-lg-5 border bg-white">
-                                    <table class="table site-block-order-table mb-5">
-                                        <thead>
-                                            <th>Product</th>
-                                            <th>Total</th>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Top Up T-Shirt <strong class="mx-2">x</strong>
-                                                    1</td>
-                                                <td>$250.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Polo Shirt <strong class="mx-2">x</strong>
-                                                    1</td>
-                                                <td>$100.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-black font-weight-bold"><strong>Cart
-                                                        Subtotal</strong></td>
-                                                <td class="text-black">$350.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-black font-weight-bold"><strong>Order
-                                                        Total</strong></td>
-                                                <td class="text-black font-weight-bold"><strong>$350.00</strong></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                            <div class="border p-3 mb-3">
+                                <h3 class="h6 mb-0"><a class="d-block" data-bs-toggle="collapse" href="#collapsecheque"
+                                        role="button" aria-expanded="false" aria-controls="collapsecheque">Cheque
+                                        Payment</a></h3>
 
-                                    <div class="border p-3 mb-3">
-                                        <h3 class="h6 mb-0"><a class="d-block" data-bs-toggle="collapse"
-                                                href="#collapsebank" role="button" aria-expanded="false"
-                                                aria-controls="collapsebank">Direct
-                                                Bank Transfer</a></h3>
-
-                                        <div class="collapse" id="collapsebank">
-                                            <div class="py-2">
-                                                <p class="mb-0">Make your
-                                                    payment directly into our
-                                                    bank account. Please use
-                                                    your Order ID as the payment
-                                                    reference. Your order won’t
-                                                    be shipped until the funds
-                                                    have cleared in our
-                                                    account.</p>
-                                            </div>
-                                        </div>
+                                <div class="collapse" id="collapsecheque">
+                                    <div class="py-2">
+                                        <p class="mb-0">Make your
+                                            payment directly into our
+                                            bank account. Please use
+                                            your Order ID as the payment
+                                            reference. Your order won’t
+                                            be shipped until the funds
+                                            have cleared in our
+                                            account.</p>
                                     </div>
-
-                                    <div class="border p-3 mb-3">
-                                        <h3 class="h6 mb-0"><a class="d-block" data-bs-toggle="collapse"
-                                                href="#collapsecheque" role="button" aria-expanded="false"
-                                                aria-controls="collapsecheque">Cheque
-                                                Payment</a></h3>
-
-                                        <div class="collapse" id="collapsecheque">
-                                            <div class="py-2">
-                                                <p class="mb-0">Make your
-                                                    payment directly into our
-                                                    bank account. Please use
-                                                    your Order ID as the payment
-                                                    reference. Your order won’t
-                                                    be shipped until the funds
-                                                    have cleared in our
-                                                    account.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="border p-3 mb-5">
-                                        <h3 class="h6 mb-0"><a class="d-block" data-bs-toggle="collapse"
-                                                href="#collapsepaypal" role="button" aria-expanded="false"
-                                                aria-controls="collapsepaypal">Paypal</a></h3>
-
-                                        <div class="collapse" id="collapsepaypal">
-                                            <div class="py-2">
-                                                <p class="mb-0">Make your
-                                                    payment directly into our
-                                                    bank account. Please use
-                                                    your Order ID as the payment
-                                                    reference. Your order won’t
-                                                    be shipped until the funds
-                                                    have cleared in our
-                                                    account.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <button class="btn btn-black btn-lg py-3 btn-block"
-                                            onclick="window.location='thanks'">Place
-                                            Order</button>
-                                    </div>
-
                                 </div>
                             </div>
-                        </div>
 
+                            <div class="border p-3 mb-5">
+                                <h3 class="h6 mb-0"><a class="d-block" data-bs-toggle="collapse" href="#collapsepaypal"
+                                        role="button" aria-expanded="false" aria-controls="collapsepaypal">Paypal</a>
+                                </h3>
+
+                                <div class="collapse" id="collapsepaypal">
+                                    <div class="py-2">
+                                        <p class="mb-0">Make your
+                                            payment directly into our
+                                            bank account. Please use
+                                            your Order ID as the payment
+                                            reference. Your order won’t
+                                            be shipped until the funds
+                                            have cleared in our
+                                            account.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <button class="btn btn-black btn-lg py-3 btn-block"
+                                    onclick="window.location='thanks'">Place
+                                    Order</button>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-                <!-- </form> -->
             </div>
+
+        </div>
+        </div>
+        <!-- </form> -->
+        </div>
         </div>
 
         <%- include('../partials/footer') %>
 
             <%- include('../partials/script') %>
+
+
+                <script src="../assets/user/js/address_script.js"></script>
+                <script src="/assets/user/vendor/jquery/jquery.min.js"></script>
+                <script src="/assets/user/js/alertmsg.js"></script>
+                <script
+                    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+                <script src="../assets/admin/vendor/libs/jquery/jquery-validation.js"></script>
+                <script src="../assets/admin/vendor/js/custom.js"></script>
 </body>
 
 </html>
