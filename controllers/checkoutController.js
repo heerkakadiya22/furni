@@ -4,10 +4,32 @@ const addressRepository = require("../repositories/addressRepository");
 
 exports.renderCheckout = async (req, res) => {
   try {
-    const userId = req.session.user.id;
-    const user = await authRepo.findById(userId);
+    const userId = req.session.user?.id;
+    let user = null;
 
-    const cartItems = await cartRepo.getUserCart(req.session.user.id);
+    if (userId) {
+      user = await authRepo.findById(userId);
+    }
+
+    let cartItems = [];
+
+    if (userId) {
+      cartItems = await cartRepo.getUserCart(userId);
+    } else {
+      const sessionCart = req.session.cart || [];
+      if (sessionCart.length > 0) {
+        const productIds = sessionCart.map((i) => i.productId);
+        const products = await productRepo.findByIds(productIds);
+
+        cartItems = sessionCart
+          .map((item) => {
+            const product = products.find((p) => p.id == item.productId);
+            if (!product) return null;
+            return { product, quantity: item.quantity };
+          })
+          .filter(Boolean);
+      }
+    }
 
     if (cartItems.length === 0) {
       req.session.message =
@@ -15,21 +37,25 @@ exports.renderCheckout = async (req, res) => {
       return res.redirect("/shop");
     }
 
-    const savedAddresses = await addressRepository.findAllByUser(userId);
-
-    const editId = req.query.editId || null;
+    let savedAddresses = [];
     let editAddress = null;
 
-    if (editId) {
-      const addr = await addressRepository.findById(editId);
-      if (addr && addr.user_id === userId) {
-        editAddress = addr;
+    if (userId) {
+      savedAddresses = await addressRepository.findAllByUser(userId);
+
+      const editId = req.query.editId || null;
+      if (editId) {
+        const addr = await addressRepository.findById(editId);
+        if (addr && addr.user_id === userId) {
+          editAddress = addr;
+        }
       }
     }
 
     res.render("checkout", {
       title: "checkout",
-      ...user.dataValues,
+      ...user?.dataValues,
+      cart: cartItems,
       user: req.session.user,
       user_id: userId,
       csrfToken: req.csrfToken(),
@@ -39,7 +65,7 @@ exports.renderCheckout = async (req, res) => {
       editAddress,
     });
   } catch (error) {
-    console.error("Error rendering about page:", error);
+    console.error("Error rendering checkout page:", error);
     res.status(500).send("Something went wrong.");
   }
 };

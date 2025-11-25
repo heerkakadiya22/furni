@@ -40,7 +40,7 @@ document.addEventListener("input", function (e) {
 });
 
 document.addEventListener("click", async function (e) {
-  if (e.target.classList.contains("remove-cart")) {
+  if (e.target.classList.contains("remove-cart", "btn-checkout")) {
     e.preventDefault();
     const btn = e.target;
     const productId = btn.dataset.id;

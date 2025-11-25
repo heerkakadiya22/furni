@@ -198,7 +198,7 @@
 
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <button class="btn btn-black btn-lg py-3 btn-block" id="checkoutBtn"
+                                        <button class="btn btn-black btn-lg py-3 btn-block btn-checkout" id="checkoutBtn"
                                             data-cart='<%= JSON.stringify(cart || []) %>'
                                             onclick="window.location='<%= session.user ? '/checkout' : '/auth?redirect=checkout' %>'">
                                             Proceed To Checkout

@@ -254,26 +254,35 @@
                                     <th>Total</th>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Top Up T-Shirt <strong class="mx-2">x</strong>
-                                            1</td>
-                                        <td>$250.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Polo Shirt <strong class="mx-2">x</strong>
-                                            1</td>
-                                        <td>$100.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-black font-weight-bold"><strong>Cart
-                                                Subtotal</strong></td>
-                                        <td class="text-black">$350.00</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-black font-weight-bold"><strong>Order
-                                                Total</strong></td>
-                                        <td class="text-black font-weight-bold"><strong>$350.00</strong></td>
-                                    </tr>
+
+                                    <% if(cart.length> 0){ %>
+                                        <% cart.forEach(item=> { %>
+
+                                            <tr data-id="<%= item.product.id %>"
+                                                data-price="<%= item.product.newPrice %>">
+
+                                                <td>
+
+                                                    <a href="/product/<%= item.product.sku %>"
+                                                        style="text-decoration: none; display: flex;">
+                                                        <img src="/assets/admin/img/products/<%= item.product.main_img %>"
+                                                            class="img-fluid product-image rounded-2" style="    width: 30%;
+    height: 80px;" alt="Image">
+
+                                                        <h6 class="text-black align-content-center">
+                                                            <%= item.product.name %>
+                                                                <span class="mx-2">x</span>
+                                                                <%= item.quantity %>
+                                                        </h6>
+                                                    </a>
+                                                </td>
+                                                <td class="row-subtotal">
+                                                    <%= formatCurrency(item.product.newPrice * item.quantity) %>
+                                                </td>
+                                            </tr>
+
+                                            <% }) %>
+                                                <% } %>
                                 </tbody>
                             </table>
 
