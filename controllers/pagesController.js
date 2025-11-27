@@ -63,7 +63,21 @@ exports.renderThanks = (req, res) => {
       session: req.session,
     });
   } catch (error) {
-    console.error("Error rendering about page:", error);
+    console.error("Error rendering thanks page:", error);
+    res.status(500).send("Something went wrong.");
+  }
+};
+
+exports.renderPaymentFailed = (req, res) => {
+  try {
+    res.render("payment-failed", {
+      title: "payment Failed",
+      csrfToken: req.csrfToken(),
+      currentPage: "payment Failed",
+      session: req.session,
+    });
+  } catch (error) {
+    console.error("Error rendering payment failed page:", error);
     res.status(500).send("Something went wrong.");
   }
 };

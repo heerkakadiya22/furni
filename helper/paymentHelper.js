@@ -29,11 +29,26 @@ module.exports = {
   },
 
   async verifyPayment(
-    { razorpay_order_id, razorpay_payment_id, razorpay_signature },
+    { razorpay_order_id, razorpay_payment_id, razorpay_signature, statusType },
     sessionOrder,
     userId,
     addressId
   ) {
+    if (statusType === "failed") {
+      const invoice = await invoiceRepo.create({
+        user_id: userId,
+        transaction_id: null,
+        order_date: new Date(),
+        total_amount: sessionOrder.total,
+        received_amount: 0,
+        status: 2,
+        address: addressId || null,
+      });
+
+      await cartRepo.clearCart(userId);
+      return invoice;
+    }
+
     if (razorpay_order_id !== sessionOrder.id) {
       throw new Error("Order ID mismatch");
     }

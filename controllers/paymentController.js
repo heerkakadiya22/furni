@@ -1,4 +1,4 @@
-const paymentService = require("../services/paymentService");
+const paymentService = require("../helper/paymentHelper");
 
 exports.createOrder = async (req, res) => {
   try {
@@ -22,10 +22,6 @@ exports.verifyPayment = async (req, res) => {
     const userId = req.session?.user?.id;
     const sessionOrder = req.session.order;
 
-    console.log("🔥 BODY:", req.body);
-    console.log("🔥 SESSION:", sessionOrder);
-    console.log("🔥 SECRET:", process.env.RAZORPAY_KEY_SECRET);
-
     if (!sessionOrder)
       return res.status(400).json({ error: "No order session" });
 
@@ -34,16 +30,30 @@ exports.verifyPayment = async (req, res) => {
       razorpay_payment_id,
       razorpay_signature,
       address_id,
+      statusType,
     } = req.body;
 
     const invoice = await paymentService.verifyPayment(
-      { razorpay_order_id, razorpay_payment_id, razorpay_signature },
+      {
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+        statusType,
+      },
       sessionOrder,
       userId,
       address_id
     );
 
     delete req.session.order;
+
+    if (statusType === "failed") {
+      return res.json({
+        success: false,
+        invoice_id: invoice.id,
+        message: "Payment failed or cancelled",
+      });
+    }
 
     res.json({ success: true, invoice_id: invoice.id });
   } catch (err) {

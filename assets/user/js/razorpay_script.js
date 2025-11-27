@@ -1,5 +1,5 @@
 document.getElementById("payBtn").addEventListener("click", async () => {
-  const csrf = document.getElementById("csrfToken").value; 
+  const csrf = document.getElementById("csrfToken").value;
 
   const payBtn = document.getElementById("payBtn");
   const key = payBtn.dataset.key;
@@ -38,26 +38,37 @@ document.getElementById("payBtn").addEventListener("click", async () => {
     theme: {
       color: "#3b5d50",
     },
-
     handler: async (response) => {
-      const verifyRes = await fetch("/verify-payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "CSRF-Token": csrf,
-        },
-        body: JSON.stringify({
-          ...response,
-          address_id: addressId,
-        }),
-      });
+      sendStatus("success", response);
+    },
 
-      const result = await verifyRes.json();
-      if (result.success) {
-        window.location.href = `/thanks?invoice=${result.invoice_id}`;
-      } else {
-        alert("Payment verification failed");
-      }
+    modal: {
+      ondismiss: function () {
+        sendStatus("failed");
+      },
     },
   }).open();
+
+  async function sendStatus(type, response = {}) {
+    const verifyRes = await fetch("/verify-payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "CSRF-Token": csrf,
+      },
+      body: JSON.stringify({
+        statusType: type,
+        ...response,
+        address_id: addressId,
+      }),
+    });
+
+    const result = await verifyRes.json();
+
+    if (result.success) {
+      window.location.href = `/thanks?invoice=${result.invoice_id}`;
+    } else {
+      window.location.href = `/payment-failed?invoice=${result.invoice_id}`;
+    }
+  }
 });

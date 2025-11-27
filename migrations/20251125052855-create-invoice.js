@@ -15,7 +15,7 @@ module.exports = {
       },
       transaction_id: {
         type: Sequelize.STRING(255),
-        allowNull: false
+        allowNull: true
       },
       discount_id: {
         type: Sequelize.INTEGER,

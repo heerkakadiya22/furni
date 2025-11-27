@@ -7,6 +7,7 @@ router.get("/services", pageController.renderServices);
 router.get("/contact", pageController.renderContact);
 router.get("/about", pageController.renderAbout);
 router.get("/thanks", pageController.renderThanks);
+router.get("/payment-failed", pageController.renderPaymentFailed);
 router.get("/terms-and-privacy", pageController.renderTermsAndPrivacy);
 
 module.exports = router;
