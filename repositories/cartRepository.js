@@ -24,6 +24,12 @@ class CartRepository {
   async removeCartItem(userId, productId) {
     return await Cart.destroy({ where: { userId, productId } });
   }
+
+  async clearCart(userId) {
+    return await Cart.destroy({
+      where: { userId },
+    });
+  }
 }
 
 module.exports = new CartRepository();

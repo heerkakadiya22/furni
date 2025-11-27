@@ -20,6 +20,7 @@ const checkoutRoute = require("./checkoutRoute");
 const userProfileRoute = require("./userProfileRoute");
 const userPasswordRoute = require("./userPasswordRoute");
 const addressRoute = require("./addressRoute");
+const paymentRoute = require("./paymentRoute");
 
 router.get("/", indexController.renderIndex);
 
@@ -41,5 +42,6 @@ router.use(checkoutRoute);
 router.use(userProfileRoute);
 router.use(userPasswordRoute);
 router.use(addressRoute);
+router.use(paymentRoute);
 
 module.exports = router;

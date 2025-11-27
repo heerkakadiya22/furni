@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "crypto": "^1.0.1",
     "csurf": "^1.11.0",
     "dotenv": "^17.1.0",
     "ejs": "^3.1.10",
@@ -21,6 +22,7 @@
     "mysql2": "^3.14.1",
     "nodemailer": "^7.0.5",
     "nodemon": "^3.1.10",
+    "razorpay": "^2.9.6",
     "router": "^2.2.0",
     "sequelize": "^6.37.7",
     "sequelize-cli": "^6.6.3",

@@ -1,6 +1,7 @@
 const authRepo = require("../repositories/authRepository");
 const cartRepo = require("../repositories/cartRepository");
 const addressRepository = require("../repositories/addressRepository");
+const cartHelper = require("../helper/cartHelper");
 
 exports.renderCheckout = async (req, res) => {
   try {
@@ -52,10 +53,22 @@ exports.renderCheckout = async (req, res) => {
       }
     }
 
+    const hasItems = cartItems.length > 0;
+    const deliveryFee = hasItems ? 50 : 0;
+    const discount = hasItems ? 0 : 0;
+
+    const totals = cartItems.length
+      ? cartHelper.calculateCartTotals(cartItems)
+      : { subtotal: 0, total: 0 };
+
     res.render("checkout", {
       title: "checkout",
       ...user?.dataValues,
       cart: cartItems,
+      subtotal: totals.subtotal.toFixed(2),
+      deliveryFee: deliveryFee.toFixed(2),
+      discount: discount.toFixed(2),
+      total: totals.total.toFixed(2),
       user: req.session.user,
       user_id: userId,
       csrfToken: req.csrfToken(),
