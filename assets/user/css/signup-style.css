@@ -812,4 +812,57 @@ label.valid:after {
   }
 }
 
-/*# sourceMappingURL=style.css.map */
+.default-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #198754;
+  background-color: #eafaf1;
+  border-radius: 999px;
+}
+
+.signup-container label {
+  position: relative;
+  display: contents;
+  margin-bottom: -1%;
+}
+
+input[type="checkbox"] {
+  display: block !important;
+  visibility: visible !important;
+}
+
+.custom-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 18px;
+  padding-right: 2.5rem;
+}
+
+.address-form-container {
+  height: 600px;
+  border-radius: 8px;
+}
+
+/* Scrollable content */
+.form-body {
+  height: calc(600px - 60px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+.form-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.form-body::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+}

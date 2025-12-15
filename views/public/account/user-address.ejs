@@ -14,29 +14,10 @@
     <%- include('../partials/Head') %>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <link rel="stylesheet" href="/assets/user/css/signup-style.css">
         <style>
-            .signup-container label {
-                position: relative;
-                display: contents;
-                margin-bottom: -1%;
-            }
 
-            input[type="checkbox"] {
-                display: block !important;
-                visibility: visible !important;
-            }
-
-            .custom-select {
-                appearance: none;
-                -webkit-appearance: none;
-                -moz-appearance: none;
-                background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
-                background-repeat: no-repeat;
-                background-position: right 10px center;
-                background-size: 18px;
-                padding-right: 2.5rem;
-            }
         </style>
 
 </head>
@@ -60,10 +41,10 @@
         </div>
 
         <section class="signup">
-            <div class="signup-container">
-                <div class="signup-content">
+            <div class="signup-container" style="width: 80%;">
+                <div class="signup-content" style="margin-top: -15%;">
 
-                    <div class="signup-form" style="width: 100%;">
+                    <div class="signup-form" style="width: 38%;">
                         <!-- Saved Addresses -->
                         <div class="saved-addresses mb-4">
                             <h3 class="mb-3 fw-bold">Saved Addresses</h3>
@@ -91,7 +72,9 @@
                                                     <small>Type: <%= addr.type %></small>
                                                 </p>
                                                 <% if (addr.isDefault) { %>
-                                                    <span class="badge bg-success mt-1">Default</span>
+                                                    <span class="default-badge">
+                                                        <i class="bi bi-check-circle-fill"></i> Default Address
+                                                    </span>
                                                     <% } %>
                                             </div>
                                         </div>
@@ -123,137 +106,153 @@
                             </div>
                         </div>
 
-
-
-                        <hr>
-
-                        <% if (success) { %>
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <%= success %>
-                            </div>
-                            <% } %>
-                                <% if (error) { %>
-                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                        <%= error %>
-                                    </div>
-                                    <% } %>
-
-                                        <!-- Address Form -->
-                                        <form action="/user-address" method="POST" id="addressForm"
-                                            class="validation-form" novalidate>
-                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                            <input type="hidden" name="user_id" value="<%= user_id %>">
-                                            <input type="hidden" name="id" id="addressId"
-                                                value="<%= editAddress ? editAddress.id : '' %>">
-
-                                            <div class="form-group mb-3">
-                                                <input type="text" class="form-control" name="name" id="name"
-                                                    placeholder="Full Name"
-                                                    value="<%= editAddress ? editAddress.fullName : '' %>" required />
-                                            </div>
-
-                                            <div class="form-group mb-3">
-                                                <label for="number" class="form-label">Contact Number</label>
-                                                <input type="text" class="form-control" name="number" id="number"
-                                                    placeholder="Enter contact number"
-                                                    value="<%= editAddress ? editAddress.number : '' %>" required />
-                                            </div>
-
-
-
-                                            <div class="row">
-                                                <div class="form-group col-md-6 mb-3">
-                                                    <label for="type" class="form-label">Address Type</label>
-                                                    <select name="type" id="type" class="form-control custom-select"
-                                                        required>
-                                                        <option value="">Select Type</option>
-                                                        <option value="Home" <%=editAddress && editAddress.type==="Home"
-                                                            ? 'selected' : '' %>>Home</option>
-                                                        <option value="Office" <%=editAddress &&
-                                                            editAddress.type==="Office" ? 'selected' : '' %>>Office
-                                                        </option>
-                                                        <option value="Other" <%=editAddress &&
-                                                            editAddress.type==="Other" ? 'selected' : '' %>>Other
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group col-md-6 mb-3">
-                                                    <label for="no" class="form-label">House / Flat No.</label>
-                                                    <input type="text" class="form-control" name="no" id="no"
-                                                        placeholder="Enter house or flat number"
-                                                        value="<%= editAddress ? editAddress.no : '' %>" required />
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group mb-3">
-                                                <label for="street" class="form-label">Street</label>
-                                                <textarea name="street" id="street" cols="30" rows="2"
-                                                    placeholder="Enter street name" class="form-control" required>
-                                                    <%= editAddress ? editAddress.street : '' %>
-                                                </textarea>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="form-group col-md-6 mb-3">
-                                                    <label for="state" class="form-label">State</label>
-                                                    <select name="state" id="state" class="form-control custom-select"
-                                                        required>
-                                                        <option value="">Select State</option>
-                                                    </select>
-                                                </div>
-
-                                                <div class="form-group col-md-6 mb-3">
-                                                    <label for="city" class="form-label">City</label>
-                                                    <select name="city" id="city" class="form-control custom-select"
-                                                        required>
-                                                        <option value="">Select City</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-
-                                            <div class="row">
-                                                <div class="form-group col-md-6 mb-3">
-                                                    <label for="country" class="form-label">Country</label>
-                                                    <input type="text" class="form-control" name="country" id="country"
-                                                        placeholder="Enter country"
-                                                        value="<%= editAddress ? editAddress.country : '' %>"
-                                                        required />
-                                                </div>
-
-                                                <div class="form-group col-md-6 mb-3">
-                                                    <label for="zipCode" class="form-label">Zip Code</label>
-                                                    <input type="text" class="form-control" name="zipCode" id="zipCode"
-                                                        placeholder="Enter zip code"
-                                                        value="<%= editAddress ? editAddress.zipCode : '' %>"
-                                                        required />
-                                                </div>
-
-                                            </div>
-                                            <div class="form-group ">
-                                                <label for="landMark" class="form-label">Landmark (optional)</label>
-                                                <textarea name="landMark" id="landMark" cols="30" rows="2"
-                                                    placeholder="Enter landmark" class="form-control">
-                                                    <%= editAddress ? editAddress.landMark : '' %>
-                                                </textarea>
-                                            </div>
-
-                                            <div class="form-group mb-3">
-                                                <div class="form-check">
-                                                    <input type="checkbox" name="isDefault" id="isDefault"
-                                                        class="form-check-input" <%=editAddress && editAddress.isDefault
-                                                        ? 'checked' : '' %> />
-                                                    <label class="form-check-label" for="isDefault">Set as default
-                                                        address</label>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group form-button">
-                                                <input type="submit" class="btn btn-primary"
-                                                    value="<%= editAddress ? 'Update Address' : 'Add Address' %>" />
-                                            </div>
-                                        </form>
                     </div>
+
+                    <hr>
+
+
+
+                    <!-- Address Form -->
+                    <div class="address-form-container">
+                        <div class="form-header mb-3">
+                            <a href="javascript:history.back()" class="btn-back-custom d-inline-flex align-items-center"
+                                style="margin-left: 76%;">
+                                <i class="bi bi-arrow-left me-2"></i> Go Back
+                            </a>
+                        </div>
+                        <div class="form-body">
+                            <% if (success) { %>
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <%= success %>
+                                </div>
+                                <% } %>
+                                    <% if (error) { %>
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <%= error %>
+                                        </div>
+                                        <% } %>
+                                            <form action="/user-address" method="POST" id="addressForm"
+                                                class="validation-form" novalidate>
+
+
+                                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                <input type="hidden" name="user_id" value="<%= user_id %>">
+                                                <input type="hidden" name="id" id="addressId"
+                                                    value="<%= editAddress ? editAddress.id : '' %>">
+
+                                                <div class="form-group mb-3">
+                                                    <input type="text" class="form-control" name="name" id="name"
+                                                        placeholder="Full Name"
+                                                        value="<%= editAddress ? editAddress.fullName : '' %>"
+                                                        required />
+                                                </div>
+
+                                                <div class="form-group mb-3">
+                                                    <label for="number" class="form-label">Contact Number</label>
+                                                    <input type="text" class="form-control" name="number" id="number"
+                                                        placeholder="Enter contact number"
+                                                        value="<%= editAddress ? editAddress.number : '' %>" required />
+                                                </div>
+
+
+
+                                                <div class="row">
+                                                    <div class="form-group col-md-6 mb-3">
+                                                        <label for="type" class="form-label">Address Type</label>
+                                                        <select name="type" id="type" class="form-control custom-select"
+                                                            required>
+                                                            <option value="">Select Type</option>
+                                                            <option value="Home" <%=editAddress &&
+                                                                editAddress.type==="Home" ? 'selected' : '' %>>Home
+                                                            </option>
+                                                            <option value="Office" <%=editAddress &&
+                                                                editAddress.type==="Office" ? 'selected' : '' %>>Office
+                                                            </option>
+                                                            <option value="Other" <%=editAddress &&
+                                                                editAddress.type==="Other" ? 'selected' : '' %>>Other
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-md-6 mb-3">
+                                                        <label for="no" class="form-label">House / Flat No.</label>
+                                                        <input type="text" class="form-control" name="no" id="no"
+                                                            placeholder="Enter house or flat number"
+                                                            value="<%= editAddress ? editAddress.no : '' %>" required />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group mb-3">
+                                                    <label for="street" class="form-label">Street</label>
+                                                    <textarea name="street" id="street" cols="30" rows="2"
+                                                        placeholder="Enter street name" class="form-control" required>
+                                                        <%= editAddress ? editAddress.street : '' %>
+                                                    </textarea>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="form-group col-md-6 mb-3">
+                                                        <label for="state" class="form-label">State</label>
+                                                        <select name="state" id="state"
+                                                            class="form-control custom-select" required>
+                                                            <option value="">Select State</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="form-group col-md-6 mb-3">
+                                                        <label for="city" class="form-label">City</label>
+                                                        <select name="city" id="city" class="form-control custom-select"
+                                                            required>
+                                                            <option value="">Select City</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row">
+                                                    <div class="form-group col-md-6 mb-3">
+                                                        <label for="country" class="form-label">Country</label>
+                                                        <input type="text" class="form-control" name="country"
+                                                            id="country" placeholder="Enter country"
+                                                            value="<%= editAddress ? editAddress.country : '' %>"
+                                                            required />
+                                                    </div>
+
+                                                    <div class="form-group col-md-6 mb-3">
+                                                        <label for="zipCode" class="form-label">Zip Code</label>
+                                                        <input type="text" class="form-control" name="zipCode"
+                                                            id="zipCode" placeholder="Enter zip code"
+                                                            value="<%= editAddress ? editAddress.zipCode : '' %>"
+                                                            required />
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="landMark" class="form-label">Landmark (optional)</label>
+                                                    <textarea name="landMark" id="landMark" cols="30" rows="2"
+                                                        placeholder="Enter landmark" class="form-control">
+                                                        <%= editAddress ? editAddress.landMark : '' %>
+                                                    </textarea>
+                                                </div>
+
+                                                <div class="form-group mb-3">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" name="isDefault" id="isDefault"
+                                                            class="form-check-input" <%=editAddress &&
+                                                            editAddress.isDefault ? 'checked' : '' %> />
+                                                        <label class="form-check-label" for="isDefault">Set as default
+                                                            address</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group form-button">
+                                                    <input type="submit" class="btn btn-primary"
+                                                        value="<%= editAddress ? 'Update Address' : 'Add Address' %>" />
+                                                </div>
+                                            </form>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </section>
@@ -261,14 +260,14 @@
         <%- include('../partials/footer') %>
             <%- include('../partials/script') %>
 
-                <script src="../assets/user/js/address_script.js"></script>
+                <script src="/assets/user/js/address_script.js"></script>
                 <!-- JS -->
                 <script src="/assets/user/vendor/jquery/jquery.min.js"></script>
                 <script src="/assets/user/js/alertmsg.js"></script>
                 <script
                     src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
-                <script src="../assets/admin/vendor/libs/jquery/jquery-validation.js"></script>
-                <script src="../assets/admin/vendor/js/custom.js"></script>
+                <script src="/assets/admin/vendor/libs/jquery/jquery-validation.js"></script>
+                <script src="/assets/admin/vendor/js/custom.js"></script>
 
 </body>
 

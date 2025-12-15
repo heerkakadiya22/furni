@@ -27,6 +27,8 @@ document.getElementById("payBtn").addEventListener("click", async () => {
     body: JSON.stringify({ address_id: addressId }),
   });
 
+  console.log(orderRes);
+
   const order = await orderRes.json();
   if (!order.id) return alert("Order creation failed");
 

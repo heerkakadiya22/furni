@@ -21,7 +21,7 @@ exports.renderAddressPage = async (req, res) => {
     req.session.error = null;
 
     res.render("user-address", {
-      title: editId ? "Edit Address" : "Manage Addresses",
+      title: editId ? "Edit Address" : "Addresses",
       currentPage: "user-address",
       csrfToken: req.csrfToken(),
       user_id: userId,
@@ -65,7 +65,6 @@ exports.saveAddress = async (req, res) => {
       !zipCode ||
       !country
     ) {
-      req.session.error = "Please fill in all required fields before saving.";
       return res.redirect("/user-address");
     }
 

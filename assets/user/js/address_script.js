@@ -117,27 +117,48 @@ document.addEventListener("DOMContentLoaded", () => {
         ? `/checkout/${addressId}`
         : `/user-address/${addressId}`;
 
-      if (confirm("Are you sure you want to delete this address?")) {
-        fetch(deleteUrl, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            "CSRF-Token": csrfToken,
-          },
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.success) {
-              this.closest(".saved-address").remove();
-            } else {
-              alert(data.message || "Failed to delete address.");
-            }
+      Swal.fire({
+        title: "Delete address?",
+        text: "This action cannot be undone.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete",
+        cancelButtonText: "Cancel",
+        confirmButtonColor: "#3b5d50",
+        cancelButtonColor: "#6c757d",
+        reverseButtons: true,
+      }).then((result) => {
+        if (!result.isConfirmed) return;
+        {
+          fetch(deleteUrl, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              "CSRF-Token": csrfToken,
+            },
           })
-          .catch((err) => {
-            console.error(err);
-            alert("Error deleting address.");
-          });
-      }
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.success) {
+                this.closest(".saved-address").remove();
+
+                Swal.fire({
+                  icon: "success",
+                  title: "Deleted!",
+                  text: "Address has been removed.",
+                  timer: 1500,
+                  showConfirmButton: false,
+                });
+              } else {
+                Swal.fire("Error", data.message || "Delete failed", "error");
+              }
+            })
+            .catch((err) => {
+              console.error(err);
+              Swal.fire("Error", "Something went wrong", "error");
+            });
+        }
+      });
     });
   });
 });

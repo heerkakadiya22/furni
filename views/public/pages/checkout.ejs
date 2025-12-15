@@ -9,10 +9,12 @@
 
     <meta name="description" content />
     <meta name="keywords" content="bootstrap, bootstrap4" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <%- include('../partials/Head') %>
         <title>
             <%= title %>
         </title>
+
         <style>
             label.error {
                 color: #ff0019;
@@ -36,6 +38,18 @@
                 background-position: right 10px center;
                 background-size: 18px;
                 padding-right: 2.5rem;
+            }
+
+            .default-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 4px 10px;
+                font-size: 12px;
+                font-weight: 600;
+                color: #198754;
+                background-color: #eafaf1;
+                border-radius: 999px;
             }
         </style>
 </head>
@@ -98,7 +112,9 @@
                                                         <small>Type: <%= addr.type %></small>
                                                     </p>
                                                     <% if (addr.isDefault) { %>
-                                                        <span class="badge bg-success mt-1">Default</span>
+                                                        <span class="default-badge">
+                                                            <i class="bi bi-check-circle-fill"></i> Default Address
+                                                        </span>
                                                         <% } %>
                                                 </div>
                                             </div>

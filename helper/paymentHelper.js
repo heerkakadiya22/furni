@@ -41,7 +41,7 @@ module.exports = {
         order_date: new Date(),
         total_amount: sessionOrder.total,
         received_amount: 0,
-        status: 2,
+        status: 0,
         address: addressId || null,
       });
 
