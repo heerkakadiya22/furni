@@ -53,6 +53,9 @@
                                 </div>
                                 <div class="invoice-title">
                                     <h2>INVOICE</h2>
+                                    <p><strong>invoice Number:</strong>
+                                        #<%= invoice.id %>
+                                    </p>
                                     <p><strong>Date:</strong>
                                         <%= invoice.order_date.toDateString() %>
                                     </p>
@@ -64,9 +67,31 @@
                             <!-- ADDRESSES -->
                             <div class="invoice-address">
                                 <div>
-                                    <h4>Bill From</h4>
+                                    <h5 class="text-success fw-bold">Bill To</h5>
+                                    <h5 class="fw-bold">
+                                        <%= user.name %>
+                                    </h5>
+
+                                    <p class="text-dark">
+
+                                        <% if (address) { %>
+                                            <%= address.no %>,
+                                                <%= address.street %>,<br>
+                                                    <%= address.city %>,
+                                                        <%= address.state %> - <%= address.zipCode %>
+                                                                <% } else { %>
+                                                                    Address not available
+                                                                    <% } %>
+
+                                                                        <br>
+                                                                        <%= user.email %>
+                                    </p>
+
+                                </div>
+                                <div class="me-4">
+                                    <h5 class="text-success fw-bold">Bill From</h5>
                                     <p>
-                                    <h5 class="navbar-brand-name">Furni<span>.</span></h5>
+                                    <h5 class="navbar-brand-name fw-bold">Furni<span>.</span></h5>
                                     123 Business Street<br>
                                     Surat, Gujarat<br>
                                     support@furni.com
@@ -74,25 +99,6 @@
                                 </div>
 
 
-                                <div>
-                                    <h4>Bill To</h4>
-                                    <p>
-                                        <%= user.name %><br>
-
-                                            <% if (address) { %>
-                                                <%= address.no %>,
-                                                    <%= address.street %>,<br>
-                                                        <%= address.city %>,
-                                                            <%= address.state %> - <%= address.zipCode %>
-                                                                    <% } else { %>
-                                                                        Address not available
-                                                                        <% } %>
-
-                                                                            <br>
-                                                                            <%= user.email %>
-                                    </p>
-
-                                </div>
                             </div>
 
                             <!-- PRODUCT TABLE -->

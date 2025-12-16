@@ -2,17 +2,17 @@ const { Invoice, User, Address } = require("../models");
 
 exports.renderInvoice = async (req, res) => {
   try {
-    if (!req.session.user) {
-      return res.redirect("/login");
-    }
+    if (!req.session.user) return res.redirect("/login");
 
     const invoiceId = Number(req.params.id);
-    const userId = req.session.user.id;
+    if (Number.isNaN(invoiceId)) {
+      return res.status(400).send("Invalid invoice id");
+    }
 
     const invoice = await Invoice.findOne({
       where: {
         id: invoiceId,
-        user_id: userId,
+        user_id: req.session.user.id,
         status: 1,
       },
     });
@@ -32,9 +32,10 @@ exports.renderInvoice = async (req, res) => {
 
     let items = [];
     try {
-      items = invoice.extra ? JSON.parse(invoice.extra) : [];
-    } catch (error) {
-      console.error("Error parsing invoice items:", error);
+      const parsed = invoice.extra ? JSON.parse(invoice.extra) : [];
+      items = Array.isArray(parsed) ? parsed : [parsed];
+    } catch (err) {
+      console.error("BROKEN INVOICE JSON:", invoice.extra);
     }
 
     res.render("invoice", {
@@ -52,3 +53,4 @@ exports.renderInvoice = async (req, res) => {
     res.status(500).send("Something went wrong");
   }
 };
+
