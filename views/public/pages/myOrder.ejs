@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+    <link rel="shortcut icon" href="favicon.png">
+    <meta name="description" content />
+    <meta name="keywords" content="bootstrap, bootstrap4" />
+    <title>
+        <%= title %>
+    </title>
+    <%- include('../partials/Head') %>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="/assets/user/css/signup-style.css">
+
+
+</head>
+
+<body>
+    <%- include('../partials/header') %>
+
+        <div class="hero">
+            <div class="container">
+                <div class="row justify-content-between">
+                    <div class="col-lg-5">
+                        <div class="intro-excerpt">
+                            <h1 id="form-heading">
+                                <%= title %>
+                            </h1>
+                        </div>
+                    </div>
+                    <div class="col-lg-7"></div>
+                </div>
+            </div>
+        </div>
+
+        <section class="signup">
+            <div class="signup-container">
+                <div class="order-history-container">
+
+                    <!-- Tabs -->
+                    <div class="order-tabs">
+                        <a href="/orders?type=success"
+                            class="tab <%= activeTab === 'success' ? 'active' : '' %>">Success</a>
+                        <a href="/orders?type=unpaid"
+                            class="tab <%= activeTab === 'unpaid' ? 'active' : '' %>">Unpaid</a>
+                        <a href="/orders?type=all" class="tab <%= activeTab === 'all' ? 'active' : '' %>">All orders</a>
+                    </div>
+
+                    <!-- Orders -->
+                    <div class="orders-wrapper">
+
+                        <% if (orders.length===0) { %>
+                            <div class="empty-state">
+                                No orders found.
+                            </div>
+                            <% } %>
+
+                                <% orders.forEach(order=> { %>
+                                    <div class="order-card">
+
+                                        <!-- Header -->
+                                        <div class="order-header">
+                                            <div>
+                                                <h4>Order #<%= order.id %>
+                                                </h4>
+                                                <p class="muted">
+                                                    <%= order.order_date.toDateString() %>
+                                                </p>
+                                            </div>
+
+                                            <% if (order.status===1) { %>
+                                                <a href="/invoice/<%= order.id %>" class="btn-outline">
+                                                    Download invoice
+                                                </a>
+                                                <% } %>
+                                        </div>
+
+                                        <!-- Meta -->
+                                        <div class="order-meta">
+                                            <span class="status <%= order.status === 1 ? 'success' : 'failed' %>">
+                                                <%= order.status===1 ? 'PAID' : 'UNPAID' %>
+                                            </span>
+
+                                            <strong>Total: ₹<%= order.total_amount %></strong>
+                                        </div>
+
+                                        <!-- Items -->
+                                        <div class="order-items">
+                                            <% order.items.slice(0, 4).forEach(item=> { %>
+                                                <div class="item">
+                                                    <img src="/assets/admin/img/products/<%= item.image %>" alt="">
+                                                    <div>
+                                                        <p class="item-name">
+                                                            <%= item.product_name %>
+                                                        </p>
+                                                        <p class="muted">Qty: <%= item.quantity %>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <% }) %>
+                                        </div>
+
+                                    </div>
+                                    <% }) %>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <%- include('../partials/footer') %>
+            <%- include('../partials/script') %>
+
+</body>
+
+</html>

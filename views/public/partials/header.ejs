@@ -71,6 +71,7 @@
 				<li class="nav-item <%= currentPage === 'contact' ? 'active' : '' %>">
 					<a class="nav-link" href="/contact">Contact us</a>
 				</li>
+
 				<% if (session.user && session.user.roleId===1) { %>
 					<li class="nav-item <%= currentPage === 'dashboard' ? 'active' : '' %>">
 						<a class="nav-link" href="/dashboard">Admin Panel</a>
@@ -99,6 +100,11 @@
 								<li><a class="dropdown-item" href="/user-profile"><i
 											class="bi bi-person-fill me-2"></i>Profile</a></li>
 								<li>
+
+								<li><a class="dropdown-item" href="/orders"><i class="bi bi-card-list me-2"></i>My
+										Orders</a></li>
+								<li>
+
 
 								<li><a class="dropdown-item" href="/user-changePassword"><i
 											class="bi bi-shield-lock-fill me-2"></i>Change Password</a></li>
