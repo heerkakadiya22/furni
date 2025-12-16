@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+    <link rel="shortcut icon" href="favicon.png">
+    <meta name="description" content />
+    <meta name="keywords" content="bootstrap, bootstrap4" />
+    <title>
+        <%= title %>
+    </title>
+    <%- include('../partials/Head') %>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="/assets/user/css/signup-style.css">
+
+
+</head>
+
+<body>
+    <%- include('../partials/header') %>
+
+        <div class="hero">
+            <div class="container">
+                <div class="row justify-content-between">
+                    <div class="col-lg-5">
+                        <div class="intro-excerpt">
+                            <h1 id="form-heading">
+                                <%= title %>
+                            </h1>
+                        </div>
+                    </div>
+                    <div class="col-lg-7"></div>
+                </div>
+            </div>
+        </div>
+
+        <section class="signup">
+            <div class="signup-container">
+                <div class="signup-content">
+                    <section class="invoice-wrapper">
+                        <div class="invoice-box">
+
+                            <!-- HEADER -->
+                            <div class="invoice-header">
+                                <div class="logo">
+                                    <img src="/assets/user/images/favicon.png" alt="Company Logo"
+                                        style="width: 30px; height: 30px; margin-bottom: 10%;">
+
+                                    <a class="navbar-brand menu-link">Furni<span>.</span></a>
+                                </div>
+                                <div class="invoice-title">
+                                    <h2>INVOICE</h2>
+                                    <p><strong>Date:</strong>
+                                        <%= invoice.order_date.toDateString() %>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <!-- ADDRESSES -->
+                            <div class="invoice-address">
+                                <div>
+                                    <h4>Bill From</h4>
+                                    <p>
+                                    <h5 class="navbar-brand-name">Furni<span>.</span></h5>
+                                    123 Business Street<br>
+                                    Surat, Gujarat<br>
+                                    support@furni.com
+                                    </p>
+                                </div>
+
+
+                                <div>
+                                    <h4>Bill To</h4>
+                                    <p>
+                                        <%= user.name %><br>
+
+                                            <% if (address) { %>
+                                                <%= address.no %>,
+                                                    <%= address.street %>,<br>
+                                                        <%= address.city %>,
+                                                            <%= address.state %> - <%= address.zipCode %>
+                                                                    <% } else { %>
+                                                                        Address not available
+                                                                        <% } %>
+
+                                                                            <br>
+                                                                            <%= user.email %>
+                                    </p>
+
+                                </div>
+                            </div>
+
+                            <!-- PRODUCT TABLE -->
+                            <table class="invoice-table">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Qty</th>
+                                        <th>Price</th>
+                                        <th>subTotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (items && items.length> 0) { %>
+                                        <% items.forEach(item=> { %>
+                                            <tr>
+                                                <td>
+                                                    <img src="/assets/admin/img/products/<%= item.image %>" width="50">
+                                                    <%= item.product_name %>
+                                                </td>
+                                                <td>
+                                                    <%= item.quantity %>
+                                                </td>
+                                                <td>₹<%= item.price %>
+                                                </td>
+                                                <td>₹<%= item.quantity * item.price %>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="4" style="text-align:center;">No items found</td>
+                                                    </tr>
+                                                    <% } %>
+
+                                </tbody>
+                            </table>
+
+                            <!-- TOTALS -->
+                            <div class="invoice-summary">
+                                <div>
+                                    <p class="total">Total</p>
+                                </div>
+                                <div>
+                                    <p class="total">₹<%= invoice.total_amount %>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <!-- FOOTER -->
+                            <div class="invoice-footer">
+                                <p><strong>Payment Status:</strong> PAID</p>
+                                <p><strong>Transaction ID:</strong>
+                                    <%= invoice.transaction_id %>
+                                </p>
+
+                                <button onclick="window.print()">Print Invoice</button>
+                            </div>
+
+                        </div>
+                    </section>
+
+
+
+                </div>
+            </div>
+        </section>
+
+        <%- include('../partials/footer') %>
+            <%- include('../partials/script') %>
+                <!-- JS -->
+                <script src="/assets/user/vendor/jquery/jquery.min.js"></script>
+                <script src="/assets/user/js/alertmsg.js"></script>
+                <script
+                    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+                <script src="/assets/admin/vendor/libs/jquery/jquery-validation.js"></script>
+                <script src="/assets/admin/vendor/js/custom.js"></script>
+
+</body>
+
+</html>

@@ -1,119 +1,113 @@
-const form = document.getElementById("addressForm");
-const addressIdInput = document.getElementById("addressId");
-const stateSelect = document.getElementById("state");
-const citySelect = document.getElementById("city");
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("addressForm");
+  const addressIdInput = document.getElementById("addressId");
+  const stateSelect = document.getElementById("state");
+  const citySelect = document.getElementById("city");
+  const csrfToken = document.getElementById("csrfToken")?.value;
 
-const famousCities = {
-  Gujarat: ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar"],
-  Maharashtra: ["Mumbai", "Pune", "Nagpur", "Nashik", "Aurangabad"],
-  Delhi: ["New Delhi", "Dwarka", "Rohini", "Saket", "Karol Bagh"],
-  Rajasthan: ["Jaipur", "Udaipur", "Jodhpur", "Kota", "Ajmer"],
-  Karnataka: ["Bengaluru", "Mysore", "Mangalore", "Hubli", "Belgaum"],
-  "Tamil Nadu": [
-    "Chennai",
-    "Coimbatore",
-    "Madurai",
-    "Salem",
-    "Tiruchirappalli",
-  ],
-  "Uttar Pradesh": ["Lucknow", "Kanpur", "Agra", "Varanasi", "Ghaziabad"],
-};
-const allowedStates = Object.keys(famousCities);
+  const famousCities = {
+    Gujarat: ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar"],
+    Maharashtra: ["Mumbai", "Pune", "Nagpur", "Nashik", "Aurangabad"],
+    Delhi: ["New Delhi", "Dwarka", "Rohini", "Saket", "Karol Bagh"],
+    Rajasthan: ["Jaipur", "Udaipur", "Jodhpur", "Kota", "Ajmer"],
+    Karnataka: ["Bengaluru", "Mysore", "Mangalore", "Hubli", "Belgaum"],
+    "Tamil Nadu": [
+      "Chennai",
+      "Coimbatore",
+      "Madurai",
+      "Salem",
+      "Tiruchirappalli",
+    ],
+    "Uttar Pradesh": ["Lucknow", "Kanpur", "Agra", "Varanasi", "Ghaziabad"],
+  };
 
-function populateStates(preselectedState = "", preselectedCity = "") {
-  stateSelect.innerHTML = '<option value="">Select State</option>';
-  allowedStates.forEach((state) => {
-    const option = document.createElement("option");
-    option.value = state;
-    option.textContent = state;
-    stateSelect.appendChild(option);
-  });
+  function populateStates(state = "", city = "") {
+    stateSelect.innerHTML = `<option value="">Select State</option>`;
+    Object.keys(famousCities).forEach((s) => {
+      stateSelect.innerHTML += `<option value="${s}">${s}</option>`;
+    });
 
-  if (preselectedState) {
-    stateSelect.value = preselectedState;
-    populateCities(preselectedState, preselectedCity);
-  } else {
-    citySelect.innerHTML = '<option value="">Select City</option>';
+    if (state) {
+      stateSelect.value = state;
+      populateCities(state, city);
+    } else {
+      citySelect.innerHTML = `<option value="">Select City</option>`;
+    }
   }
-}
 
-function populateCities(stateName, preselectedCity = "") {
-  citySelect.innerHTML = '<option value="">Select City</option>';
-  const cities = famousCities[stateName] || [];
-  cities.forEach((city) => {
-    const option = document.createElement("option");
-    option.value = city;
-    option.textContent = city;
-    if (city === preselectedCity) option.selected = true;
-    citySelect.appendChild(option);
+  function populateCities(state, selectedCity = "") {
+    citySelect.innerHTML = `<option value="">Select City</option>`;
+    (famousCities[state] || []).forEach((c) => {
+      citySelect.innerHTML += `<option value="${c}" ${
+        c === selectedCity ? "selected" : ""
+      }>${c}</option>`;
+    });
+  }
+
+  stateSelect.addEventListener("change", () => {
+    populateCities(stateSelect.value);
+    form.country.value = stateSelect.value ? "India" : "";
   });
-}
 
-stateSelect.addEventListener("change", () => {
-  populateCities(stateSelect.value);
+  function fillForm(addr) {
+    addressIdInput.value = addr.id;
 
-  const countryInput = document.getElementById("country");
-  countryInput.value = stateSelect.value ? "India" : "";
-});
+    form.name.value = addr.fullName || "";
+    form.number.value = addr.number || "";
+    form.no.value = addr.no || "";
+    form.street.value = addr.street || "";
+    form.zipCode.value = addr.zipCode || "";
+    form.landMark.value = addr.landMark || "";
+    form.country.value = addr.country || "India";
+    form.type.value = addr.type || "";
+    form.isDefault.checked = !!addr.isDefault;
 
-function fillForm(addr) {
-  addressIdInput.value = addr.id || "";
-  form.name.value = addr.fullName || "";
-  form.number.value = addr.number || "";
-  form.no.value = addr.no || "";
-  form.street.value = addr.street || "";
-  form.zipCode.value = addr.zipCode || "";
-  form.landMark.value = addr.landMark || "";
-  form.country.value = addr.country || "";
-  form.type.value = addr.type || "";
-  form.isDefault.checked = !!addr.isDefault;
+    populateStates(addr.state, addr.city);
+  }
 
-  populateStates(addr.state || "", addr.city || "");
-}
-
-document.querySelectorAll('input[name="selectedAddress"]').forEach((radio) => {
-  radio.addEventListener("change", function () {
-    if (this.value === "new") {
-      form.reset();
-      addressIdInput.value = "";
-      populateStates();
-      return;
-    }
-
-    try {
-      const addr = JSON.parse(this.dataset.addr);
-      fillForm(addr);
-    } catch (err) {
-      console.error("Invalid address data:", err);
-    }
-  });
-});
-
-window.addEventListener("DOMContentLoaded", () => {
-  const defaultRadio = document.querySelector(
-    'input[name="selectedAddress"]:checked'
-  );
-  if (defaultRadio && defaultRadio.value !== "new") {
-    try {
-      const addr = JSON.parse(defaultRadio.dataset.addr);
-      fillForm(addr);
-    } catch (err) {
-      console.error("Invalid default address data:", err);
-    }
-  } else {
+  function resetFormForNew() {
+    form.reset();
+    addressIdInput.value = "";
     populateStates();
   }
-});
 
-document.addEventListener("DOMContentLoaded", () => {
-  const csrfToken = document.getElementById("csrfToken").value;
+  const radios = document.querySelectorAll('input[name="selectedAddress"]');
 
-  document.querySelectorAll(".delete-address-btn").forEach((button) => {
-    button.addEventListener("click", function () {
-      const addressId = this.dataset.id;
+  radios.forEach((radio) => {
+    radio.addEventListener("change", () => {
+      localStorage.setItem("selectedAddress", radio.value);
 
-      const currentPath = window.location.pathname;
-      const deleteUrl = currentPath.includes("checkout")
+      if (radio.value === "new") {
+        resetFormForNew();
+        return;
+      }
+
+      const addr = JSON.parse(radio.dataset.addr);
+      fillForm(addr);
+
+      addressIdInput.value = radio.value;
+    });
+  });
+
+  const saved = localStorage.getItem("selectedAddress");
+
+  let radioToSelect =
+    (saved &&
+      document.querySelector(
+        `input[name="selectedAddress"][value="${saved}"]`
+      )) ||
+    document.querySelector('input[name="selectedAddress"]:checked') ||
+    document.querySelector('input[name="selectedAddress"][value="new"]');
+
+  if (radioToSelect) {
+    radioToSelect.checked = true;
+    radioToSelect.dispatchEvent(new Event("change"));
+  }
+
+  document.querySelectorAll(".delete-address-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const addressId = btn.dataset.id;
+      const deleteUrl = location.pathname.includes("checkout")
         ? `/checkout/${addressId}`
         : `/user-address/${addressId}`;
 
@@ -123,66 +117,25 @@ document.addEventListener("DOMContentLoaded", () => {
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes, delete",
-        cancelButtonText: "Cancel",
-        confirmButtonColor: "#3b5d50",
-        cancelButtonColor: "#6c757d",
-        reverseButtons: true,
-      }).then((result) => {
+      }).then(async (result) => {
         if (!result.isConfirmed) return;
-        {
-          fetch(deleteUrl, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-              "CSRF-Token": csrfToken,
-            },
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              if (data.success) {
-                this.closest(".saved-address").remove();
 
-                Swal.fire({
-                  icon: "success",
-                  title: "Deleted!",
-                  text: "Address has been removed.",
-                  timer: 1500,
-                  showConfirmButton: false,
-                });
-              } else {
-                Swal.fire("Error", data.message || "Delete failed", "error");
-              }
-            })
-            .catch((err) => {
-              console.error(err);
-              Swal.fire("Error", "Something went wrong", "error");
-            });
+        const res = await fetch(deleteUrl, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "CSRF-Token": csrfToken,
+          },
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          btn.closest(".saved-address")?.remove();
+          Swal.fire("Deleted", "Address removed", "success");
+        } else {
+          Swal.fire("Error", data.message || "Delete failed", "error");
         }
       });
-    });
-  });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-  const radios = document.querySelectorAll("input[name='selectedAddress']");
-  const lastSelected = localStorage.getItem("lastSelectedAddress");
-
-  if (lastSelected) {
-    const target = document.querySelector(
-      `input[name='selectedAddress'][value='${lastSelected}']`
-    );
-    if (target) {
-      target.checked = true;
-    } else {
-      const defaultRadio = document.querySelector(
-        "input[name='selectedAddress'][data-addr*='\"isDefault\":true']"
-      );
-      if (defaultRadio) defaultRadio.checked = true;
-    }
-  }
-  radios.forEach((radio) => {
-    radio.addEventListener("change", function () {
-      localStorage.setItem("lastSelectedAddress", this.value);
     });
   });
 });

@@ -21,6 +21,7 @@ const userProfileRoute = require("./userProfileRoute");
 const userPasswordRoute = require("./userPasswordRoute");
 const addressRoute = require("./addressRoute");
 const paymentRoute = require("./paymentRoute");
+const invoiceRoute = require("./invoiceRoute");
 
 router.get("/", indexController.renderIndex);
 
@@ -43,5 +44,6 @@ router.use(userProfileRoute);
 router.use(userPasswordRoute);
 router.use(addressRoute);
 router.use(paymentRoute);
+router.use(invoiceRoute);
 
 module.exports = router;

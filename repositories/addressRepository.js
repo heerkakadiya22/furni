@@ -29,7 +29,7 @@ class AddressRepository {
   }
   async findDefaultByUser(userId) {
     return await Address.findOne({
-      where: { user_id: userId, isDefault: true },
+      where: { user_id: userId, isDefault: 1 },
     });
   }
 }

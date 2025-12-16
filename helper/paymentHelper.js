@@ -2,6 +2,7 @@ const razorpay = require("../config/razorpay");
 const crypto = require("crypto");
 const cartRepo = require("../repositories/cartRepository");
 const invoiceRepo = require("../repositories/invoiceRepository");
+const addressRepo = require("../repositories/addressRepository");
 
 module.exports = {
   async createOrder(userId) {
@@ -34,6 +35,21 @@ module.exports = {
     userId,
     addressId
   ) {
+    if (addressId === "null" || addressId === "undefined" || addressId === "") {
+      addressId = null;
+    }
+    let finalAddressId = addressId;
+
+    if (!finalAddressId) {
+      const defaultAddress = await addressRepo.findDefaultByUser(userId);
+
+      if (!defaultAddress) {
+        throw new Error("No address selected and no default address found");
+      }
+
+      finalAddressId = defaultAddress.id;
+    }
+
     if (statusType === "failed") {
       const invoice = await invoiceRepo.create({
         user_id: userId,
@@ -42,7 +58,7 @@ module.exports = {
         total_amount: sessionOrder.total,
         received_amount: 0,
         status: 0,
-        address: addressId || null,
+        address: finalAddressId || null,
       });
 
       await cartRepo.clearCart(userId);
@@ -64,6 +80,15 @@ module.exports = {
       throw new Error("Invalid payment signature");
     }
 
+    const cartItems = await cartRepo.getUserCart(userId);
+
+    const orderedItems = cartItems.map((item) => ({
+      product_name: item.product.name,
+      price: item.product.newPrice,
+      quantity: item.quantity,
+      image: item.product.main_img,
+    }));
+
     const invoice = await invoiceRepo.create({
       user_id: userId,
       transaction_id: razorpay_payment_id,
@@ -71,7 +96,8 @@ module.exports = {
       total_amount: sessionOrder.total,
       received_amount: sessionOrder.total,
       status: 1,
-      address: addressId || null,
+      address: finalAddressId || null,
+      extra: JSON.stringify(orderedItems),
     });
 
     await cartRepo.clearCart(userId);

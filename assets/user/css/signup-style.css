@@ -535,6 +535,15 @@ input[type="checkbox"]:not(old) + label {
   margin-top: 6px;
 }
 
+.navbar-brand > span {
+  font-size: 32px;
+  opacity: 0.4;
+}
+.navbar-brand {
+  font-size: 32px;
+  font-weight: 600;
+}
+
 input[type="checkbox"]:not(old) + label > span {
   display: inline-block;
   width: 13px;
@@ -824,7 +833,7 @@ label.valid:after {
   border-radius: 999px;
 }
 
-.signup-container label {
+.signup-contain label {
   position: relative;
   display: contents;
   margin-bottom: -1%;
@@ -865,4 +874,128 @@ input[type="checkbox"] {
 
 .form-body::-webkit-scrollbar-thumb {
   border-radius: 10px;
+}
+
+.invoice-wrapper {
+  background: #f4f6f8;
+  padding: 40px 0;
+  width: 100%;
+}
+
+.invoice-box {
+  margin: auto;
+  background: #fff;
+  padding: 40px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.invoice-header img {
+  height: 50px;
+}
+
+.invoice-title h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.invoice-address {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 0;
+}
+
+.invoice-address h4 {
+  margin-bottom: 8px;
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.invoice-table th,
+.invoice-table td {
+  border-bottom: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.invoice-table th {
+  background: #f9fafb;
+}
+
+.invoice-summary {
+  display: flex;
+  justify-content: flex-end;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.invoice-summary p {
+  margin: 6px 0;
+}
+
+.invoice-summary .total {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.invoice-footer {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.invoice-footer button {
+  margin-top: 15px;
+  padding: 10px 25px;
+  border: none;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .invoice-box,
+  .invoice-box * {
+    visibility: visible;
+  }
+
+  .invoice-box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    max-height: 260mm;
+    overflow: hidden;
+
+    page-break-after: avoid !important;
+    page-break-before: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  hr {
+    page-break-after: avoid !important;
+  }
+
+  button {
+    display: none !important;
+  }
 }

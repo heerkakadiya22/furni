@@ -54,16 +54,42 @@ exports.renderAbout = (req, res) => {
   }
 };
 
-exports.renderThanks = (req, res) => {
+const { Invoice } = require("../models");
+
+exports.renderThanks = async (req, res) => {
   try {
+    if (!req.session.user) {
+      return res.redirect("/login");
+    }
+
+    const invoiceId = req.query.invoice;
+    const userId = req.session.user.id;
+
+    if (!invoiceId) {
+      return res.status(400).send("Invalid invoice id");
+    }
+
+    const invoice = await Invoice.findOne({
+      where: {
+        id: invoiceId,
+        user_id: userId,
+        status: 1,
+      },
+    });
+
+    if (!invoice) {
+      return res.status(404).send("Invoice not found or unauthorized");
+    }
+
     res.render("thanks", {
       title: "Thank You",
-      csrfToken: req.csrfToken(),
-      currentPage: "Thank You",
+      invoice,
       session: req.session,
+      currentPage: "Thank You",
+      csrfToken: req.csrfToken(),
     });
   } catch (error) {
-    console.error("Error rendering thanks page:", error);
+    console.error("THANKS PAGE ERROR ", error);
     res.status(500).send("Something went wrong.");
   }
 };

@@ -1,4 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
+  
   const Invoice = sequelize.define('Invoice', {
     id: {
       type: DataTypes.INTEGER,

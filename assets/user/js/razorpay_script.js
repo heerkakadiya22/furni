@@ -4,19 +4,12 @@ document.getElementById("payBtn").addEventListener("click", async () => {
   const payBtn = document.getElementById("payBtn");
   const key = payBtn.dataset.key;
 
-  let selectedRadio = document.querySelector(
-    "input[name='selectedAddress']:checked"
+  const selectedRadio = document.querySelector(
+    'input[name="selectedAddress"]:checked'
   );
-  let addressId = selectedRadio?.value;
 
-  if (!addressId) {
-    addressId = document.getElementById("defaultAddressId")?.value;
-
-    if (!addressId) {
-      alert("No address selected and no default address found.");
-      return;
-    }
-  }
+  const addressId =
+    selectedRadio && selectedRadio.value !== "new" ? selectedRadio.value : null;
 
   const orderRes = await fetch("/create-order", {
     method: "POST",
@@ -40,6 +33,8 @@ document.getElementById("payBtn").addEventListener("click", async () => {
     theme: {
       color: "#3b5d50",
     },
+    name: "Furni.",
+    image: "/assets/user/images/logo.png",
     handler: async (response) => {
       sendStatus("success", response);
     },
@@ -70,7 +65,7 @@ document.getElementById("payBtn").addEventListener("click", async () => {
     if (result.success) {
       window.location.href = `/thanks?invoice=${result.invoice_id}`;
     } else {
-      window.location.href = `/payment-failed?invoice=${result.invoice_id}`;
+      window.location.href = `/payment-failed?order=${result.order_id}`;
     }
   }
 });

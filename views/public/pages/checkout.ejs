@@ -92,11 +92,9 @@
                                         <div
                                             class="saved-address d-flex align-items-start justify-content-between p-3 mb-2 border rounded shadow-sm">
                                             <!-- Left: Radio + Address Info -->
-                                            <div class="d-flex align-items-start">
-                                                <input type="radio" name="selectedAddress"
-                                                    class="form-check-input me-3 mt-1 address-radio"
-                                                    value="<%= addr.id %>" data-addr='<%- JSON.stringify(addr) %>'
-                                                    <%=addr.isDefault ? "checked" : "" %>
+                                            <div class="d-flex align-items-start" style="gap:15px;">
+                                                <input type="radio" name="selectedAddress" style="margin-top: 2%;"
+                                                    value="<%= addr.id %>" <%=addr.isDefault ? "checked" : "" %>
                                                 >
 
                                                 <div>
